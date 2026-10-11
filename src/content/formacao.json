@@ -9,14 +9,14 @@
   {
     "id": "tecnico-em-qualidade-senac",
     "curso": "Técnico em Qualidade",
-    "instituicao": "senac",
+    "instituicao": "senac-rs",
     "status": "andamento",
     "data": "2026-11"
   },
   {
     "id": "tecnico-em-logistica-senac",
     "curso": "Técnico em Logística",
-    "instituicao": "senac",
+    "instituicao": "senac-rs",
     "status": "concluido",
     "data": "2026-03"
   },

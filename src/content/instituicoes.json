@@ -9,7 +9,15 @@
   },
   {
     "id": "senac",
-    "nome": "Senac",
+    "nome": "Senac RJ",
+    "logo": {
+      "arquivo": "/img/instituicoes/senac-logo-bfa6bcd0.svg",
+      "alt": "senac-logo"
+    }
+  },
+  {
+    "id": "senac-rs",
+    "nome": "Senac RS",
     "logo": {
       "arquivo": "/img/instituicoes/senac-logo-bfa6bcd0.svg",
       "alt": "senac-logo"
@@ -40,8 +48,8 @@
     }
   },
   {
-    "id": "xperium",
-    "nome": "Xperium",
+    "id": "xperiun",
+    "nome": "Xperiun",
     "logo": {
       "arquivo": "/img/instituicoes/channels4-profile-09f7c66f.jpg",
       "alt": "xperiun-logo"
@@ -62,5 +70,9 @@
       "arquivo": "/img/instituicoes/logo-ctest-c58ff42e.png",
       "alt": "ctest-logo"
     }
+  },
+  {
+    "id": "sest-senat",
+    "nome": "SEST SENAT"
   }
 ]

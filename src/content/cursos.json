@@ -23,12 +23,28 @@
     "cargaHoraria": 180
   },
   {
-    "id": "data-analyst-xperium",
-    "curso": "Data Analyst",
-    "instituicao": "xperium",
+    "id": "power-bi-para-analise-de-dados-faetec",
+    "curso": "Power BI para Análise de Dados",
+    "instituicao": "faetec",
     "status": "concluido",
-    "data": "2026-04",
-    "cargaHoraria": 60
+    "data": "2026-07",
+    "cargaHoraria": 160
+  },
+  {
+    "id": "gestao-do-transporte-e-da-frota-sest-senat",
+    "curso": "Gestão do Transporte e da Frota",
+    "instituicao": "sest-senat",
+    "status": "concluido",
+    "data": "2026-06",
+    "cargaHoraria": 30
+  },
+  {
+    "id": "power-bi-fundamentals-xperiun",
+    "curso": "Power BI Fundamentals (Formação em Análise de Dados)",
+    "instituicao": "xperiun",
+    "status": "concluido",
+    "data": "2026-03",
+    "cargaHoraria": 64
   },
   {
     "id": "informatica-fundamental-senac",
@@ -47,9 +63,9 @@
     "cargaHoraria": 60
   },
   {
-    "id": "assistente-de-logistica-senai",
-    "curso": "Assistente de Logística",
-    "instituicao": "senai",
+    "id": "assistente-de-operacoes-em-logistica-senai-firjan",
+    "curso": "Assistente de Operações em Logística",
+    "instituicao": "senai-firjan",
     "status": "concluido",
     "data": "2025-09",
     "cargaHoraria": 180
@@ -63,8 +79,16 @@
     "cargaHoraria": 36
   },
   {
+    "id": "construcao-de-dashboards-em-excel-senai-firjan",
+    "curso": "Construção de Dashboards em Excel",
+    "instituicao": "senai-firjan",
+    "status": "concluido",
+    "data": "2024-12",
+    "cargaHoraria": 20
+  },
+  {
     "id": "departamento-pessoal-senac",
-    "curso": "Departamento Pessoal",
+    "curso": "Formação em Departamento Pessoal",
     "instituicao": "senac",
     "status": "concluido",
     "data": "2024-11",
