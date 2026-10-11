@@ -188,6 +188,21 @@ test.describe('conteúdo profissional (E1–E8)', () => {
       'Atuar nas áreas de Análise de Dados, Business Intelligence e tecnologia, aplicando conhecimentos em Power BI, Excel, SQL, Python e automação para transformar dados em informações úteis à tomada de decisão.',
     );
   });
+
+  test('Atividade Flask: telas reais carregam, têm descrição e o repositório está linkado', async ({ page }) => {
+    await page.goto('/projetos/atividade-flask/');
+    const telas = page.locator('#telas figure');
+    await expect(telas).toHaveCount(4);
+    for (const img of await page.locator('#telas img').all()) {
+      await img.scrollIntoViewIfNeeded();
+      await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+      expect((await img.getAttribute('alt'))?.length).toBeGreaterThan(20);
+    }
+    await expect(page.locator('#telas figcaption').first()).not.toBeEmpty();
+    await expect(page.getByRole('link', { name: /Código-fonte no GitHub/ })).toHaveAttribute('href', 'https://github.com/vitorassis-tech/atividade_flask');
+    await expect(page.getByText('Informações pendentes')).toHaveCount(0);
+    await expect(page.locator('.sumario a[href="#telas"]')).toHaveText('Telas');
+  });
 });
 
 test.describe('movimento reduzido', () => {

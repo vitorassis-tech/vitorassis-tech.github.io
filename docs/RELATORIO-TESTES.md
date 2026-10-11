@@ -1,6 +1,6 @@
 # Relatório de testes
 
-**Última execução:** 11/10/2026, após o painel administrativo (Fase 1), a migração do conteúdo para JSON e os logotipos das instituições
+**Última execução:** 11/10/2026, após a galeria de telas e o repositório da Atividade Flask
 **Ambiente:** container Linux na nuvem, Node 22.22, npm 10.9, Python 3.13, Chromium 141 (Playwright 1.56.1)
 **Base:** versão E1–E16 (sobre o commit `6369885`), com as alterações ainda **não commitadas**
 
@@ -14,11 +14,19 @@ Neste relatório, "passou" significa que o teste **foi executado** e passou. O q
 | Tipos TypeScript | `npm run typecheck` | **Sem erros** |
 | Lógica, conteúdo, esquema, API do painel e `npm run admin` | `npm test` (Vitest, 6 arquivos) | **100 de 100 passaram** |
 | Build de produção | `npm run build` | **12 páginas, sem erros** |
-| Site no navegador | `npm run test:e2e` (Playwright + axe) | **56 de 56 passaram** |
+| Site no navegador | `npm run test:e2e` (Playwright + axe) | **57 de 57 passaram** |
 | Painel no navegador | `npm run test:painel` (Playwright + axe) | **11 de 11 passaram** |
 | Bateria completa | `npm run test:all` | **Código de saída 0** |
 | Vulnerabilidades | `npm audit` | **0** (nenhuma dependência nova) |
 | Lighthouse (celular, local) | Início e Sobre | **99 / 100 / 100 / 100** (desempenho, acessibilidade, boas práticas, SEO) |
+
+## Atividade Flask: repositório e telas
+
+- **Origem das telas:** o código do repositório público `vitorassis-tech/atividade_flask` foi executado localmente, com o banco recriado pelo `setupdb.py` (só os três conteúdos de exemplo do `database.sql`). As quatro capturas (1280 × 800, convertidas para WebP, 25 a 85 KB cada) não mostram e-mail nem dados pessoais.
+- **Textos:** as novas afirmações do estudo de caso foram conferidas no código (`app.py`): consultas parametrizadas, exclusão por POST, rota `/admin` sem login e `debug=True`.
+- **Teste novo (e2e):** a página mostra 4 telas, todas carregam, têm texto alternativo e legenda; o link do repositório aponta para o endereço certo; não há mais "Informações pendentes"; o sumário tem o item "Telas".
+- **Painel:** o projeto abre com as 4 telas no campo "Telas do projeto", com prévia das imagens e sem erros no console (verificação manual).
+- **Visual:** conferido no computador (duas colunas) e no celular (uma coluna, sem transbordo; o teste de responsividade cobre 375 a 1440 px).
 
 ## Migração do conteúdo para JSON: o site não mudou
 

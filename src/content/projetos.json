@@ -322,19 +322,25 @@
     "problema": "Criar um pequeno site dinâmico capaz de gerenciar conteúdos armazenados em banco de dados.",
     "objetivo": "Praticar o ciclo completo de uma aplicação web: rotas, templates, banco de dados e operações CRUD.",
     "dados": {
-      "descricao": "Tabela de conteúdos criada pelo próprio projeto (script de criação do banco).",
-      "origem": "Dados de exemplo cadastrados durante o desenvolvimento."
+      "descricao": "Tabela content (código, título, texto, data de criação e status), criada pelo script database.sql e executada pelo setupdb.py.",
+      "origem": "Três conteúdos de exemplo inseridos pelo próprio script de criação do banco. As telas abaixo usam esses dados."
     },
     "solucao": [
       "Rotas em Flask para listar, criar, visualizar e editar conteúdos.",
       "Templates Jinja com um layout base reaproveitado nas páginas Início, Novo conteúdo, Sobre e Contatos.",
       "Banco SQLite com script de criação (setupdb.py e database.sql).",
-      "Exclusão lógica: o registro não é apagado; o campo de status muda de “on” para “off”."
+      "Consultas SQL parametrizadas: os valores do formulário são enviados separados do comando SQL.",
+      "Exclusão lógica: o registro não é apagado; o campo de status muda de “on” para “off”, e a exclusão só aceita requisições POST.",
+      "Área administrativa (/admin) que lista todos os conteúdos, inclusive os desativados."
     ],
     "decisoes": [
       {
         "decisao": "Exclusão lógica em vez de física",
         "motivo": "Preserva o histórico e permite recuperar um conteúdo removido por engano."
+      },
+      {
+        "decisao": "Consultas parametrizadas",
+        "motivo": "O texto digitado pelo usuário não é montado dentro do comando SQL, o que evita injeção de SQL."
       },
       {
         "decisao": "Template base com herança no Jinja",
@@ -344,26 +350,61 @@
     "resultados": [
       {
         "tipo": "funcional",
-        "texto": "Aplicação funcional executada em ambiente local."
+        "texto": "Aplicação funcional executada em ambiente local, com código-fonte público no GitHub e instruções de execução no README."
       }
     ],
     "limitacoes": [
-      "Projeto de estudo, executado em ambiente local. Não há demonstração on-line publicada."
+      "Projeto de estudo, executado em ambiente local. Não há demonstração on-line publicada.",
+      "Não há login: a área administrativa fica acessível a quem abre o sistema.",
+      "O servidor roda no modo de depuração do Flask (debug=True), adequado só para desenvolvimento."
     ],
     "proximosPassos": [
-      "Publicar o código em um repositório específico, com instruções de execução."
+      "Proteger a área administrativa com login.",
+      "Publicar uma demonstração on-line com o modo de depuração desativado."
+    ],
+    "galeria": [
+      {
+        "legenda": "Página inicial do Projeto Flask.",
+        "imagem": {
+          "arquivo": "/img/projetos/atividade-flask-inicio.webp",
+          "alt": "Página inicial com o título Projeto web com Python, Flask e SQLite e o menu Início, Novo conteúdo, Sobre e Contatos."
+        }
+      },
+      {
+        "legenda": "Lista de conteúdos cadastrados, lida do banco SQLite.",
+        "imagem": {
+          "arquivo": "/img/projetos/atividade-flask-lista.webp",
+          "alt": "Três cartões de conteúdo (Primeiro conteúdo, Aprendendo Flask e Banco de dados SQLite), cada um com botão Ver conteúdo, código e data de criação."
+        }
+      },
+      {
+        "legenda": "Formulário de cadastro de novo conteúdo.",
+        "imagem": {
+          "arquivo": "/img/projetos/atividade-flask-novo.webp",
+          "alt": "Formulário Novo conteúdo com os campos Título e Conteúdo preenchidos e os botões Cadastrar conteúdo e Cancelar."
+        }
+      },
+      {
+        "legenda": "Detalhes de um conteúdo, com as opções de editar e excluir.",
+        "imagem": {
+          "arquivo": "/img/projetos/atividade-flask-ver.webp",
+          "alt": "Página Detalhes do conteúdo mostrando Aprendendo Flask, com os botões Editar conteúdo, Voltar e Excluir conteúdo."
+        }
+      }
     ],
     "links": [
+      {
+        "rotulo": "Código-fonte no GitHub (atividade_flask)",
+        "href": "https://github.com/vitorassis-tech/atividade_flask",
+        "externo": true
+      },
       {
         "rotulo": "Perfil no GitHub",
         "href": "https://github.com/vitorassis-tech",
         "externo": true
       }
     ],
-    "pendencias": [
-      "Link do repositório específico da Atividade Flask (necessário para indicar a publicação no GitHub).",
-      "Capturas de tela reais da aplicação."
-    ],
+    "pendencias": [],
     "status": "publicado"
   },
   {

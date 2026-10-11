@@ -77,7 +77,8 @@
       {
         "nome": "Git e GitHub",
         "contexto": "formacao",
-        "evidencia": "Perfil github.com/vitorassis-tech; repositório da Atividade Flask pendente de confirmação"
+        "evidencia": "Repositório público da Atividade Flask (github.com/vitorassis-tech/atividade_flask)",
+        "href": "/projetos/atividade-flask/"
       },
       {
         "nome": "Inteligência Artificial",

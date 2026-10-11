@@ -169,6 +169,18 @@ export const COLECOES = [
         titulo: 'Materiais e transparência',
         campos: [
           {
+            nome: 'galeria',
+            rotulo: 'Telas do projeto',
+            tipo: 'listaObjetos',
+            rotuloItem: 'Tela',
+            maxItens: 8,
+            ajuda: 'Capturas reais do sistema funcionando, na ordem em que devem aparecer. Use só dados de exemplo; nunca dados internos de empresas.',
+            campos: [
+              { nome: 'legenda', rotulo: 'Legenda', tipo: 'texto', obrigatorio: true, max: 140, ajuda: 'Aparece abaixo da imagem. Ex.: Página inicial com os conteúdos cadastrados.' },
+              { nome: 'imagem', rotulo: 'Imagem', tipo: 'imagem', obrigatorio: true, pasta: 'projetos', ajuda: 'JPG, PNG ou WebP até 2 MB.' },
+            ],
+          },
+          {
             nome: 'links',
             rotulo: 'Links',
             tipo: 'listaObjetos',

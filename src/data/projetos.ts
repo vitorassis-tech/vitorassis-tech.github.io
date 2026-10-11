@@ -63,6 +63,8 @@ export interface Projeto {
   limitacoes: string[];
   proximosPassos: string[];
   links: { rotulo: string; href: string; externo?: boolean }[];
+  /** Capturas reais do sistema, exibidas na seção "Telas" do estudo de caso */
+  galeria: { legenda: string; imagem: { arquivo: string; alt: string } }[];
   demo?: 'painel-fretes' | 'roteirizacao' | 'torre-simulacao';
   pendencias: string[];
   /** Transparência sobre uso de IA generativa na construção */
@@ -78,6 +80,7 @@ const completar = (p: ProjetoBruto): Projeto =>
     limitacoes: [],
     proximosPassos: [],
     links: [],
+    galeria: [],
     pendencias: [],
     ...p,
   }) as Projeto;

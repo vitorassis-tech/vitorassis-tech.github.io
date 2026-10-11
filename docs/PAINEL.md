@@ -25,7 +25,7 @@ Para encerrar, pressione `Ctrl + C`. Se a porta estiver ocupada: `npm run admin 
 
 | Seção | Operações |
 |---|---|
-| Projetos | Criar, editar, mover para a lixeira, ordenar, status (publicado, rascunho, arquivado), imagem de capa |
+| Projetos | Criar, editar, mover para a lixeira, ordenar, status (publicado, rascunho, arquivado), imagem de capa, telas do projeto (galeria com legenda) |
 | Experiência | Empresas e cargos, com atividades |
 | Formação acadêmica e Cursos | Curso, instituição, situação, data e carga horária |
 | **Instituições** | Nome, site e **logotipo oficial** (exibido ao lado dos cursos) |

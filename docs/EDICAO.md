@@ -66,6 +66,18 @@ Manualmente: salve o arquivo em `public/img/projetos/` (nome em minúsculas, sem
 "imagem": { "arquivo": "/img/projetos/atividade-flask.webp", "alt": "Tela inicial da Atividade Flask listando conteúdos cadastrados" }
 ```
 
+### Adicionar telas (galeria) a um projeto
+
+Pelo painel: abra o projeto, vá em **Materiais e transparência → Telas do projeto**, clique em **Adicionar tela**, escreva a legenda, escolha a imagem, descreva-a e salve. As telas aparecem na seção **Telas** do estudo de caso, em duas colunas no computador e uma no celular (até 8 telas). Prefira capturas na proporção 16:10 (ex.: 1280 × 800).
+
+Manualmente:
+
+```json
+"galeria": [
+  { "legenda": "Página inicial.", "imagem": { "arquivo": "/img/projetos/meu-projeto-inicio.webp", "alt": "Descrição do que aparece na tela" } }
+]
+```
+
 Nunca use capturas com dados internos de empresas.
 
 ## Cores e fontes (`src/styles/global.css`)

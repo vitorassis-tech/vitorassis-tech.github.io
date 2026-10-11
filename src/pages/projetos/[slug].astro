@@ -26,6 +26,7 @@ const secoes = [
   { id: 'dados', titulo: 'Dados utilizados' },
   ...(p.demo ? [{ id: 'demonstracao', titulo: 'Demonstração' }] : []),
   { id: 'solucao', titulo: 'Solução' },
+  ...(p.galeria.length ? [{ id: 'telas', titulo: 'Telas' }] : []),
   ...(p.decisoes.length ? [{ id: 'decisoes', titulo: 'Decisões técnicas' }] : []),
   { id: 'resultados', titulo: 'Resultados' },
   { id: 'limitacoes', titulo: 'Limitações e próximos passos' },
@@ -117,6 +118,26 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
         <h2 id="h-solucao">Solução</h2>
         <ol class="passos">{p.solucao.map((s) => <li>{s}</li>)}</ol>
       </section>
+
+      {
+        p.galeria.length > 0 && (
+          <section id="telas" aria-labelledby="h-telas">
+            <h2 id="h-telas">Telas</h2>
+            <p class="muted telas-intro">Capturas do sistema em funcionamento. Clique em uma imagem para vê-la em tamanho real.</p>
+            <div class="galeria">
+              {p.galeria.map((g) => (
+                <figure class="tela">
+                  <a href={url(g.imagem.arquivo)} target="_blank" rel="noopener">
+                    <img src={url(g.imagem.arquivo)} alt={g.imagem.alt} loading="lazy" decoding="async" />
+                    <span class="visually-hidden"> (abre a imagem em tamanho real em nova aba)</span>
+                  </a>
+                  <figcaption>{g.legenda}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )
+      }
 
       {
         p.decisoes.length > 0 && (
@@ -271,4 +292,23 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
   .proximo a { font-family: var(--font-display); font-size: var(--step-3); text-decoration-thickness: 2px; }
 
   .secao-demo { max-width: none; }
+
+  .telas-intro { font-size: 0.95rem; }
+  .galeria { display: grid; gap: 1.75rem 1.5rem; margin-top: 1.25rem; }
+  @media (min-width: 760px) { .galeria { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .tela { margin: 0; min-width: 0; }
+  .tela a { display: block; border-radius: var(--radius-m); }
+  .tela img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-m);
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 2px rgb(11 31 58 / 0.06), 0 8px 24px -12px rgb(11 31 58 / 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .tela img { aspect-ratio: 16 / 10; object-fit: cover; object-position: top; }
+  .tela a:hover img { transform: translateY(-2px); box-shadow: 0 1px 2px rgb(11 31 58 / 0.06), 0 14px 32px -14px rgb(11 31 58 / 0.35); }
+  @media (prefers-reduced-motion: reduce) { .tela img { transition: none; } .tela a:hover img { transform: none; } }
+  .tela figcaption { margin-top: 0.65rem; font-size: 0.93rem; color: var(--muted); }
 </style>

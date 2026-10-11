@@ -1,24 +1,26 @@
 # Pendências e limitações conhecidas
 
-Atualizado em 11/10/2026, após o painel administrativo (Fase 1) e os logotipos das instituições.
+Atualizado em 11/10/2026, após o repositório e as telas da Atividade Flask.
 
 ## Informações e materiais que dependem de você
 
 | # | Pendência | Onde aparece / onde editar | Impacto |
 |---|---|---|---|
-| 1 | **Link do repositório específico da Atividade Flask.** Sem ele, o site não afirma publicação no GitHub e o link aponta só para o perfil | Painel → Projetos → Atividade Flask; e Competências → Programação → Git e GitHub | Médio |
-| 2 | **Capturas de tela reais da Atividade Flask** | Painel → Projetos → Atividade Flask → Imagem de capa | Médio |
-| 3 | Se o professor deve ser **creditado nominalmente** na Atividade Flask | `atividade-flask` | Baixo |
-| 4 | **Banco de dados (SENAI Firjan):** tema, imagem do DER, scripts SQL e qual SGBD foi usado. Hoje a página só mostra o que está no currículo, e o MySQL foi retirado do projeto | `banco-dados-relacional` | Médio |
-| 5 | **Capturas anonimizadas da Torre de Controle real**, somente com autorização da empresa | `torre-controle-expedicao` | Opcional |
-| 6 | **Resultados medidos** de projetos reais, se existirem e puderem ser divulgados | campo `resultados` | Opcional |
-| 7 | **Endereço final do site** (`SITE_URL`) e plataforma de hospedagem | `docs/PUBLICACAO.md` | Só para publicar |
-| 8 | **Logotipos oficiais das instituições** (Senac, SENAI Firjan, SENAI, FAETEC, UNISUAM, Xperium, CTEST, SEEDUC-RJ), respeitando o manual de marca de cada uma. Sem eles, o site mostra o selo neutro | Painel → Instituições | Opcional |
-| 9 | **Sites oficiais das instituições** (opcional, campo já existe) | Painel → Instituições | Opcional |
-| 10 | **Revisão no seu computador Windows:** `npm ci`, `npm run dev`, `npm run admin` e `npm run dados` não foram executados em Windows | — | Validação final |
-| 11 | **Fase 2 do painel** (on-line, com login): depende da sua autorização e da criação de contas | `docs/PAINEL.md` | Futuro |
+| 1 | Se o professor deve ser **creditado nominalmente** na Atividade Flask | `atividade-flask` | Baixo |
+| 2 | **Banco de dados (SENAI Firjan):** tema, imagem do DER, scripts SQL e qual SGBD foi usado. Hoje a página só mostra o que está no currículo, e o MySQL foi retirado do projeto | `banco-dados-relacional` | Médio |
+| 3 | **Capturas anonimizadas da Torre de Controle real**, somente com autorização da empresa | `torre-controle-expedicao` | Opcional |
+| 4 | **Resultados medidos** de projetos reais, se existirem e puderem ser divulgados | campo `resultados` | Opcional |
+| 5 | **Endereço final do site** (`SITE_URL`) e plataforma de hospedagem | `docs/PUBLICACAO.md` | Só para publicar |
+| 6 | **Logotipos das instituições:** 7 de 8 enviados pelo painel. Quando possível, troque os que não vieram do site oficial ou do manual de marca da instituição | Painel → Instituições | Opcional |
+| 7 | **Sites oficiais das instituições** (opcional, campo já existe) | Painel → Instituições | Opcional |
+| 8 | **Revisão no Windows:** `npm run dev`, `npm run admin`, `npm run build` e `npm test` já foram executados por você com sucesso. Falta só `npm run dados` | — | Baixo |
+| 9 | **Fase 2 do painel** (on-line, com login): depende da sua autorização e da criação de contas | `docs/PAINEL.md` | Futuro |
 
-Os itens 1, 2, 4, 5 e 6 aparecem no próprio site, na seção "Código e materiais" de cada estudo de caso, como "Informações pendentes". Quando resolver uma, apague o item em `pendencias`.
+Os itens 2, 3 e 4 aparecem no próprio site, na seção "Código e materiais" de cada estudo de caso, como "Informações pendentes". Quando resolver uma, apague o item em `pendencias`.
+
+## Resolvidas
+
+- **Atividade Flask:** link do repositório público (`github.com/vitorassis-tech/atividade_flask`) e quatro telas reais, capturadas com o próprio código do repositório rodando localmente e com os dados de exemplo do `database.sql`.
 
 ## Decisões aplicadas que alteraram textos do currículo
 
