@@ -14,17 +14,18 @@ const fonte = (p) => `data:font/woff2;base64,${readFileSync(path.join(raiz, 'nod
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face{font-family:F;src:url(${fonte('@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2')});font-weight:100 900}
 @font-face{font-family:P;src:url(${fonte('@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-500-normal.woff2')});font-weight:500}
-body{margin:0;width:1200px;height:630px;background:#F7F9FC;font-family:P;color:#15253b;position:relative;overflow:hidden}
-.n{position:absolute;left:80px;top:72px;font-size:28px;color:#9a4d08;display:flex;align-items:center;gap:18px}
+body{margin:0;width:1200px;height:630px;background:radial-gradient(900px 420px at 80% 20%,rgba(79,155,217,.18),transparent 60%),#07111F;font-family:P;color:#E7EEF7;position:relative;overflow:hidden}
+body:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(150,185,225,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(150,185,225,.12) 1px,transparent 1px);background-size:64px 64px}
+.n{position:absolute;left:80px;top:72px;font-size:28px;color:#F6C690;display:flex;align-items:center;gap:18px}
 .n:before{content:'';width:56px;height:3px;background:#E58A2B}
-h1{position:absolute;left:80px;top:130px;margin:0;font-family:F;font-weight:560;font-size:84px;line-height:1.02;letter-spacing:-2px;color:#17365D;width:860px}
-p{position:absolute;left:80px;bottom:64px;margin:0;font-size:28px;color:#4a5a70}
+h1{position:absolute;left:80px;top:130px;margin:0;font-family:F;font-weight:560;font-size:84px;line-height:1.02;letter-spacing:-2px;color:#FFFFFF;width:860px}
+p{position:absolute;left:80px;bottom:64px;margin:0;font-size:28px;color:#A3B5CB}
 svg{position:absolute;right:0;bottom:0}
 </style></head><body>
 <div class="n">Vitor Assis</div>
 <h1>Da operação logística às decisões guiadas por dados.</h1>
 <p>Logística · Power BI · SQL · Python</p>
-<svg width="540" height="330" viewBox="0 0 540 330" style="right:30px"><path d="M20 300 C 120 300, 120 220, 220 220 S 320 150, 380 140" fill="none" stroke="#17365D" stroke-width="6" stroke-linecap="round"/><path d="M380 140 C 430 130, 450 70, 500 60" fill="none" stroke="#E58A2B" stroke-width="6" stroke-dasharray="14 12" stroke-linecap="round"/><circle cx="20" cy="300" r="12" fill="#fff" stroke="#17365D" stroke-width="6"/><circle cx="220" cy="220" r="12" fill="#fff" stroke="#17365D" stroke-width="6"/><circle cx="380" cy="140" r="14" fill="#E58A2B" stroke="#17365D" stroke-width="6"/><circle cx="500" cy="60" r="12" fill="#fff" stroke="#E58A2B" stroke-width="5" stroke-dasharray="6 5"/></svg>
+<svg width="540" height="330" viewBox="0 0 540 330" style="right:30px"><path d="M20 300 C 120 300, 120 220, 220 220 S 320 150, 380 140" fill="none" stroke="#CFE2F6" stroke-width="6" stroke-linecap="round"/><path d="M380 140 C 430 130, 450 70, 500 60" fill="none" stroke="#E58A2B" stroke-width="6" stroke-dasharray="14 12" stroke-linecap="round"/><circle cx="20" cy="300" r="12" fill="#0B1A2C" stroke="#CFE2F6" stroke-width="6"/><circle cx="220" cy="220" r="12" fill="#0B1A2C" stroke="#CFE2F6" stroke-width="6"/><circle cx="380" cy="140" r="14" fill="#E58A2B" stroke="#07111F" stroke-width="6"/><circle cx="500" cy="60" r="12" fill="#0B1A2C" stroke="#E58A2B" stroke-width="5" stroke-dasharray="6 5"/></svg>
 </body></html>`;
 
 const navegador = await chromium.launch();

@@ -1,6 +1,6 @@
 /**
  * Funções puras de indicadores logísticos (testadas em tests/unit).
- * Usadas pelo painel de demonstração com dados simulados.
+ * Usadas pelas demonstrações com dados fictícios (indicadores didáticos, independentes de qualquer empresa).
  */
 
 export interface LinhaEntrega {
@@ -18,11 +18,27 @@ export interface LinhaEntrega {
 export interface LinhaFrota {
   data: string;
   transportadora: string;
-  contratados: number;
-  apresentados: number;
-  utilizados: number;
-  no_show: number;
-  spot: number;
+  necessarios: number;
+  disponiveis: number;
+  em_rota: number;
+  /** entregas do dia (todas as regiões) */
+  entregas: number;
+}
+
+export interface LinhaCargas {
+  data: string;
+  transportadora: string;
+  programadas: number;
+  expedidas: number;
+  pendentes: number;
+  horas_pendencia: number;
+}
+
+export interface LinhaPendencia {
+  data: string;
+  transportadora: string;
+  motivo: string;
+  horas: number;
 }
 
 export interface Tabela {
@@ -43,12 +59,6 @@ export function deColunar<T>(tabela: Tabela): T[] {
     return obj as T;
   });
 }
-
-/** No-Show = MÁXIMO(Contratado − Apresentado; 0) */
-export const noShow = (contratados: number, apresentados: number): number => Math.max(contratados - apresentados, 0);
-
-/** Spot (frete extra) = MÁXIMO(Utilizado − Contratado; 0) */
-export const spot = (utilizados: number, contratados: number): number => Math.max(utilizados - contratados, 0);
 
 /** Divisão segura: retorna null quando o denominador é zero (não inventa valor). */
 export const razao = (numerador: number, denominador: number): number | null =>
@@ -90,27 +100,125 @@ export function resumirEntregas(linhas: LinhaEntrega[]): ResumoEntregas {
   };
 }
 
+/** Converte razão em percentual, preservando null (sem dados). */
+export const pct = (numerador: number, denominador: number): number | null => {
+  const r = razao(numerador, denominador);
+  return r === null ? null : r * 100;
+};
+
+/** Cobertura de frota (%) = veículos disponíveis ÷ veículos necessários × 100. Indicador didático. */
+export const coberturaFrota = (disponiveis: number, necessarios: number): number | null => pct(disponiveis, necessarios);
+
+/** Entregas por veículo em rota = entregas ÷ veículos em rota. Indicador didático. */
+export const entregasPorVeiculoEmRota = (entregas: number, emRota: number): number | null => razao(entregas, emRota);
+
+/** Taxa de expedição (%) = cargas expedidas ÷ cargas programadas × 100. Indicador didático. */
+export const taxaExpedicao = (expedidas: number, programadas: number): number | null => pct(expedidas, programadas);
+
 export interface ResumoFrota {
-  contratados: number;
-  apresentados: number;
-  utilizados: number;
-  noShow: number;
-  spot: number;
+  necessarios: number;
+  disponiveis: number;
+  emRota: number;
+  entregas: number;
+  coberturaPct: number | null;
+  entregasPorVeiculo: number | null;
 }
 
-/** Soma diária: No-Show e Spot são calculados por dia/transportadora e depois somados. */
 export function resumirFrota(linhas: LinhaFrota[]): ResumoFrota {
-  return linhas.reduce<ResumoFrota>(
+  const t = linhas.reduce(
     (acc, l) => ({
-      contratados: acc.contratados + l.contratados,
-      apresentados: acc.apresentados + l.apresentados,
-      utilizados: acc.utilizados + l.utilizados,
-      noShow: acc.noShow + noShow(l.contratados, l.apresentados),
-      spot: acc.spot + spot(l.utilizados, l.contratados),
+      necessarios: acc.necessarios + l.necessarios,
+      disponiveis: acc.disponiveis + l.disponiveis,
+      emRota: acc.emRota + l.em_rota,
+      entregas: acc.entregas + l.entregas,
     }),
-    { contratados: 0, apresentados: 0, utilizados: 0, noShow: 0, spot: 0 },
+    { necessarios: 0, disponiveis: 0, emRota: 0, entregas: 0 },
   );
+  return {
+    ...t,
+    coberturaPct: coberturaFrota(t.disponiveis, t.necessarios),
+    entregasPorVeiculo: entregasPorVeiculoEmRota(t.entregas, t.emRota),
+  };
 }
+
+export interface ResumoCargas {
+  programadas: number;
+  expedidas: number;
+  pendentes: number;
+  taxaExpedicaoPct: number | null;
+  /** null quando não há pendências no período (não é zero) */
+  tempoMedioPendencia: number | null;
+}
+
+export function resumirCargas(linhas: LinhaCargas[]): ResumoCargas {
+  const t = linhas.reduce(
+    (acc, l) => ({
+      programadas: acc.programadas + l.programadas,
+      expedidas: acc.expedidas + l.expedidas,
+      pendentes: acc.pendentes + l.pendentes,
+      horas: acc.horas + l.horas_pendencia,
+    }),
+    { programadas: 0, expedidas: 0, pendentes: 0, horas: 0 },
+  );
+  return {
+    programadas: t.programadas,
+    expedidas: t.expedidas,
+    pendentes: t.pendentes,
+    taxaExpedicaoPct: taxaExpedicao(t.expedidas, t.programadas),
+    tempoMedioPendencia: razao(t.horas, t.pendentes),
+  };
+}
+
+/* ---------------- Farol da simulação (parâmetros fictícios) ---------------- */
+
+export type StatusFarol = 'normal' | 'atencao' | 'critico' | 'sem-dados';
+
+export interface LimitesFarol {
+  /** abaixo deste valor (%): Atenção */
+  atencao: number;
+  /** abaixo deste valor (%): Crítico */
+  critico: number;
+}
+
+/** Parâmetros demonstrativos FICTÍCIOS (ajustáveis na tela). */
+export const LIMITES_PADRAO: LimitesFarol = { atencao: 95, critico: 85 };
+
+/** Valida os limites informados pelo visitante. Retorna a lista de erros (vazia = válido). */
+export function validarLimites(l: LimitesFarol): string[] {
+  const erros: string[] = [];
+  for (const [nome, v] of [
+    ['Atenção', l.atencao],
+    ['Crítico', l.critico],
+  ] as const) {
+    if (!Number.isFinite(v)) erros.push(`${nome}: informe um número.`);
+    else if (v < 0 || v > 100) erros.push(`${nome}: use um valor entre 0 e 100.`);
+  }
+  if (erros.length === 0 && l.critico >= l.atencao) erros.push('O limite crítico precisa ser menor que o de atenção.');
+  return erros;
+}
+
+/**
+ * Farol com prioridade para Crítico:
+ * - Crítico se QUALQUER indicador disponível estiver abaixo do limite crítico;
+ * - senão Atenção se algum estiver abaixo do limite de atenção;
+ * - senão Normal;
+ * - "sem-dados" se nenhum indicador puder ser calculado.
+ * Indicadores sem dado (null) são ignorados — nunca viram zero.
+ */
+export function farol(valores: (number | null)[], limites: LimitesFarol = LIMITES_PADRAO): StatusFarol {
+  const disponiveis = valores.filter((v): v is number => v !== null && Number.isFinite(v));
+  if (disponiveis.length === 0) return 'sem-dados';
+  if (disponiveis.some((v) => v < limites.critico)) return 'critico';
+  if (disponiveis.some((v) => v < limites.atencao)) return 'atencao';
+  return 'normal';
+}
+
+export const ROTULO_FAROL: Record<StatusFarol, string> = {
+  normal: 'Normal',
+  atencao: 'Atenção',
+  critico: 'Crítico',
+  'sem-dados': 'Sem dados',
+};
 
 /** Segunda-feira (AAAA-MM-DD) da semana de uma data ISO. */
 export function inicioDaSemana(dataIso: string): string {

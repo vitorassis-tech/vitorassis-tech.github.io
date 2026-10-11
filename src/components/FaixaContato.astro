@@ -6,62 +6,79 @@ interface Props {
   texto?: string;
 }
 const {
-  titulo = 'Vamos conversar sobre dados e operação?',
-  texto = 'Estou aberto a oportunidades em análise de dados, BI e logística orientada por dados.',
+  titulo = 'Vamos conversar sobre dados e tecnologia?',
+  texto = 'Estou aberto a oportunidades em análise de dados, Business Intelligence e tecnologia.',
 } = Astro.props;
 const canais = canaisVisiveis();
-const email = canais.find((c) => c.id === 'email');
+const curto = (v: string) => v.replace('linkedin.com/', '').replace('github.com/', '');
 ---
 
-<section class="faixa-contato" aria-labelledby="faixa-contato-titulo">
-  <div class="container interno">
-    <div>
-      <h2 id="faixa-contato-titulo">{titulo}</h2>
-      <p>{texto}</p>
-    </div>
-    <div class="acoes">
-      {email && <a class="btn btn-claro" href={email.href}>Enviar e-mail</a>}
-      <a class="btn btn-contorno" href={url('/contato/')}>Ver todos os contatos</a>
+<section class="faixa-contato cmd" aria-labelledby="faixa-contato-titulo">
+  <div class="container">
+    <div class="terminal painel-vidro">
+      <p class="terminal-barra mono" aria-hidden="true"><i></i><i></i><i></i><span>canais de contato</span></p>
+      <div class="terminal-corpo">
+        <div>
+          <h2 id="faixa-contato-titulo">{titulo}</h2>
+          <p class="muted">{texto}</p>
+        </div>
+        <div>
+          <ul class="canais">
+            {
+              canais.map((c) => (
+                <li>
+                  <a
+                    href={c.href}
+                    target={c.id === 'email' ? undefined : '_blank'}
+                    rel={c.id === 'email' ? undefined : 'noopener noreferrer'}
+                  >
+                    <span>{c.rotulo}</span>
+                    <span class="mono valor">{curto(c.valor)}</span>
+                    {c.id !== 'email' && <span class="visually-hidden"> (abre em nova aba)</span>}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="todos"><a href={url('/contato/')}>Ver página de contato</a></p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .faixa-contato {
-    background: var(--navy);
-    color: #e8eef6;
-    padding-block: clamp(3rem, 7vw, 5rem);
-    position: relative;
-    overflow: hidden;
+  .faixa-contato { padding-block: clamp(3rem, 7vw, 5rem); }
+  .terminal-barra {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0.7rem 1.1rem;
+    border-bottom: 1px solid var(--cmd-line);
+    color: var(--cmd-muted);
   }
-  /* Linha de rota decorativa discreta, coerente com o mapa da página inicial */
-  .faixa-contato::after {
-    content: '';
-    position: absolute;
-    right: -4rem;
-    bottom: -6rem;
-    width: 22rem;
-    height: 22rem;
-    border: 2px dashed rgba(229, 138, 43, 0.45);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-  .interno {
-    display: grid;
-    gap: 2rem;
-    position: relative;
-    z-index: 1;
-  }
+  .terminal-barra i { width: 10px; height: 10px; border-radius: 50%; background: var(--cmd-line-2); }
+  .terminal-barra span { margin-left: 0.5rem; }
+  .terminal-corpo { display: grid; gap: 2rem; padding: clamp(1.25rem, 3vw, 2rem); }
   @media (min-width: 900px) {
-    .interno { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: end; }
-    .acoes { justify-content: flex-end; }
+    .terminal-corpo { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); align-items: end; }
   }
-  h2 { color: #fff; font-size: var(--step-4); max-width: 18ch; }
-  p { margin: 0; max-width: 52ch; color: #d3deeb; }
-  .acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-  .btn-claro { background: #fff; color: var(--navy); border-color: #fff; }
-  .btn-claro:hover { background: var(--accent-wash); color: var(--navy-900); }
-  .btn-contorno { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.6); }
-  .btn-contorno:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
-  a:focus-visible { box-shadow: 0 0 0 3px var(--navy), 0 0 0 6px #fff; }
+  h2 { font-size: var(--step-4); max-width: 16ch; font-weight: 480; letter-spacing: -0.03em; }
+  .terminal-corpo p { margin: 0; max-width: 52ch; }
+  .canais { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--cmd-line); }
+  .canais a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    min-height: 52px;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--cmd-line);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .canais a:hover .valor { color: var(--signal-text); }
+  .valor { color: var(--cmd-muted); overflow-wrap: anywhere; text-align: right; }
+  .todos { margin-top: 1rem !important; font-size: 0.95rem; }
 </style>

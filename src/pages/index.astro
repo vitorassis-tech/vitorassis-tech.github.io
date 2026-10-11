@@ -2,74 +2,126 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RotaCarreira from '../components/RotaCarreira.astro';
 import ListaProjetos from '../components/ListaProjetos.astro';
+import VitrineDemos from '../components/VitrineDemos.astro';
 import FaixaContato from '../components/FaixaContato.astro';
 import { site } from '../data/site';
 import { projetos } from '../data/projetos';
 import { competencias } from '../data/competencias';
-import { url } from '../lib/formato';
+import { marcos, experiencias } from '../data/trajetoria';
+import { mesAno, url } from '../lib/formato';
 
-const destaques = projetos.slice(0, 4);
+const SLUGS_DESTAQUE = ['torre-controle-expedicao', 'simulacao-torre-controle', 'painel-fretes-simulado', 'atividade-flask'];
+const destaques = SLUGS_DESTAQUE.map((s) => projetos.find((p) => p.slug === s)).filter((p) => p !== undefined);
+const cargoAtual = experiencias[0].cargos[0];
+const proximas = marcos.filter((m) => m.proxima);
 const frentes = [
   {
+    rotulo: 'Módulo operação',
     titulo: 'Na operação',
     texto: 'Roteirização e planejamento de cargas no Roadnet, controle de fretes spot, gestão de ocorrências e faturamento de transportes com conferência de XML para liberação de CT-e.',
+    formacao: false,
   },
   {
+    rotulo: 'Módulo dados',
     titulo: 'Nos dados',
-    texto: 'Dashboards gerenciais em Power BI com dados do SAP e SQL, tratados no Power Query e calculados em DAX, para acompanhar KPIs operacionais e financeiros.',
+    texto: 'Dashboards gerenciais em Power BI a partir de relatórios e arquivos operacionais exportados, tratados no Power Query e calculados em DAX, para acompanhar KPIs operacionais e financeiros.',
+    formacao: false,
   },
   {
+    rotulo: 'Módulo em formação',
     titulo: 'Em formação',
-    texto: 'Python e Flask no Senac, administração de banco de dados no SENAI Firjan (concluído) e Inteligência Artificial na FAETEC.',
+    texto: 'SQL e modelagem de dados (Administrador de Banco de Dados, SENAI Firjan, concluído), Python e Flask (Senac) e Inteligência Artificial (FAETEC).',
+    formacao: true,
   },
 ];
 ---
 
 <BaseLayout title={site.nome}>
-  <section class="hero container" aria-labelledby="hero-titulo">
-    <div class="hero-texto">
-      <p class="assinatura">{site.nome}, {site.cargoAtual} na {site.empresaAtual}</p>
-      <h1 id="hero-titulo">Da operação logística às decisões guiadas por dados.</h1>
-      <p class="lede">
-        Há mais de sete anos na logística, do armazém ao planejamento de transportes. Hoje roteirizo cargas, acompanho
-        fretes e construo painéis em Power BI e SQL para a gerência. Agora aprofundo Python, bancos de dados e
-        inteligência artificial.
-      </p>
-      <div class="cta">
-        <a class="btn btn-primary" href={url('/projetos/')}>Ver projetos</a>
-        <a class="btn btn-ghost" href={url('/sobre/')}>Conhecer minha trajetória</a>
+  <div class="cmd abertura">
+    <section class="container hero" aria-labelledby="hero-titulo">
+      <div class="hero-texto">
+        <p class="coord mono">
+          <span>{site.local}</span><span>22°54′S 43°10′W</span><span>Logística, dados e BI</span>
+        </p>
+        <h1 id="hero-titulo">Da operação logística às decisões guiadas por dados.</h1>
+        <p class="lede">
+          {site.cargoAtual} na {site.empresaAtual}. Roteirizo cargas no Roadnet, acompanho fretes e construo dashboards
+          em Power BI para a gerência, a partir de relatórios exportados da operação. Em formação: SQL, Python e
+          inteligência artificial.
+        </p>
+        <div class="cta">
+          <a class="btn btn-sinal" href={url('/projetos/')}>Ver projetos</a>
+          <a class="btn btn-linha" href="#demonstracoes">Experimentar as demonstrações</a>
+        </div>
       </div>
+      <dl class="leituras painel-vidro">
+        <div>
+          <dt class="mono">Posição atual</dt>
+          <dd>{cargoAtual.titulo}, {site.empresaAtual}, desde {mesAno(cargoAtual.inicio)}</dd>
+        </div>
+        <div>
+          <dt class="mono">Na logística desde</dt>
+          <dd>{mesAno(experiencias[0].inicio)}, com início na indústria em {mesAno(marcos[0].data)}</dd>
+        </div>
+        <div>
+          <dt class="mono">Próximas paradas</dt>
+          <dd>{proximas.map((m) => `${m.titulo} (${mesAno(m.data)})`).join(' e ')}, previstas</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="container telemetria-secao" aria-labelledby="telemetria-titulo">
+      <div class="telemetria painel-vidro">
+        <p class="telemetria-cab">
+          <span id="telemetria-titulo" class="telemetria-titulo">Telemetria de carreira</span>
+          <span class="mono muted">atualizado em {mesAno(site.revisadoEm.slice(0, 7))}</span>
+        </p>
+        <div class="telemetria-corpo"><RotaCarreira /></div>
+      </div>
+    </section>
+
+    <div class="container">
+      <ul class="destaques mono" aria-label="Destaques">
+        <li><b>Power BI, Power Query e DAX</b> em dashboards gerenciais</li>
+        <li><b>Roadnet</b> na roteirização diária</li>
+        <li><b>Banco de dados</b> SENAI Firjan, 180h</li>
+        <li><b>Python</b> Senac, em andamento</li>
+      </ul>
     </div>
-    <div class="hero-rota">
-      <h2 class="visually-hidden">Trajetória</h2>
-      <RotaCarreira />
-    </div>
-  </section>
+  </div>
 
   <section class="section container" aria-labelledby="frentes-titulo">
     <div class="section-head">
       <h2 id="frentes-titulo">Onde a operação encontra os dados</h2>
-      <p>Conheço o problema por dentro antes de transformá-lo em indicador. É isso que conecta as três frentes do meu trabalho.</p>
+      <p>Conheço o problema por dentro antes de transformá-lo em indicador.</p>
     </div>
     <div class="frentes">
       {
         frentes.map((f) => (
-          <div class="frente">
+          <article class:list={['modulo', { formacao: f.formacao }]}>
+            <p class="mono modulo-rotulo"><i aria-hidden="true" />{f.rotulo}</p>
             <h3>{f.titulo}</h3>
             <p>{f.texto}</p>
-          </div>
+          </article>
         ))
       }
+    </div>
+  </section>
+
+  <section class="cmd section-cmd" id="demonstracoes" aria-labelledby="demos-titulo">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="demos-titulo">Experimente, não só leia</h2>
+        <p>Três demonstrações que funcionam no navegador. Todos os dados e parâmetros são fictícios e independentes da Profarma.</p>
+      </div>
+      <VitrineDemos />
     </div>
   </section>
 
   <section class="section container" aria-labelledby="projetos-titulo">
     <div class="section-head">
       <h2 id="projetos-titulo">Projetos selecionados</h2>
-      <p>
-        Cada projeto informa se é profissional, acadêmico ou uma demonstração com dados simulados. Nada de números
-        inventados.
-      </p>
+      <p>Cada projeto informa se é profissional, acadêmico ou uma demonstração com dados fictícios. Nada de números inventados.</p>
     </div>
     <ListaProjetos projetos={destaques} />
     <p class="ver-todos"><a href={url('/projetos/')}>Ver todos os {projetos.length} projetos</a></p>
@@ -107,41 +159,69 @@ const frentes = [
 </BaseLayout>
 
 <style>
+  .abertura { padding-bottom: 0.5rem; }
   .hero {
+    display: grid;
+    gap: 2.5rem;
     padding-top: clamp(2.5rem, 7vw, 5.5rem);
-    padding-bottom: clamp(2rem, 5vw, 3.5rem);
+    padding-bottom: clamp(2rem, 4vw, 3rem);
   }
-  .hero-texto { max-width: 58rem; }
-  .assinatura {
-    font-size: 1rem;
-    color: var(--accent-ink);
-    font-weight: 500;
-    margin-bottom: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+  @media (min-width: 1080px) {
+    .hero { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); align-items: end; }
   }
-  .assinatura::before {
-    content: '';
-    width: 2.5rem;
-    height: 2px;
-    background: var(--accent);
-    flex: none;
+  .coord { display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; color: var(--cmd-muted); margin: 0 0 1.5rem; }
+  .coord span:first-child { color: var(--signal-text); }
+  h1 {
+    font-size: clamp(2.5rem, 1.3rem + 4.6vw, 5rem);
+    font-weight: 480;
+    letter-spacing: -0.035em;
+    max-width: 14ch;
+    margin-bottom: 1.5rem;
   }
-  h1 { max-width: 15ch; margin-bottom: 1.5rem; }
+  .lede { max-width: 50ch; }
   .cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
-  .hero-rota {
-    margin-top: clamp(3rem, 7vw, 5rem);
-    padding-top: 2rem;
-    border-top: 1px solid var(--line);
-  }
 
-  .frentes { display: grid; gap: 2rem 3rem; }
-  @media (min-width: 760px) { .frentes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .frente { border-top: 3px solid var(--navy); padding-top: 1.25rem; }
-  .frente:last-child { border-top-color: var(--accent); }
-  .frente h3 { font-size: var(--step-2); }
-  .frente p { color: var(--muted); margin: 0; }
+  .leituras { margin: 0; display: grid; }
+  .leituras > div { padding: 0.9rem 1.15rem; }
+  .leituras > div + div { border-top: 1px solid var(--cmd-line); }
+  .leituras dt { color: var(--cmd-muted); }
+  .leituras dd { margin: 0.25rem 0 0; color: var(--cmd-text); line-height: 1.4; }
+
+  .telemetria-secao { padding-bottom: 1.5rem; }
+  .telemetria-cab {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin: 0;
+    padding: 0.9rem 1.15rem;
+    border-bottom: 1px solid var(--cmd-line);
+  }
+  .telemetria-titulo { font-weight: 600; color: #fff; }
+  .telemetria-corpo { padding: 1.25rem 1.15rem 1rem; }
+
+  .destaques {
+    list-style: none;
+    margin: 0;
+    padding: 1rem 0 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    color: var(--cmd-muted);
+    border-top: 1px solid var(--cmd-line);
+  }
+  .destaques b { color: var(--cmd-text); font-weight: 600; }
+
+  .frentes { display: grid; gap: 1.25rem; }
+  @media (min-width: 860px) { .frentes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .modulo { border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius-l); padding: 1.25rem 1.25rem 1.4rem; }
+  .modulo-rotulo { color: var(--muted); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.9rem; }
+  .modulo-rotulo i { width: 8px; height: 8px; border-radius: 50%; background: var(--navy); }
+  .formacao .modulo-rotulo i { background: transparent; border: 2px solid var(--accent); }
+  .modulo h3 { font-size: var(--step-2); margin-bottom: 0.5rem; }
+  .modulo p:last-child { margin: 0; color: var(--muted); }
+
+  .section-cmd { padding-block: var(--section); }
 
   .ver-todos { margin-top: 1.75rem; font-weight: 500; }
 

@@ -1,77 +1,105 @@
 # Relatório de testes
 
-**Data da execução:** 11/10/2026
+**Data da execução:** 11/10/2026 (após a implementação das correções E1 a E16 e da nova identidade visual)
 **Ambiente:** container Linux na nuvem, Node 22.22, npm 10.9, Python 3.13, Chromium 141 (Playwright 1.56.1)
-**Comando:** `npm run test:all`, mais as verificações manuais listadas abaixo
+**Base:** commit `6369885`, com as alterações ainda **não commitadas**
 
 Neste relatório, "passou" significa que o teste **foi executado** e passou. O que não pôde ser executado está na seção "Não testado".
 
 ## Resumo
 
-| Suíte | Ferramenta | Resultado |
+| Suíte | Comando | Resultado |
 |---|---|---|
-| Gerador de dados simulados | Python `unittest` | **8 de 8 passaram** |
-| Tipos TypeScript | `tsc --noEmit` | **Sem erros** |
-| Lógica e conteúdo | Vitest | **29 de 29 passaram** (3 arquivos) |
-| Build de produção | `astro build` | **11 páginas geradas, sem erros nem avisos** |
-| Navegador (ponta a ponta) | Playwright + axe-core | **39 de 39 passaram** |
-| Vulnerabilidades de dependências | `npm audit` | **0 vulnerabilidades** |
-| Instalação limpa | `npm ci` (npm 10) em pasta vazia | **OK** |
+| Gerador de dados fictícios | `npm run test:dados` | **18 de 18 passaram** |
+| Tipos TypeScript | `npm run typecheck` (`astro sync && tsc --noEmit`) | **Sem erros** |
+| Lógica e conteúdo | `npm test` (Vitest) | **55 de 55 passaram** (3 arquivos) |
+| Build de produção | `npm run build` | **12 páginas geradas, sem erros nem avisos** |
+| Navegador (ponta a ponta) | `npm run test:e2e` (Playwright + axe) | **56 de 56 passaram** |
+| Bateria completa | `npm run test:all` | **Código de saída 0** |
+| Vulnerabilidades | `npm audit` | **0 vulnerabilidades** |
+| Independência dos dados fictícios | script de verificação mantido **fora** do repositório | **Nenhuma coincidência** de quantidades de referência ou nomes reais |
 | Desempenho, acessibilidade, SEO | Lighthouse 12.8 (emulação móvel, localhost) | Ver tabela abaixo |
 
 ## O que cada suíte cobre
 
-### Python (`dados-demo/tests`)
-- Dias úteis sem fim de semana; geração reprodutível (mesma semente, mesmos dados).
-- No-Show e Spot calculados pelo SQL conferem com a regra `MÁXIMO(x − y; 0)` em todas as linhas.
-- OTIF nunca excede entregas no prazo nem completas; total agregado bate com a tabela bruta.
-- Integridade referencial (nenhuma entrega sem transportadora).
-- O JSON publicado existe, está marcado `simulado: true`, contém o aviso "DADOS SIMULADOS" e tem formato consistente.
+### Python (`dados-demo/tests`): 18 testes
+- Geração reprodutível, dias úteis e integridade referencial.
+- Frota coerente: veículos em rota ≤ disponíveis e ≤ necessários.
+- Entregas da frota batem com a tabela bruta; OTIF nunca excede os componentes.
+- Cargas: programadas = expedidas + pendentes. Lista de pendências bate com o agregado. Dias sem pendência têm 0 horas.
+- Existem dias sem pendência, o que garante que o estado vazio é exercitado.
+- O resumo SQL (cobertura e entregas por veículo em rota) confere com o cálculo manual.
+- Divisão por zero no SQL retorna nulo.
+- Transportadoras com nomes genéricos (A a D).
+- SQL, JSON e CSV sem termos de regras reais ("no-show", "spot", "máximo", "contrat…").
+- Arquivos publicados com `simulado: true`, aviso "DADOS FICTÍCIOS" e parâmetros padrão 95/85 identificados como fictícios.
 
-### Vitest (`tests/unit`)
-- **KPIs:** No-Show, Spot, OTIF ponderado, custo por entrega, agrupamento semanal, retorno `null` quando não há dados (o painel mostra "sem dados", sem inventar valor).
-- **Roteirização:** vizinho mais próximo visita todos os pontos; 2-opt desfaz cruzamento e **nunca piora** a rota (25 cenários); gerador determinístico; casos vazios.
-- **Conteúdo:** slugs únicos; campos obrigatórios dos estudos de caso; demonstrações marcadas como simuladas; **nenhum resultado declarado como "medido"**; o projeto profissional não contém quantidades de veículos, valores em R$ ou percentuais; links internos válidos; telefone oculto; datas válidas e marcos em ordem; formatação pt-BR; prefixo de subpasta.
+### Vitest (`tests/unit`): 55 testes
+- **Indicadores:** cobertura de frota, entregas por veículo em rota, taxa de expedição, tempo médio de pendência e OTIF. Divisões por zero retornam `null`. Período sem pendências resulta em tempo médio `null`, não zero.
+- **Farol:** padrão 95/85, classificação, **prioridade para Crítico**, limites exatos, indicadores sem dado ignorados, "sem dados" e validação dos limites informados.
+- **Roteirização:** distância mínima entre pontos em 100 sementes com 5, 14 e 40 pontos. Trechos: N entregas geram N+1 trechos, e a soma é igual à distância total. O 2-opt nunca piora a rota.
+- **Conteúdo (correções):**
+  - E1: nenhum cargo na Profarma cita SQL, e o texto dos dashboards não generaliza o Roadnet.
+  - E3: SQL aparece como formação.
+  - E4: Torre com Roadnet e Excel, sem SQL, sem termos de regras e com "Em uso diário pela gerência."
+  - E5: "Torre de Controle" não aparece como cargo ou etapa.
+  - E6: objetivo idêntico ao aprovado.
+  - E7: descrições de SEO sem SQL associado ao trabalho.
+  - E8: nenhum texto afirma que uma demonstração reproduz o painel real.
+  - E9: projetos e código das demonstrações sem termos de regras reais.
+  - E11: arquivos marcados como fictícios.
+  - E13: Atividade Flask sem afirmação de publicação.
+  - E14: banco de dados sem MySQL.
+  - Também verificados: privacidade (telefone oculto), links internos, datas e formatação.
 
-### Playwright (`tests/e2e`)
-- **10 rotas** respondem 200, com um único `h1`, `title`, `meta description`, `canonical` e `lang="pt-BR"`, **sem erros no console**.
-- Página 404 responde com status 404.
-- `robots.txt` e `sitemap` gerados, com todas as rotas e sem a 404.
-- Todos os links internos de todas as páginas respondem 200.
-- Links externos com `rel="noopener"`; nenhum `tel:` ou número de telefone publicado.
-- **Responsividade:** sem rolagem horizontal em **375, 430, 768 e 1280 px** em todas as rotas. O teste desativa o `overflow-x: clip` do `body` para não mascarar transbordos.
-- **Teclado:** o primeiro Tab foca "Pular para o conteúdo"; o menu móvel abre, fecha com Esc e devolve o foco ao botão; o gráfico de OTIF pode ser percorrido com setas, Home e End.
-- **Acessibilidade (axe, WCAG 2.1 A/AA):** nenhuma violação séria ou crítica nas 10 rotas e na 404.
-- **Filtros de projetos:** filtram, anunciam o resultado para leitores de tela, persistem na URL e, **sem JavaScript**, todos os projetos continuam visíveis e os botões ficam ocultos.
-- **Painel de fretes:** carrega, exibe o aviso de dados simulados, reage aos filtros, limpa os filtros e mostra uma **mensagem clara quando o JSON não carrega** (falha simulada com HTTP 500).
-- **Laboratório de rotas:** recalcula ao mudar a quantidade de pontos, alterna entre as rotas e gera novos pontos.
-- **Contato:** o botão copia o e-mail e anuncia a ação.
+### Playwright (`tests/e2e`): 56 testes
+- **11 rotas** com status 200, um único `h1`, `title`, descrição, `canonical`, `lang="pt-BR"` e **sem erros no console**. A 404 responde com status 404. `robots.txt` e sitemap presentes. Todos os links internos respondem. Links externos usam `noopener`. Telefone não publicado.
+- **Responsividade:** sem rolagem horizontal em **375, 430, 768, 1280 e 1440 px** em todas as rotas. O teste desativa o `overflow-x: clip` para não mascarar problemas.
+- **Acessibilidade:** axe (WCAG 2.1 A/AA) sem violações sérias ou críticas nas 11 rotas e na 404. O primeiro Tab foca o link para pular ao conteúdo. O menu do celular abre, fecha com Esc e devolve o foco.
+- **Movimento reduzido:** nenhuma animação roda na página inicial quando o visitante pede menos movimento.
+- **Conteúdo:** a Experiência e as frentes "operação" e "dados" não citam SQL. A página da Torre cita Roadnet, Excel e uso diário, sem fórmulas, e tem link para a simulação. O objetivo aparece exato na página Sobre.
+- **Filtros de projetos:** com 6 projetos, filtram, anunciam o resultado e persistem na URL. Sem JavaScript, tudo continua visível.
+- **Painel de frota:**
+  - Aviso visível, filtros funcionando e indicadores novos ("veíc." não aparece mais).
+  - **A tabela confere com o resumo calculado pelo SQL** nas 4 transportadoras.
+  - Gráficos navegáveis pelo teclado, com valores anunciados.
+  - Mensagem clara quando os dados não carregam.
+- **Simulação da Torre:**
+  - Aviso visível que cita a Profarma; parâmetros "fictícios e ajustáveis"; faróis com texto.
+  - Farol prioriza Crítico e reage aos limites ajustados.
+  - Limite inválido mostra erro e mantém os últimos valores válidos.
+  - **Estado sem pendências** mostra "Nenhuma carga pendente" e tempo médio "sem pendências".
+  - Mensagem clara quando os dados não carregam.
+- **Laboratório:**
+  - Com **5, 14 e 40 pontos**, nos dois modos: o mapa tem N marcadores, a lista numerada tem N itens, os números do mapa vão de 1 a N, "Saída do CD" e "Retorno ao CD" aparecem sem número e há N+1 trechos.
+  - A soma dos trechos é igual ao total, e novos pontos atualizam tudo.
+  - Números do mapa com pelo menos 10,5 px de altura renderizada em tela de 375 px.
 
-## Lighthouse (executado localmente)
+## Lighthouse (executado localmente, emulação móvel)
 
 | Página | Desempenho | Acessibilidade | Boas práticas | SEO | LCP | CLS | TBT |
 |---|---|---|---|---|---|---|---|
-| Início | 97 | 100 | 100 | 100 | 1,8 s | 0 | 150 ms |
-| Painel de fretes | 100 | 100 | 100 | 100 | 1,5 s | 0 | 80 ms |
+| Início | 99 | 100 | 100 | 100 | 1,8 s | 0 | 40 ms |
+| Sobre | 99 | 100 | 100 | 100 | 2,0 s | 0,005 | 0 ms |
+| Torre de Controle (estudo de caso) | 99 | 100 | 100 | 100 | 1,8 s | 0 | 0 ms |
+| Simulação da Torre | 99 | 100 | 100 | 100 | 2,0 s | 0 | 0 ms |
+| Painel de frota | 99 | 100 | 100 | 100 | 2,1 s | 0 | 0 ms |
+| Laboratório | 99 | 100 | 100 | 100 | 2,0 s | 0 | 0 ms |
 
-São métricas de laboratório (emulação de celular com rede limitada simulada) servidas a partir de `localhost`. Os valores reais dependem da hospedagem e devem ser medidos depois da publicação (PageSpeed Insights).
+Na primeira medição, a página inicial teve desempenho 88 (TBT de 390 ms) por causa do `backdrop-filter` nos painéis. O efeito foi removido, e as duas medições seguintes deram 99. As simulações, o painel e o laboratório também foram medidos com o efeito ativo (99); não foram medidos de novo depois da remoção. Os valores são de laboratório. Os números reais dependem da hospedagem.
 
-## Verificações visuais (manuais)
+## Correções feitas durante os testes
 
-Capturas de tela revisadas em 375, 430, 768, 980, 1000, 1280 e 1440 px. Problemas encontrados e **corrigidos** durante a revisão:
-
-1. Painel e laboratório transbordavam no celular (itens de grid com `min-width` automático). Corrigido com `minmax(0, 1fr)`.
-2. Linhas da tabela do painel criadas por JavaScript não recebiam o estilo do componente. Corrigido com seletores `:global`.
-3. Os indicadores do painel ficavam desalinhados no celular. A grade foi reescrita (mobile first).
-4. O rótulo da última parada do mapa de rota era cortado entre 960 e 1100 px. A coluna de folga foi ampliada.
-5. Espaços perdidos entre texto e link ("aTorre", "Origem:Sistemas"). Corrigidos, e foi feita uma varredura no HTML gerado em busca de casos parecidos.
-6. Os botões de filtro apareciam sem JavaScript, apesar do atributo `hidden`. Corrigido (o teste pegou o erro).
-7. Rótulos do eixo X sobrepostos no fim do gráfico de OTIF. Corrigido.
+1. Região rolável sem foco no laboratório (sequência de visitas), apontada pelo axe → recebeu `tabindex` e rótulo.
+2. Teste de soma dos trechos lia uma tabela recolhida como vazia → passou a ler `textContent`.
+3. Estilos de tabela da simulação vazavam para outras páginas → foram restritos ao componente.
+4. Barra de navegação acinzentada sobre o fundo claro → ficou mais opaca.
+5. Desempenho da página inicial abaixo de 90 → `backdrop-filter` removido.
 
 ## Não testado / limitações do ambiente
 
-- **Safari (iOS/macOS) e Firefox:** não estavam disponíveis no ambiente; os testes rodaram só no Chromium. Recomenda-se abrir o site no celular antes de publicar.
-- **Leitores de tela reais** (NVDA, VoiceOver): não testados. A estrutura semântica e o axe foram verificados, mas isso não substitui o teste com leitor de tela.
+- **Firefox e Safari:** indisponíveis no ambiente; os testes rodaram só no Chromium.
+- **Leitores de tela reais** (NVDA, VoiceOver): não testados.
+- **Windows:** nada foi executado em Windows. As instruções estão no README, e o executor `scripts/python.mjs` foi preparado para `py`/`python`.
 - **Core Web Vitals de campo:** só podem ser medidas com o site publicado.
-- **Windows:** os comandos foram executados em Linux. As instruções para Windows estão no README, mas não foram executadas.
-- **Links externos** (LinkedIn, GitHub): o formato foi verificado, mas não foi feito acesso real a eles, porque o ambiente não tem acesso livre à internet.
+- **Links externos** (LinkedIn, GitHub): o formato foi verificado, mas não foi feito acesso real.

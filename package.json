@@ -11,10 +11,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "dados": "python3 dados-demo/gerar_dados.py",
+    "dados": "node scripts/python.mjs dados-demo/gerar_dados.py",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "test:dados": "python3 -m unittest discover -s dados-demo/tests -v",
+    "test:dados": "node scripts/python.mjs -m unittest discover -s dados-demo/tests -v",
     "test:all": "npm run test:dados && npm run typecheck && npm run test && npm run build && npm run test:e2e",
     "og": "node scripts/gerar-og.mjs",
     "typecheck": "astro sync && tsc --noEmit"

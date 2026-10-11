@@ -12,7 +12,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
 
 <BaseLayout
   title="Sobre"
-  description="Trajetória de Vitor Assis: do armazém ao planejamento de transportes e à análise de dados com Power BI, SQL e Python. Formação, cursos e competências."
+  description="Trajetória de Vitor Assis: do armazém ao planejamento de transportes e à dashboards em Power BI, com estudos em SQL, Python e bancos de dados. Formação, cursos e competências."
 >
   <CabecalhoPagina
     titulo="Logística na prática, dados como ferramenta"
@@ -43,10 +43,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
     </div>
     <aside class="objetivo" aria-labelledby="objetivo-titulo">
       <h3 id="objetivo-titulo">O que busco</h3>
-      <p>
-        Atuar em análise de dados e Business Intelligence, de preferência em contextos de logística e supply chain, onde
-        minha experiência operacional ajuda a fazer as perguntas certas aos dados.
-      </p>
+      <p>{site.objetivo}</p>
     </aside>
   </section>
 

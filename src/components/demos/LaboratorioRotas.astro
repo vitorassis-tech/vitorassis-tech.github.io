@@ -1,18 +1,18 @@
 ---
-/** Laboratório de roteirização — pontos SIMULADOS gerados no navegador. */
+/** Laboratório de roteirização — pontos FICTÍCIOS gerados no navegador. */
 ---
 
-<div class="lab" data-laboratorio-rotas>
+<div class="lab console" data-laboratorio-rotas>
   <div class="aviso-simulado" role="note">
     <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 1 21h22L12 2zm0 4.5L19.5 19h-15L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/></svg>
     <span>
-      <strong>Pontos simulados.</strong> As entregas são posições aleatórias em um plano fictício, sem endereços reais. A
-      distância é em linha reta, em unidades do plano.
+      <strong>Pontos fictícios.</strong> As entregas são posições aleatórias em um plano fictício, sem endereços reais.
+      A distância é em linha reta, em unidades do plano. A redução calculada não representa ganho operacional real.
     </span>
   </div>
 
   <div class="controles">
-    <label>
+    <label class="faixa-qtd">
       <span>Pontos de entrega: <output name="qtd-saida">14</output></span>
       <input type="range" name="qtd" min="5" max="40" step="1" value="14" />
     </label>
@@ -23,11 +23,11 @@
         <label><input type="radio" name="modo" value="otimizada" checked /> <span>Após 2-opt</span></label>
       </div>
     </fieldset>
-    <button type="button" class="btn btn-ghost gerar">Gerar novos pontos</button>
+    <button type="button" class="btn btn-linha gerar">Gerar novos pontos</button>
   </div>
 
   <div class="palco">
-    <div class="mapa" role="img" aria-label="Mapa com o depósito e os pontos de entrega ligados pela rota selecionada. A sequência está descrita na lista ao lado."></div>
+    <div class="mapa" role="img" aria-label="Mapa com o CD e os pontos de entrega ligados pela rota selecionada. A sequência completa está na lista de visitas."></div>
     <div class="lateral">
       <dl class="metricas">
         <div><dt>Vizinho mais próximo</dt><dd data-m="vizinho">–</dd></div>
@@ -35,9 +35,23 @@
         <div class="ganho"><dt>Redução calculada</dt><dd data-m="ganho">–</dd></div>
       </dl>
       <p class="resumo-rota" aria-live="polite"></p>
-      <details>
+      <details open>
         <summary>Sequência de visitas</summary>
-        <ol class="sequencia"></ol>
+        <div class="sequencia-caixa" role="region" aria-label="Sequência de visitas da rota exibida" tabindex="0">
+          <p class="extremo" data-extremo="saida">Saída do CD</p>
+          <ol class="sequencia"></ol>
+          <p class="extremo" data-extremo="retorno">Retorno ao CD</p>
+        </div>
+      </details>
+      <details>
+        <summary>Trechos e distâncias</summary>
+        <div class="tabela-rolagem" role="region" aria-label="Trechos da rota exibida" tabindex="0">
+          <table class="trechos">
+            <thead><tr><th scope="col">Trecho</th><th scope="col" class="num">Distância</th></tr></thead>
+            <tbody></tbody>
+            <tfoot><tr><th scope="row">Total</th><td class="num total-trechos"></td></tr></tfoot>
+          </table>
+        </div>
       </details>
     </div>
   </div>
@@ -49,48 +63,50 @@
 </script>
 
 <style>
-  .lab {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.25rem;
-    padding: clamp(1rem, 3vw, 1.75rem);
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-l);
-    box-shadow: 0 1px 0 var(--line), 0 24px 48px -36px rgba(15, 37, 65, 0.35);
-  }
+  .lab { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; padding: clamp(1rem, 3vw, 1.75rem); }
   .controles { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: end; }
-  .controles > label { display: grid; gap: 0.4rem; font-size: 0.9rem; font-weight: 500; color: var(--muted); min-width: 12rem; flex: 1 1 12rem; }
-  output { color: var(--navy); font-weight: 600; font-variant-numeric: tabular-nums; }
-  input[type='range'] { width: 100%; accent-color: var(--navy); min-height: 32px; }
-  fieldset { border: 0; padding: 0; margin: 0; }
-  legend { font-size: 0.9rem; font-weight: 500; color: var(--muted); padding: 0; margin-bottom: 0.4rem; }
-  .segmentado { display: inline-flex; border: 1.5px solid var(--line-strong); border-radius: var(--radius-m); overflow: hidden; flex-wrap: wrap; }
+  .faixa-qtd { display: grid; gap: 0.4rem; font-size: 0.9rem; font-weight: 500; color: var(--cmd-muted); min-width: 12rem; flex: 1 1 12rem; }
+  output { color: #fff; font-weight: 600; font-variant-numeric: tabular-nums; }
+  input[type='range'] { width: 100%; accent-color: var(--signal); min-height: 32px; }
+  fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+  legend { font-size: 0.9rem; font-weight: 500; color: var(--cmd-muted); padding: 0; margin-bottom: 0.4rem; }
+  .segmentado { display: inline-flex; border: 1px solid var(--cmd-line-2); border-radius: var(--radius-m); overflow: hidden; flex-wrap: wrap; }
   .segmentado label { position: relative; cursor: pointer; }
   .segmentado input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
-  .segmentado span { display: inline-flex; align-items: center; min-height: 42px; padding: 0 0.9rem; font-size: 0.92rem; font-weight: 500; color: var(--ink); }
-  .segmentado label + label span { border-left: 1.5px solid var(--line-strong); }
-  .segmentado input:checked + span { background: var(--navy); color: #fff; }
-  .segmentado input:focus-visible + span { box-shadow: inset 0 0 0 3px var(--accent); }
+  .segmentado span { display: inline-flex; align-items: center; min-height: 42px; padding: 0 0.9rem; font-size: 0.92rem; font-weight: 500; color: var(--cmd-text); }
+  .segmentado label + label span { border-left: 1px solid var(--cmd-line-2); }
+  .segmentado input:checked + span { background: var(--signal); color: #1b0f02; }
+  .segmentado input:focus-visible + span { box-shadow: inset 0 0 0 3px #fff; }
 
   .palco { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
-  @media (min-width: 900px) { .palco { grid-template-columns: minmax(0, 3fr) minmax(0, 1.2fr); } }
+  @media (min-width: 900px) { .palco { grid-template-columns: minmax(0, 3fr) minmax(0, 1.3fr); } }
   .mapa {
     aspect-ratio: 5 / 3;
     border-radius: var(--radius-m);
-    background-color: #fbfcfe;
-    background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-color: var(--cmd-0);
+    background-image: linear-gradient(var(--cmd-line) 1px, transparent 1px), linear-gradient(90deg, var(--cmd-line) 1px, transparent 1px);
     background-size: 10% 16.6667%;
-    border: 1px solid var(--line);
+    border: 1px solid var(--cmd-line);
     overflow: hidden;
   }
-  .mapa :global(svg) { width: 100%; height: 100%; }
-  .metricas { margin: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
-  .metricas > div { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
-  .metricas dt { font-size: 0.9rem; color: var(--muted); }
-  .metricas dd { margin: 0; font-family: var(--font-display); font-size: 1.35rem; color: var(--navy); font-variant-numeric: tabular-nums; }
-  .ganho dd { color: var(--accent-ink); }
-  .resumo-rota { font-size: 0.9rem; color: var(--muted); margin: 0.75rem 0; }
-  summary { cursor: pointer; color: var(--navy); font-weight: 500; min-height: 32px; display: flex; align-items: center; }
-  .sequencia { font-size: 0.9rem; padding-left: 1.4rem; max-height: 14rem; overflow: auto; margin: 0.5rem 0 0; }
+  .mapa :global(svg) { width: 100%; height: 100%; display: block; }
+  .metricas { margin: 0; display: grid; border-top: 1px solid var(--cmd-line); }
+  .metricas > div { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--cmd-line); }
+  .metricas dt { font-size: 0.9rem; color: var(--cmd-muted); }
+  .metricas dd { margin: 0; font-family: var(--font-display); font-size: 1.35rem; color: #fff; font-variant-numeric: tabular-nums; }
+  .ganho dd { color: var(--signal-text); }
+  .resumo-rota { font-size: 0.9rem; color: var(--cmd-muted); margin: 0.75rem 0; }
+  details + details { margin-top: 0.5rem; }
+  summary { cursor: pointer; color: var(--cmd-text); font-weight: 500; min-height: 36px; display: flex; align-items: center; }
+  .sequencia-caixa { font-size: 0.9rem; max-height: 16rem; overflow: auto; margin-top: 0.25rem; }
+  .extremo { margin: 0.25rem 0; color: var(--signal-text); font-weight: 600; }
+  .sequencia { padding-left: 1.6rem; margin: 0.25rem 0; }
+  .sequencia :global(li) { padding: 0.1rem 0; }
+  .sequencia :global(li::marker) { color: var(--cmd-muted); font-variant-numeric: tabular-nums; }
+  .tabela-rolagem { overflow-x: auto; max-height: 16rem; overflow-y: auto; }
+  .trechos { width: 100%; border-collapse: collapse; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+  .trechos th, .trechos :global(td) { text-align: left; padding: 0.35rem 0.5rem 0.35rem 0; border-bottom: 1px solid var(--cmd-line); font-weight: 400; }
+  .trechos thead th { color: var(--cmd-muted); font-size: 0.8rem; }
+  .trechos tfoot th, .trechos tfoot td { font-weight: 600; color: #fff; border-bottom: 0; }
+  .num, .trechos :global(td.num) { text-align: right !important; }
 </style>

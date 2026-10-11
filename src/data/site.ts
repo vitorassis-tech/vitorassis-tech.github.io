@@ -19,11 +19,14 @@ export const site = {
   nomeCompleto: 'Vitor da Silva de Assis',
   cargoAtual: 'Assistente de Logística II',
   empresaAtual: 'Profarma',
-  posicionamento: 'Logística e Supply Chain, Análise de Dados e BI',
+  posicionamento: 'Logística, Análise de Dados e BI',
   local: 'Rio de Janeiro, RJ',
   idioma: 'pt-BR',
   descricaoPadrao:
-    'Portfólio de Vitor Assis: experiência em logística, roteirização e gestão de fretes, com dashboards em Power BI, SQL e projetos em Python, bancos de dados e desenvolvimento web.',
+    'Portfólio de Vitor Assis: experiência em logística, roteirização e gestão de fretes, com dashboards em Power BI, Power Query e DAX, e estudos em SQL, Python, bancos de dados e desenvolvimento web.',
+  /** Objetivo profissional — texto aprovado pelo proprietário. Não alterar sem nova aprovação. */
+  objetivo:
+    'Atuar nas áreas de Análise de Dados, Business Intelligence e tecnologia, aplicando conhecimentos em Power BI, Excel, SQL, Python e automação para transformar dados em informações úteis à tomada de decisão.',
   /** Data da última revisão do conteúdo (AAAA-MM-DD). */
   revisadoEm: '2026-10-11',
 } as const;

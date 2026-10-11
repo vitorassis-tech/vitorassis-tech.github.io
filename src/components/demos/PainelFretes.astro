@@ -1,18 +1,18 @@
 ---
 /**
- * Painel interativo com DADOS SIMULADOS.
+ * Painel interativo com DADOS FICTÍCIOS.
  * Dados: public/dados/fretes-simulados.json (gerado por dados-demo/gerar_dados.py)
  * Lógica: src/scripts/painel-fretes.ts + src/lib/kpis.ts
  */
 import { url } from '../../lib/formato';
 ---
 
-<div class="painel" data-painel-fretes data-fonte={url('/dados/fretes-simulados.json')}>
+<div class="painel console" data-painel-fretes data-fonte={url('/dados/fretes-simulados.json')}>
   <div class="aviso-simulado" role="note">
     <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 1 21h22L12 2zm0 4.5L19.5 19h-15L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/></svg>
     <span>
-      <strong>Dados simulados.</strong> Transportadoras, regiões, volumes e custos são fictícios, gerados por script
-      para demonstrar a lógica dos indicadores. Não representam nenhuma operação real.
+      <strong>Dados fictícios.</strong> Transportadoras, regiões, volumes, custos e indicadores são fictícios, gerados por
+      script e independentes de qualquer empresa. Não representam nenhuma operação real.
     </span>
   </div>
 
@@ -36,27 +36,28 @@ import { url } from '../../lib/formato';
     <button type="reset" class="limpar" disabled>Limpar filtros</button>
   </form>
 
-  <p class="estado" role="status" aria-live="polite">Carregando dados simulados…</p>
+  <p class="estado" role="status" aria-live="polite">Carregando dados fictícios…</p>
 
   <div class="conteudo-painel" hidden>
-    <p class="periodo-ativo muted"></p>
+    <p class="periodo-ativo mono"></p>
     <dl class="kpis">
       <div class="kpi" data-kpi="entregas"><dt>Entregas</dt><dd class="valor"></dd><dd class="sub"></dd></div>
       <div class="kpi" data-kpi="otif"><dt>OTIF</dt><dd class="valor"></dd><dd class="sub"></dd></div>
       <div class="kpi" data-kpi="custo"><dt>Custo por entrega</dt><dd class="valor"></dd><dd class="sub"></dd></div>
-      <div class="kpi" data-kpi="noshow"><dt>No-Show</dt><dd class="valor"></dd><dd class="sub"></dd></div>
-      <div class="kpi" data-kpi="spot"><dt>Spot</dt><dd class="valor"></dd><dd class="sub"></dd></div>
+      <div class="kpi" data-kpi="cobertura"><dt>Cobertura de frota</dt><dd class="valor"></dd><dd class="sub"></dd></div>
+      <div class="kpi" data-kpi="produtividade"><dt>Entregas por veículo em rota</dt><dd class="valor"></dd><dd class="sub"></dd></div>
     </dl>
-    <p class="nota-frota muted" hidden>No-Show e Spot são controlados por transportadora e dia; o filtro de região não se aplica a eles.</p>
+    <p class="nota-frota" hidden>Cobertura de frota e entregas por veículo em rota são calculadas por transportadora e dia; o filtro de região não se aplica a elas.</p>
 
     <div class="graficos">
       <figure class="grafico" data-grafico="otif">
         <figcaption>
           <span class="g-titulo">OTIF por semana</span>
-          <span class="g-sub muted">Entregas no prazo e completas sobre o total, em %</span>
+          <span class="g-sub">Entregas no prazo e completas sobre o total, em %</span>
         </figcaption>
-        <div class="area" tabindex="0" role="img" aria-label="Gráfico de linha do OTIF semanal. Use as setas para percorrer as semanas."></div>
+        <div class="area" tabindex="0" role="group" aria-roledescription="gráfico" aria-label="Gráfico de linha do OTIF semanal. Use as setas, Home e End para percorrer as semanas."></div>
         <div class="tooltip" hidden></div>
+        <p class="anuncio visually-hidden" aria-live="polite"></p>
         <details>
           <summary>Ver dados do gráfico</summary>
           <table class="tabela-dados"><thead><tr><th scope="col">Semana iniciada em</th><th scope="col">Entregas</th><th scope="col">OTIF</th></tr></thead><tbody></tbody></table>
@@ -65,29 +66,30 @@ import { url } from '../../lib/formato';
 
       <figure class="grafico" data-grafico="frota">
         <figcaption>
-          <span class="g-titulo">No-Show e Spot por transportadora</span>
-          <span class="g-sub muted">Soma de veículos no período</span>
+          <span class="g-titulo">Frota por transportadora</span>
+          <span class="g-sub">Veículos necessários e disponíveis no período</span>
         </figcaption>
         <ul class="legenda" aria-hidden="true">
-          <li><span class="cor cor-1"></span>No-Show</li>
-          <li><span class="cor cor-2"></span>Spot</li>
+          <li><span class="cor cor-1"></span>Necessários</li>
+          <li><span class="cor cor-2"></span>Disponíveis</li>
         </ul>
-        <div class="area" role="img" aria-label="Gráfico de barras com No-Show e Spot por transportadora. Os valores estão na tabela abaixo."></div>
+        <div class="area" tabindex="0" role="group" aria-roledescription="gráfico" aria-label="Gráfico de barras de veículos necessários e disponíveis por transportadora. Use as setas para percorrer as barras. Os valores também estão na tabela abaixo."></div>
         <div class="tooltip" hidden></div>
+        <p class="anuncio visually-hidden" aria-live="polite"></p>
       </figure>
     </div>
 
     <div class="tabela-rolagem" role="region" aria-label="Resumo por transportadora" tabindex="0">
       <table class="resumo">
-        <caption>Resumo por transportadora (dados simulados)</caption>
+        <caption>Resumo por transportadora (dados fictícios)</caption>
         <thead>
           <tr>
             <th scope="col">Transportadora</th>
             <th scope="col" class="num">Entregas</th>
             <th scope="col" class="num">OTIF</th>
             <th scope="col" class="num">Custo por entrega</th>
-            <th scope="col" class="num">No-Show</th>
-            <th scope="col" class="num">Spot</th>
+            <th scope="col" class="num">Cobertura de frota</th>
+            <th scope="col" class="num">Entregas por veículo em rota</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -96,11 +98,13 @@ import { url } from '../../lib/formato';
 
     <details class="regras">
       <summary>Como os indicadores são calculados</summary>
+      <p class="regras-aviso">Indicadores didáticos desta demonstração, independentes de qualquer empresa.</p>
       <dl>
-        <dt>OTIF</dt><dd>Entregas no prazo <em>e</em> completas ÷ total de entregas.</dd>
-        <dt>No-Show</dt><dd>MÁXIMO(veículos contratados − veículos apresentados; 0), por dia e transportadora.</dd>
-        <dt>Spot (frete extra)</dt><dd>MÁXIMO(veículos utilizados − veículos contratados; 0), por dia e transportadora.</dd>
+        <dt>OTIF</dt><dd>Entregas no prazo <em>e</em> completas ÷ total de entregas × 100.</dd>
         <dt>Custo por entrega</dt><dd>Soma do custo de frete ÷ número de entregas.</dd>
+        <dt>Cobertura de frota</dt><dd>Veículos disponíveis ÷ veículos necessários × 100. Acima de 100% indica sobra de veículos.</dd>
+        <dt>Entregas por veículo em rota</dt><dd>Entregas ÷ veículos que saíram em rota.</dd>
+        <dt>Sem dados</dt><dd>Quando o denominador é zero, o indicador aparece como “sem dados”, e não como zero.</dd>
       </dl>
     </details>
   </div>
@@ -117,105 +121,102 @@ import { url } from '../../lib/formato';
     grid-template-columns: minmax(0, 1fr);
     gap: 1.25rem;
     padding: clamp(1rem, 3vw, 1.75rem);
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-l);
-    box-shadow: 0 1px 0 var(--line), 0 24px 48px -36px rgba(15, 37, 65, 0.35);
   }
   .filtros { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: end; }
-  .filtros label { display: grid; gap: 0.3rem; font-size: 0.88rem; font-weight: 500; color: var(--muted); flex: 1 1 10rem; }
+  .filtros label { display: grid; gap: 0.3rem; font-size: 0.88rem; font-weight: 500; color: var(--cmd-muted); flex: 1 1 10rem; }
   select {
     min-height: 44px;
     padding: 0.4rem 2rem 0.4rem 0.75rem;
-    border: 1.5px solid var(--line-strong);
+    border: 1px solid var(--cmd-line-2);
     border-radius: var(--radius-m);
-    background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2317365D' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
+    background: var(--cmd-0) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23E7EEF7' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
     appearance: none;
     font: 400 1rem var(--font-body);
-    color: var(--ink);
+    color: var(--cmd-text);
     width: 100%;
   }
-  select:focus-visible { box-shadow: var(--focus); }
+  select option { background: var(--cmd-0); color: var(--cmd-text); }
   .limpar {
     min-height: 44px;
     padding: 0.4rem 1rem;
     border-radius: var(--radius-m);
-    border: 1.5px solid transparent;
+    border: 1px solid transparent;
     background: transparent;
-    color: var(--navy);
+    color: var(--cmd-text);
     font: 500 0.95rem var(--font-body);
     text-decoration: underline;
-    text-decoration-color: var(--accent);
+    text-decoration-color: var(--signal);
     text-underline-offset: 0.2em;
     cursor: pointer;
   }
-  .estado { margin: 0; color: var(--muted); }
-  .estado.erro { color: #8a1c1c; background: #fdecec; padding: 0.75rem 1rem; border-radius: var(--radius-m); }
+  .estado { margin: 0; color: var(--cmd-muted); }
+  .estado.erro { color: #ffd2cc; background: rgba(240, 100, 90, 0.14); border: 1px solid rgba(240, 100, 90, 0.5); padding: 0.75rem 1rem; border-radius: var(--radius-m); }
   .estado:empty { display: none; }
-  .periodo-ativo { margin: 0; font-size: 0.92rem; }
+  .periodo-ativo { margin: 0; color: var(--cmd-muted); }
 
-  .kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1rem; margin: 0; border-bottom: 1px solid var(--line); }
-  .kpi { padding: 0.9rem 0; border-top: 1px solid var(--line); min-width: 0; }
+  .kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1rem; margin: 0; border-bottom: 1px solid var(--cmd-line); }
+  .kpi { padding: 0.9rem 0; border-top: 1px solid var(--cmd-line); min-width: 0; }
   @media (min-width: 560px) {
     .kpis { grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 0; }
     .kpi { padding: 1rem 0.9rem; }
     .kpi:first-child { padding-left: 0; }
-    .kpi + .kpi { border-left: 1px solid var(--line); }
+    .kpi + .kpi { border-left: 1px solid var(--cmd-line); }
   }
   @media (min-width: 560px) and (max-width: 819px) {
     .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .kpi:nth-child(4) { border-left: 0; padding-left: 0; }
   }
-  .kpi dt { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
-  .kpi .valor { margin: 0.15rem 0 0; font-family: var(--font-display); font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); color: var(--navy); font-variant-numeric: tabular-nums; line-height: 1.15; }
-  .kpi .sub { margin: 0.2rem 0 0; font-size: 0.8rem; color: var(--muted); line-height: 1.35; }
-  .nota-frota { font-size: 0.85rem; margin: -0.5rem 0 0; }
+  .kpi dt { font-size: 0.85rem; color: var(--cmd-muted); font-weight: 500; }
+  .kpi .valor { margin: 0.15rem 0 0; font-family: var(--font-display); font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); color: #fff; font-variant-numeric: tabular-nums; line-height: 1.15; }
+  .kpi .sub { margin: 0.2rem 0 0; font-size: 0.8rem; color: var(--cmd-muted); line-height: 1.35; }
+  .nota-frota { font-size: 0.85rem; margin: -0.5rem 0 0; color: var(--cmd-muted); }
 
   .graficos { display: grid; gap: 1.5rem 2rem; margin-bottom: 0.75rem; }
   .graficos > * { min-width: 0; }
   @media (min-width: 900px) { .graficos { grid-template-columns: 3fr 2fr; } }
   .grafico { margin: 0; position: relative; min-width: 0; }
   figcaption { display: grid; gap: 0.1rem; margin-bottom: 0.75rem; }
-  .g-titulo { font-weight: 600; color: var(--ink); }
-  .g-sub { font-size: 0.85rem; }
+  .g-titulo { font-weight: 600; color: #fff; }
+  .g-sub { font-size: 0.85rem; color: var(--cmd-muted); }
   .area { position: relative; width: 100%; height: 240px; border-radius: var(--radius-s); }
   .area :global(svg) { width: 100%; height: 100%; overflow: visible; }
-  .legenda { display: flex; gap: 1rem; list-style: none; padding: 0; margin: 0 0 0.5rem; font-size: 0.85rem; color: var(--muted); }
+  .legenda { display: flex; gap: 1rem; list-style: none; padding: 0; margin: 0 0 0.5rem; font-size: 0.85rem; color: var(--cmd-muted); }
   .legenda li { display: inline-flex; align-items: center; gap: 0.4rem; }
   .cor { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
-  .cor-1 { background: var(--serie-1); }
-  .cor-2 { background: var(--serie-2); }
+  .cor-1 { background: var(--serie-1-escuro); }
+  .cor-2 { background: var(--serie-2-escuro); }
 
   .tooltip {
     position: absolute;
     z-index: 5;
     pointer-events: none;
-    background: var(--navy-900);
-    color: #fff;
+    background: #fff;
+    color: var(--cmd-0);
     font-size: 0.82rem;
     line-height: 1.4;
     padding: 0.45rem 0.65rem;
     border-radius: var(--radius-m);
-    box-shadow: 0 8px 20px -8px rgba(15, 37, 65, 0.5);
+    box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.6);
     white-space: nowrap;
     transform: translate(-50%, calc(-100% - 10px));
   }
   details { margin-top: 0.75rem; font-size: 0.9rem; }
-  summary { cursor: pointer; color: var(--navy); font-weight: 500; min-height: 32px; display: flex; align-items: center; }
+  summary { cursor: pointer; color: var(--cmd-text); font-weight: 500; min-height: 32px; display: flex; align-items: center; }
   .tabela-dados, .resumo { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-  .tabela-dados th, .tabela-dados :global(td) { padding: 0.35rem 0.5rem 0.35rem 0; text-align: left; border-bottom: 1px solid var(--line); font-weight: 400; }
-  .tabela-dados thead th { color: var(--muted); font-size: 0.8rem; }
+  .tabela-dados th, .tabela-dados :global(td) { padding: 0.35rem 0.5rem 0.35rem 0; text-align: left; border-bottom: 1px solid var(--cmd-line); font-weight: 400; }
+  .tabela-dados thead th { color: var(--cmd-muted); font-size: 0.8rem; }
 
   .tabela-rolagem { overflow-x: auto; }
-  .resumo { min-width: 36rem; font-size: 0.95rem; }
-  .resumo caption { text-align: left; font-weight: 600; padding-bottom: 0.5rem; }
-  .resumo :global(th), .resumo :global(td) { padding: 0.6rem 0.75rem 0.6rem 0; border-bottom: 1px solid var(--line); text-align: left; }
-  .resumo thead th { font-size: 0.82rem; color: var(--muted); font-weight: 500; border-bottom-color: var(--line-strong); }
+  .resumo { min-width: 40rem; font-size: 0.95rem; }
+  .resumo caption { text-align: left; font-weight: 600; padding-bottom: 0.5rem; color: #fff; }
+  .resumo :global(th), .resumo :global(td) { padding: 0.6rem 0.75rem 0.6rem 0; border-bottom: 1px solid var(--cmd-line); text-align: left; }
+  .resumo thead th { font-size: 0.82rem; color: var(--cmd-muted); font-weight: 500; border-bottom-color: var(--cmd-line-2); }
   .resumo :global(tbody th) { font-weight: 500; }
   .num, .resumo :global(td.num) { text-align: right !important; }
 
+  .regras-aviso { margin: 0.75rem 0 0; color: var(--signal-text); }
   .regras dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; margin: 0.75rem 0 0; }
   .regras dt { font-weight: 600; }
-  .regras dd { margin: 0; color: var(--muted); }
+  .regras dd { margin: 0; color: var(--cmd-muted); }
   @media (max-width: 559px) { .regras dl { grid-template-columns: 1fr; } .regras dd { margin-bottom: 0.5rem; } }
 </style>

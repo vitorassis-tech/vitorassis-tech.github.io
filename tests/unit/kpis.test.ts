@@ -1,13 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import {
+  coberturaFrota,
   deColunar,
+  entregasPorVeiculoEmRota,
+  farol,
   inicioDaSemana,
-  noShow,
+  LIMITES_PADRAO,
   otifSemanal,
   razao,
+  resumirCargas,
   resumirEntregas,
   resumirFrota,
-  spot,
+  taxaExpedicao,
+  validarLimites,
+  type LinhaCargas,
   type LinhaEntrega,
   type LinhaFrota,
 } from '../../src/lib/kpis';
@@ -25,27 +31,101 @@ const entrega = (p: Partial<LinhaEntrega>): LinhaEntrega => ({
   ...p,
 });
 
-describe('regras de frota', () => {
-  it('No-Show = MÁXIMO(contratado − apresentado; 0)', () => {
-    expect(noShow(10, 8)).toBe(2);
-    expect(noShow(10, 10)).toBe(0);
-    expect(noShow(10, 12)).toBe(0);
+describe('indicadores didáticos de frota', () => {
+  it('cobertura de frota = disponíveis ÷ necessários × 100', () => {
+    expect(coberturaFrota(9, 10)).toBeCloseTo(90);
+    expect(coberturaFrota(12, 10)).toBeCloseTo(120);
   });
 
-  it('Spot = MÁXIMO(utilizado − contratado; 0)', () => {
-    expect(spot(12, 10)).toBe(2);
-    expect(spot(9, 10)).toBe(0);
+  it('entregas por veículo em rota = entregas ÷ veículos em rota', () => {
+    expect(entregasPorVeiculoEmRota(70, 10)).toBeCloseTo(7);
   });
 
-  it('soma No-Show e Spot por dia, sem compensar dias diferentes', () => {
+  it('divisão por zero retorna null (sem dados), nunca 0', () => {
+    expect(coberturaFrota(3, 0)).toBeNull();
+    expect(entregasPorVeiculoEmRota(5, 0)).toBeNull();
+    expect(taxaExpedicao(0, 0)).toBeNull();
+    expect(razao(1, 0)).toBeNull();
+  });
+
+  it('resume a frota somando antes de dividir (média ponderada)', () => {
     const linhas: LinhaFrota[] = [
-      { data: '2026-01-05', transportadora: 'A', contratados: 10, apresentados: 8, utilizados: 9, no_show: 2, spot: 0 },
-      { data: '2026-01-06', transportadora: 'A', contratados: 10, apresentados: 12, utilizados: 13, no_show: 0, spot: 3 },
+      { data: '2026-01-05', transportadora: 'A', necessarios: 10, disponiveis: 8, em_rota: 8, entregas: 56 },
+      { data: '2026-01-06', transportadora: 'A', necessarios: 30, disponiveis: 30, em_rota: 30, entregas: 210 },
     ];
     const r = resumirFrota(linhas);
-    expect(r.noShow).toBe(2);
-    expect(r.spot).toBe(3);
-    expect(r.contratados).toBe(20);
+    expect(r.coberturaPct).toBeCloseTo(95);
+    expect(r.entregasPorVeiculo).toBeCloseTo(7);
+    expect(resumirFrota([]).coberturaPct).toBeNull();
+  });
+});
+
+describe('cargas e pendências', () => {
+  const linha = (p: Partial<LinhaCargas>): LinhaCargas => ({
+    data: '2026-01-05',
+    transportadora: 'A',
+    programadas: 20,
+    expedidas: 18,
+    pendentes: 2,
+    horas_pendencia: 10,
+    ...p,
+  });
+
+  it('taxa de expedição e tempo médio de pendência', () => {
+    const r = resumirCargas([linha({}), linha({ programadas: 10, expedidas: 10, pendentes: 0, horas_pendencia: 0 })]);
+    expect(r.taxaExpedicaoPct).toBeCloseTo((28 / 30) * 100);
+    expect(r.tempoMedioPendencia).toBeCloseTo(5);
+  });
+
+  it('período sem pendências: tempo médio é null, não zero', () => {
+    const r = resumirCargas([linha({ programadas: 10, expedidas: 10, pendentes: 0, horas_pendencia: 0 })]);
+    expect(r.pendentes).toBe(0);
+    expect(r.tempoMedioPendencia).toBeNull();
+    expect(r.taxaExpedicaoPct).toBeCloseTo(100);
+  });
+
+  it('sem cargas programadas: taxa é null', () => {
+    expect(resumirCargas([]).taxaExpedicaoPct).toBeNull();
+  });
+});
+
+describe('farol (parâmetros fictícios)', () => {
+  it('usa 95% e 85% como padrão', () => {
+    expect(LIMITES_PADRAO).toEqual({ atencao: 95, critico: 85 });
+  });
+
+  it('classifica normal, atenção e crítico', () => {
+    expect(farol([99, 97])).toBe('normal');
+    expect(farol([99, 90])).toBe('atencao');
+    expect(farol([99, 80])).toBe('critico');
+  });
+
+  it('prioriza Crítico quando qualquer indicador está abaixo do limite crítico', () => {
+    expect(farol([90, 84.9])).toBe('critico');
+    expect(farol([84, 100])).toBe('critico');
+  });
+
+  it('limite exato não rebaixa o status', () => {
+    expect(farol([95, 95])).toBe('normal');
+    expect(farol([85, 99])).toBe('atencao');
+  });
+
+  it('ignora indicadores sem dado e retorna sem-dados quando nenhum existe', () => {
+    expect(farol([null, 99])).toBe('normal');
+    expect(farol([null, 80])).toBe('critico');
+    expect(farol([null, null])).toBe('sem-dados');
+  });
+
+  it('respeita limites ajustados', () => {
+    expect(farol([92], { atencao: 90, critico: 80 })).toBe('normal');
+    expect(farol([79], { atencao: 90, critico: 80 })).toBe('critico');
+  });
+
+  it('valida os limites informados', () => {
+    expect(validarLimites({ atencao: 95, critico: 85 })).toEqual([]);
+    expect(validarLimites({ atencao: 80, critico: 85 })).toHaveLength(1);
+    expect(validarLimites({ atencao: 120, critico: 85 })).toHaveLength(1);
+    expect(validarLimites({ atencao: Number.NaN, critico: 85 })).toHaveLength(1);
   });
 });
 
@@ -62,7 +142,6 @@ describe('indicadores de entrega', () => {
     const r = resumirEntregas([]);
     expect(r.otifPct).toBeNull();
     expect(r.custoPorEntrega).toBeNull();
-    expect(razao(1, 0)).toBeNull();
   });
 
   it('agrupa OTIF por semana (segunda-feira) e pondera pelo volume', () => {

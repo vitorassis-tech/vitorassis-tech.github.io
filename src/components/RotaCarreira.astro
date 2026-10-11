@@ -37,6 +37,7 @@ const trechoPrevisto = curva(pts.slice(ultimoConcluido));
   <div class="faixa" aria-hidden="true">
     <svg viewBox="0 0 1000 100" preserveAspectRatio="none" focusable="false">
       <path class="trilha" d={curva(pts)} vector-effect="non-scaling-stroke"></path>
+      <path class="brilho" d={trechoConcluido} vector-effect="non-scaling-stroke"></path>
       <path class="concluido" d={trechoConcluido} vector-effect="non-scaling-stroke"></path>
       <path class="previsto" d={trechoPrevisto} vector-effect="non-scaling-stroke"></path>
     </svg>
@@ -67,6 +68,7 @@ const trechoPrevisto = curva(pts.slice(ultimoConcluido));
 </figure>
 
 <style>
+  /* Telemetria de carreira — desenhada para a superfície escura (.cmd) */
   .rota {
     margin: 0;
     position: relative;
@@ -78,10 +80,7 @@ const trechoPrevisto = curva(pts.slice(ultimoConcluido));
   ol { list-style: none; margin: 0; padding: 0; }
 
   /* --- Lista vertical (padrão: celular e tablet) --- */
-  .parada {
-    position: relative;
-    padding: 0 0 1.35rem 2rem;
-  }
+  .parada { position: relative; padding: 0 0 1.35rem 2rem; }
   .parada::before {
     content: '';
     position: absolute;
@@ -89,12 +88,12 @@ const trechoPrevisto = curva(pts.slice(ultimoConcluido));
     top: 0.9rem;
     bottom: -0.35rem;
     width: 2px;
-    background: var(--navy);
+    background: var(--trace);
   }
   .parada:last-child::before { display: none; }
   .parada.atual::before,
   .parada.proxima::before {
-    background: repeating-linear-gradient(to bottom, var(--accent) 0 5px, transparent 5px 10px);
+    background: repeating-linear-gradient(to bottom, var(--signal) 0 5px, transparent 5px 10px);
   }
   .marcador {
     position: absolute;
@@ -103,39 +102,49 @@ const trechoPrevisto = curva(pts.slice(ultimoConcluido));
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: var(--surface);
-    border: 3px solid var(--navy);
+    background: var(--cmd-1);
+    border: 3px solid var(--trace);
   }
-  .atual .marcador { background: var(--accent); border-color: var(--navy); box-shadow: 0 0 0 4px var(--accent-wash); }
-  .proxima .marcador { border-style: dashed; border-color: var(--accent); border-width: 2px; }
+  .atual .marcador { background: var(--signal); border-color: var(--cmd-0); box-shadow: 0 0 0 2px var(--signal); }
+  .atual .marcador::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid var(--signal);
+    opacity: 0;
+  }
+  .proxima .marcador { border-style: dashed; border-color: var(--signal); border-width: 2px; }
 
   .rotulo { display: grid; gap: 0.05rem; }
-  time {
-    font-size: var(--step--1);
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-  }
+  time { font-family: var(--font-mono); font-size: 0.78rem; color: var(--cmd-muted); }
   strong {
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 560;
     font-size: 1.15rem;
-    color: var(--navy);
+    color: #fff;
     line-height: 1.2;
   }
-  .detalhe { font-size: 0.92rem; color: var(--muted); line-height: 1.4; }
+  .proxima strong { color: var(--signal-text); }
+  .detalhe { font-size: 0.92rem; color: var(--cmd-muted); line-height: 1.4; }
 
   .legenda {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: var(--step--1);
-    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--cmd-muted);
     margin: 0.5rem 0 0;
   }
   .legenda span { display: inline-block; width: 1.75rem; height: 0; margin-left: 0.5rem; }
   .legenda span:first-child { margin-left: 0; }
-  .leg-concluido { border-top: 2.5px solid var(--navy); }
-  .leg-previsto { border-top: 2.5px dashed var(--accent); }
+  .leg-concluido { border-top: 2.5px solid var(--trace); }
+  .leg-previsto { border-top: 2.5px dashed var(--signal); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .atual .marcador::after { animation: pulso 2.4s ease-out infinite; }
+  }
 
   /* --- Mapa de rota horizontal (telas largas) --- */
   @media (min-width: 960px) {
@@ -156,9 +165,10 @@ const trechoPrevisto = curva(pts.slice(ultimoConcluido));
     }
     .faixa svg { width: 100%; height: 100%; overflow: visible; }
     path { fill: none; stroke-linecap: round; }
-    .trilha { stroke: var(--line); stroke-width: 10; }
-    .concluido { stroke: var(--navy); stroke-width: 3; }
-    .previsto { stroke: var(--accent); stroke-width: 3; stroke-dasharray: 7 7; }
+    .trilha { stroke: rgba(150, 185, 225, 0.12); stroke-width: 10; }
+    .brilho { stroke: rgba(207, 226, 246, 0.22); stroke-width: 8; }
+    .concluido { stroke: var(--trace); stroke-width: 2.5; }
+    .previsto { stroke: var(--signal); stroke-width: 2.5; stroke-dasharray: 7 7; }
 
     .parada {
       grid-column: calc(var(--i) + 1);
@@ -166,15 +176,12 @@ const trechoPrevisto = curva(pts.slice(ultimoConcluido));
       padding: 0.6rem 0 0 0.75rem;
       margin-left: calc(50% - 1px);
       width: 180%;
-      border-left: 1px solid var(--line-strong);
+      border-left: 1px solid var(--cmd-line-2);
       align-self: start;
     }
-    .parada.acima {
-      grid-row: 1;
-      align-self: end;
-      padding: 0 0 0.6rem 0.75rem;
-    }
+    .parada.acima { grid-row: 1; align-self: end; padding: 0 0 0.6rem 0.75rem; }
     .parada::before { display: none; }
+    .parada { position: static; }
     .marcador {
       position: absolute;
       left: calc(var(--x) - 9px);
@@ -182,14 +189,12 @@ const trechoPrevisto = curva(pts.slice(ultimoConcluido));
       width: 18px;
       height: 18px;
     }
-    /* O marcador precisa ser posicionado em relação à lista, não ao item */
-    .parada { position: static; }
     strong { font-size: 1.05rem; }
     .detalhe { font-size: 0.85rem; max-width: 22ch; }
 
     @media (prefers-reduced-motion: no-preference) {
       .faixa svg { animation: revelar 1.8s var(--ease) 0.2s both; }
-      .marcador { animation: surgir 0.5s var(--ease) both; animation-delay: calc(0.3s + var(--i) * 0.18s); }
+      .marcador { animation: surgir 0.5s var(--ease) both; animation-delay: calc(0.3s + var(--i) * 0.15s); }
     }
   }
 
@@ -200,5 +205,9 @@ const trechoPrevisto = curva(pts.slice(ultimoConcluido));
   @keyframes surgir {
     from { opacity: 0; transform: scale(0.4); }
     to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes pulso {
+    0% { opacity: 0.8; transform: scale(1); }
+    100% { opacity: 0; transform: scale(2.4); }
   }
 </style>

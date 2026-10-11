@@ -92,15 +92,46 @@ export function geradorAleatorio(semente: number): () => number {
   };
 }
 
-/** Gera depósito no centro + `quantidade` pontos dentro de uma margem do plano. */
-export function gerarPontos(quantidade: number, semente: number, largura = 100, altura = 60, margem = 6): Ponto[] {
+/**
+ * Gera o depósito (CD) no centro + `quantidade` pontos dentro de uma margem do plano.
+ * Mantém uma distância mínima entre pontos (rejeição com limite de tentativas) para
+ * evitar marcadores sobrepostos. Se o limite for atingido, aceita o último sorteio.
+ */
+export function gerarPontos(
+  quantidade: number,
+  semente: number,
+  largura = 100,
+  altura = 60,
+  margem = 6,
+  distanciaMinima = 6,
+): Ponto[] {
   const aleatorio = geradorAleatorio(semente);
   const pontos: Ponto[] = [{ x: largura / 2, y: altura / 2 }];
   for (let i = 0; i < quantidade; i++) {
-    pontos.push({
-      x: margem + aleatorio() * (largura - 2 * margem),
-      y: margem + aleatorio() * (altura - 2 * margem),
-    });
+    let candidato: Ponto = { x: 0, y: 0 };
+    for (let tentativa = 0; tentativa < 300; tentativa++) {
+      candidato = {
+        x: margem + aleatorio() * (largura - 2 * margem),
+        y: margem + aleatorio() * (altura - 2 * margem),
+      };
+      if (pontos.every((p) => distancia(p, candidato) >= distanciaMinima)) break;
+    }
+    pontos.push(candidato);
   }
   return pontos;
+}
+
+export interface Trecho {
+  de: number;
+  para: number;
+  distancia: number;
+}
+
+/** Trechos de uma rota fechada (inclui o retorno ao ponto inicial). A soma é igual a distanciaRota. */
+export function trechosRota(pontos: Ponto[], rota: number[]): Trecho[] {
+  if (rota.length < 2) return [];
+  return rota.map((de, i) => {
+    const para = rota[(i + 1) % rota.length];
+    return { de, para, distancia: distancia(pontos[de], pontos[para]) };
+  });
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { distanciaRota, doisOpt, gerarPontos, geradorAleatorio, vizinhoMaisProximo } from '../../src/lib/roteirizacao';
+import { distancia, distanciaRota, doisOpt, gerarPontos, geradorAleatorio, trechosRota, vizinhoMaisProximo } from '../../src/lib/roteirizacao';
 
 describe('roteirização', () => {
   const quadrado = [
@@ -57,8 +57,34 @@ describe('roteirização', () => {
     }
   });
 
+  it('mantém distância mínima entre pontos em 100 sementes (5, 14 e 40 pontos)', () => {
+    for (const qtd of [5, 14, 40]) {
+      for (let semente = 1; semente <= 100; semente++) {
+        const pts = gerarPontos(qtd, semente);
+        expect(pts).toHaveLength(qtd + 1);
+        let menor = Infinity;
+        for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) menor = Math.min(menor, distancia(pts[i], pts[j]));
+        expect(menor, `qtd ${qtd}, semente ${semente}`).toBeGreaterThanOrEqual(6);
+      }
+    }
+  });
+
+  it('trechos: N entregas geram N+1 trechos e a soma é igual à distância total', () => {
+    for (const qtd of [5, 14, 40]) {
+      const pts = gerarPontos(qtd, 11);
+      const rota = doisOpt(pts, vizinhoMaisProximo(pts));
+      const trechos = trechosRota(pts, rota);
+      expect(trechos).toHaveLength(qtd + 1);
+      expect(trechos[0].de).toBe(0);
+      expect(trechos[trechos.length - 1].para).toBe(0);
+      const soma = trechos.reduce((s, t) => s + t.distancia, 0);
+      expect(soma).toBeCloseTo(distanciaRota(pts, rota), 9);
+    }
+  });
+
   it('casos vazios não quebram', () => {
     expect(vizinhoMaisProximo([])).toEqual([]);
     expect(distanciaRota([], [])).toBe(0);
+    expect(trechosRota([], [])).toEqual([]);
   });
 });

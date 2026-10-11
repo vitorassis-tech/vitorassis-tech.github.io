@@ -48,6 +48,28 @@
 
   --focus: 0 0 0 3px var(--bg), 0 0 0 6px var(--navy);
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Superfícies de comando (escuras) — direção visual híbrida "Centro de Comando" */
+  --cmd-0: #07111f;         /* fundo das faixas escuras */
+  --cmd-1: #0b1a2c;         /* painéis */
+  --cmd-2: #10243b;         /* painéis elevados */
+  --cmd-line: rgba(150, 185, 225, 0.16);
+  --cmd-line-2: rgba(150, 185, 225, 0.3);
+  --cmd-text: #e7eef7;      /* contraste 16:1 sobre --cmd-0 */
+  --cmd-muted: #a3b5cb;     /* contraste 8,6:1 sobre --cmd-0 */
+  --signal: #e58a2b;        /* laranja de sinal: contraste 7:1 sobre --cmd-0 */
+  --signal-text: #f6c690;
+  --signal-soft: rgba(229, 138, 43, 0.16);
+  --trace: #cfe2f6;         /* rota concluída */
+  /* Séries de gráficos sobre fundo escuro (validadas para daltonismo e contraste ≥ 3:1) */
+  --serie-1-escuro: #4f9bd9;
+  --serie-2-escuro: #cf7a24;
+  /* Status do farol (sempre acompanhados de forma e texto) */
+  --st-normal: #5fd08a;
+  --st-atencao: #f2c14e;
+  --st-critico: #f0645a;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', Consolas, 'Liberation Mono', monospace;
+  --focus-escuro: 0 0 0 3px var(--cmd-0), 0 0 0 6px var(--signal);
 }
 
 *,
@@ -269,3 +291,119 @@ a:hover { color: var(--accent-ink); }
   .site-header, .site-footer, .skip-link { display: none !important; }
   body { background: #fff; }
 }
+
+/* ==========================================================================
+   Superfícies de comando (faixas escuras)
+   ========================================================================== */
+/* Dentro das superfícies escuras, os tokens claros são remapeados para variantes de alto contraste */
+.cmd,
+.console {
+  --ink: var(--cmd-text);
+  --muted: var(--cmd-muted);
+  --navy: #ffffff;
+  --line: var(--cmd-line);
+  --line-strong: var(--cmd-line-2);
+  --surface: var(--cmd-1);
+  --navy-wash: rgba(255, 255, 255, 0.07);
+  --accent-ink: var(--signal-text);
+  --accent-wash: var(--signal-soft);
+  --focus: var(--focus-escuro);
+}
+.cmd .natureza[data-natureza='demonstracao'],
+.console .natureza[data-natureza='demonstracao'] { border-color: rgba(229, 138, 43, 0.5); }
+.cmd .natureza[data-natureza='academico']::before,
+.console .natureza[data-natureza='academico']::before { background: var(--cmd-muted); }
+.cmd .natureza[data-natureza='trabalho']::before,
+.console .natureza[data-natureza='trabalho']::before { background: var(--trace); }
+.cmd .aviso-simulado { background: rgba(229, 138, 43, 0.12); border-color: rgba(229, 138, 43, 0.5); color: var(--signal-text); }
+.cmd .aviso-simulado strong { color: #fff; }
+.cmd .tag-list li, .console .tag-list li { background: rgba(255, 255, 255, 0.07); color: var(--cmd-text); }
+
+.cmd {
+  --bg: var(--cmd-0);
+  background:
+    radial-gradient(1100px 480px at 80% 10%, rgba(79, 155, 217, 0.13), transparent 60%),
+    radial-gradient(700px 380px at 5% 100%, rgba(229, 138, 43, 0.09), transparent 60%),
+    var(--cmd-0);
+  color: var(--cmd-text);
+  position: relative;
+  isolation: isolate;
+}
+/* Grade de coordenadas discreta */
+.cmd::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--cmd-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cmd-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse at 60% 30%, #000 25%, transparent 75%);
+  mask-image: radial-gradient(ellipse at 60% 30%, #000 25%, transparent 75%);
+  opacity: 0.5;
+}
+.cmd h1, .cmd h2, .cmd h3 { color: #fff; }
+.cmd a { color: var(--cmd-text); text-decoration-color: var(--signal); }
+.cmd a:hover { color: #fff; }
+.cmd .muted, .cmd .lede { color: var(--cmd-muted); }
+.cmd :focus-visible { box-shadow: var(--focus-escuro); }
+
+.mono { font-family: var(--font-mono); font-size: 0.82rem; letter-spacing: 0.01em; }
+
+/* Painel de vidro com cantos de sinal */
+.painel-vidro {
+  position: relative;
+  border: 1px solid var(--cmd-line-2);
+  border-radius: var(--radius-l);
+  background: linear-gradient(180deg, rgba(16, 36, 59, 0.82), rgba(11, 26, 44, 0.78));
+  box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+/* Sem backdrop-filter: os painéis ficam sobre fundo sólido e o desfoque custaria desempenho. */
+.painel-vidro::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--radius-l);
+  pointer-events: none;
+  background:
+    linear-gradient(var(--signal), var(--signal)) top left / 18px 2px no-repeat,
+    linear-gradient(var(--signal), var(--signal)) top left / 2px 18px no-repeat,
+    linear-gradient(var(--signal), var(--signal)) bottom right / 18px 2px no-repeat,
+    linear-gradient(var(--signal), var(--signal)) bottom right / 2px 18px no-repeat;
+}
+
+.btn-sinal { background: var(--signal); border-color: var(--signal); color: #1b0f02; font-weight: 600; }
+.btn-sinal:hover { background: #f19a3e; border-color: #f19a3e; color: #1b0f02; }
+.btn-linha { background: rgba(255, 255, 255, 0.03); border-color: var(--cmd-line-2); color: var(--cmd-text); }
+.btn-linha:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+
+/* Selo "dados fictícios" sobre fundo escuro */
+.selo-ficticio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--signal-text);
+  border: 1px solid rgba(229, 138, 43, 0.45);
+  background: var(--signal-soft);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+.selo-ficticio::before { content: ''; width: 7px; height: 7px; background: var(--signal); transform: rotate(45deg); flex: none; }
+
+/* Console escuro das demonstrações */
+.console {
+  --bg: var(--cmd-1);
+  background: var(--cmd-1);
+  color: var(--cmd-text);
+  border: 1px solid var(--cmd-line-2);
+  border-radius: var(--radius-l);
+  box-shadow: 0 30px 70px -45px rgba(7, 17, 31, 0.9);
+}
+.console :focus-visible { box-shadow: var(--focus-escuro); }
+.console a { color: var(--cmd-text); text-decoration-color: var(--signal); }
+.console .aviso-simulado { background: rgba(229, 138, 43, 0.12); border-color: rgba(229, 138, 43, 0.5); color: var(--signal-text); }
+.console .aviso-simulado strong { color: #fff; }

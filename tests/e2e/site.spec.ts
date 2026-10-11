@@ -8,12 +8,13 @@ const ROTAS = [
   '/projetos/',
   '/contato/',
   '/projetos/torre-controle-expedicao/',
+  '/projetos/simulacao-torre-controle/',
   '/projetos/painel-fretes-simulado/',
   '/projetos/laboratorio-roteirizacao/',
   '/projetos/atividade-flask/',
   '/projetos/banco-dados-relacional/',
 ];
-const LARGURAS = [375, 430, 768, 1280];
+const LARGURAS = [375, 430, 768, 1280, 1440];
 
 /** Coleta erros de console e exceções da página. */
 function vigiarErros(page: Page): string[] {
@@ -158,11 +159,56 @@ test.describe('navegação e acessibilidade', () => {
   }
 });
 
+test.describe('conteúdo profissional (E1–E8)', () => {
+  test('experiência e página inicial não associam SQL ao trabalho', async ({ page }) => {
+    await page.goto('/experiencia/');
+    const profarma = await page.locator('.empresa').first().innerText();
+    expect(profarma).toContain('Profarma');
+    expect(profarma).not.toMatch(/\bSQL\b/);
+    await page.goto('/');
+    const operacaoEDados = await page.locator('.modulo').filter({ hasNotText: 'Em formação' }).allInnerTexts();
+    for (const t of operacaoEDados) expect(t).not.toMatch(/\bSQL\b/);
+    await expect(page.locator('.modulo.formacao')).toContainText('SQL');
+  });
+
+  test('estudo de caso da Torre: Roadnet e Excel, uso diário, sem fórmulas e com link para a simulação', async ({ page }) => {
+    await page.goto('/projetos/torre-controle-expedicao/');
+    const corpo = await page.locator('main').innerText();
+    expect(corpo).toContain('Roadnet');
+    expect(corpo).toContain('Excel');
+    expect(corpo).toContain('Em uso diário pela gerência.');
+    expect(corpo).not.toMatch(/MÁXIMO|No-Show|Spot \(|contrat/i);
+    expect(corpo).not.toMatch(/\bSQL\b/);
+    await expect(page.getByRole('link', { name: 'Ver a simulação com dados fictícios' })).toHaveAttribute('href', '/projetos/simulacao-torre-controle/');
+  });
+
+  test('objetivo profissional aprovado aparece na página Sobre', async ({ page }) => {
+    await page.goto('/sobre/');
+    await expect(page.locator('.objetivo p')).toHaveText(
+      'Atuar nas áreas de Análise de Dados, Business Intelligence e tecnologia, aplicando conhecimentos em Power BI, Excel, SQL, Python e automação para transformar dados em informações úteis à tomada de decisão.',
+    );
+  });
+});
+
+test.describe('movimento reduzido', () => {
+  test('nenhuma animação roda quando o visitante pede menos movimento', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/');
+    const animadas = await page.evaluate(() =>
+      [...document.querySelectorAll('*')]
+        .flatMap((el) => [getComputedStyle(el), getComputedStyle(el, '::after'), getComputedStyle(el, '::before')])
+        .filter((cs) => cs.animationName !== 'none' && parseFloat(cs.animationDuration) > 0.01).length,
+    );
+    expect(animadas).toBe(0);
+  });
+});
+
 test.describe('filtros de projetos', () => {
   test('filtra por categoria, anuncia o resultado e mantém a URL', async ({ page }) => {
     await page.goto('/projetos/');
     const itens = page.locator('.lista-projetos .item');
-    await expect(itens).toHaveCount(5);
+    await expect(itens).toHaveCount(6);
     await page.getByRole('button', { name: /Desenvolvimento web/ }).click();
     await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(2);
     await expect(page.getByRole('button', { name: /Desenvolvimento web/ })).toHaveAttribute('aria-pressed', 'true');
@@ -172,29 +218,31 @@ test.describe('filtros de projetos', () => {
     await page.reload();
     await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(2);
     await page.getByRole('button', { name: /^Todos/ }).click();
-    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(5);
+    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(6);
   });
 
   test('sem JavaScript, todos os projetos continuam visíveis', async ({ browser }) => {
     const contexto = await browser.newContext({ javaScriptEnabled: false });
     const page = await contexto.newPage();
     await page.goto('/projetos/');
-    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(5);
+    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(6);
     await expect(page.locator('.filtros')).toBeHidden();
     await contexto.close();
   });
 });
 
-test.describe('painel de fretes (dados simulados)', () => {
+test.describe('painel de frota e entregas (dados fictícios)', () => {
   test('carrega, mostra o aviso e reage aos filtros', async ({ page }) => {
     const erros = vigiarErros(page);
     await page.goto('/projetos/painel-fretes-simulado/');
-    await expect(page.locator('.painel .aviso-simulado')).toContainText('Dados simulados');
+    await expect(page.locator('.painel .aviso-simulado')).toContainText('Dados fictícios');
     const entregas = page.locator('[data-kpi="entregas"] .valor');
     await expect(entregas).not.toHaveText('');
     const total = await entregas.textContent();
     await expect(page.locator('table.resumo tbody tr')).toHaveCount(4);
-    await expect(page.locator('[data-grafico="otif"] svg path').first()).toBeAttached();
+    await expect(page.locator('[data-kpi="cobertura"] .valor')).toHaveText(/%$/);
+    await expect(page.locator('[data-kpi="produtividade"] .valor')).toHaveText(/^\d+,\d$/);
+    await expect(page.locator('[data-kpi="cobertura"] .valor')).not.toContainText('veíc.');
 
     await page.selectOption('select[name="transportadora"]', 'Transportadora B');
     await expect(entregas).not.toHaveText(total!);
@@ -208,48 +256,162 @@ test.describe('painel de fretes (dados simulados)', () => {
     expect(erros).toEqual([]);
   });
 
-  test('gráfico de OTIF pode ser percorrido pelo teclado', async ({ page }) => {
+  test('tabela do painel confere com o resumo calculado pelo SQL', async ({ page, request }) => {
+    const json = await (await request.get('/dados/fretes-simulados.json')).json();
+    const cols: string[] = json.resumo_sql.colunas;
+    const fmt = (v: number, casas: number) => v.toLocaleString('pt-BR', { minimumFractionDigits: casas, maximumFractionDigits: casas });
     await page.goto('/projetos/painel-fretes-simulado/');
-    const area = page.locator('[data-grafico="otif"] .area');
+    await expect(page.locator('table.resumo tbody tr')).toHaveCount(4);
+    for (const linha of json.resumo_sql.linhas) {
+      const r = Object.fromEntries(cols.map((c, i) => [c, linha[i]]));
+      const celulas = await page.locator(`table.resumo tbody tr[data-transportadora="${r.transportadora}"] td`).allInnerTexts();
+      expect(celulas[0]).toBe(fmt(r.entregas, 0));
+      expect(celulas[1]).toBe(`${fmt(r.otif_pct, 1)}%`);
+      expect(celulas[2].replace(/\s/g, ' ')).toBe(`R$ ${fmt(r.custo_por_entrega, 2)}`);
+      expect(celulas[3]).toBe(`${fmt(r.cobertura_pct, 1)}%`);
+      expect(celulas[4]).toBe(fmt(r.entregas_por_veiculo_em_rota, 1));
+    }
+  });
+
+  test('gráficos podem ser percorridos pelo teclado e os valores são anunciados', async ({ page }) => {
+    await page.goto('/projetos/painel-fretes-simulado/');
     await expect(page.locator('[data-kpi="otif"] .valor')).not.toHaveText('');
-    await area.focus();
-    const dica = page.locator('[data-grafico="otif"] .tooltip');
-    await expect(dica).toBeVisible();
-    const antes = await dica.textContent();
+    const otif = page.locator('[data-grafico="otif"]');
+    await otif.locator('.area').focus();
+    await expect(otif.locator('.tooltip')).toBeVisible();
     await page.keyboard.press('Home');
-    await expect(dica).not.toHaveText(antes!);
-    await expect(dica).toContainText('OTIF');
+    await expect(otif.locator('.anuncio')).toContainText('OTIF');
+
+    const frota = page.locator('[data-grafico="frota"]');
+    await frota.locator('.area').focus();
+    await expect(frota.locator('.anuncio')).toContainText('Transportadora A');
+    await page.keyboard.press('ArrowRight');
+    await expect(frota.locator('.anuncio')).toContainText('Disponíveis');
+    await page.keyboard.press('End');
+    await expect(frota.locator('.anuncio')).toContainText('Transportadora D');
   });
 
   test('mostra mensagem clara quando os dados não carregam', async ({ page }) => {
     await page.route('**/dados/fretes-simulados.json', (r) => r.fulfill({ status: 500, body: '' }));
     await page.goto('/projetos/painel-fretes-simulado/');
-    await expect(page.locator('.painel .estado')).toContainText('Não foi possível carregar os dados simulados');
+    await expect(page.locator('.painel .estado')).toContainText('Não foi possível carregar os dados fictícios');
     await expect(page.locator('.conteudo-painel')).toBeHidden();
   });
 });
 
-test.describe('laboratório de roteirização', () => {
-  test('calcula rotas, alterna a visualização e gera novos pontos', async ({ page }) => {
+test.describe('simulação da Torre de Controle', () => {
+  test('aviso visível, parâmetros fictícios e faróis com texto', async ({ page }) => {
     const erros = vigiarErros(page);
+    await page.goto('/projetos/simulacao-torre-controle/');
+    await expect(page.locator('.torre .aviso-simulado')).toContainText('Simulação com dados fictícios');
+    await expect(page.locator('.torre .aviso-simulado')).toContainText('Profarma');
+    await expect(page.locator('.parametros legend')).toContainText('fictícios e ajustáveis');
+    await expect(page.locator('input[name="atencao"]')).toHaveValue('95');
+    await expect(page.locator('input[name="critico"]')).toHaveValue('85');
+    await expect(page.locator('table.quadro tbody tr')).toHaveCount(4);
+    for (const t of await page.locator('table.quadro .farol').allInnerTexts()) expect(['Normal', 'Atenção', 'Crítico', 'Sem dados']).toContain(t);
+    expect(erros).toEqual([]);
+  });
+
+  test('farol prioriza Crítico e reage aos limites ajustados', async ({ page }) => {
+    await page.goto('/projetos/simulacao-torre-controle/');
+    await page.selectOption('select[name="periodo"]', '0');
+    await expect(page.locator('table.quadro tbody tr')).toHaveCount(4);
+    const status = async () => page.locator('table.quadro tbody tr').evaluateAll((trs) => trs.map((tr) => (tr as HTMLElement).dataset.status));
+    // Limites muito baixos: nenhum indicador abaixo → tudo Normal
+    await page.fill('input[name="critico"]', '10');
+    await page.fill('input[name="atencao"]', '20');
+    await page.locator('input[name="atencao"]').blur();
+    await expect.poll(status).toEqual(['normal', 'normal', 'normal', 'normal']);
+    // Limites muito altos: qualquer indicador abaixo do crítico → Crítico (prioridade)
+    await page.fill('input[name="atencao"]', '100');
+    await page.fill('input[name="critico"]', '99.5');
+    await page.locator('input[name="critico"]').blur();
+    await expect.poll(status).toEqual(['critico', 'critico', 'critico', 'critico']);
+    await page.getByRole('button', { name: 'Restaurar 95% e 85%' }).click();
+    await expect(page.locator('input[name="atencao"]')).toHaveValue('95');
+  });
+
+  test('limites inválidos mostram erro e mantêm os últimos válidos', async ({ page }) => {
+    await page.goto('/projetos/simulacao-torre-controle/');
+    await page.fill('input[name="critico"]', '97');
+    await page.locator('input[name="critico"]').blur();
+    await expect(page.locator('.erro-parametros')).toContainText('menor que o de atenção');
+    await expect(page.locator('input[name="critico"]')).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  test('período sem pendências mostra estado vazio e tempo médio "sem pendências"', async ({ page, request }) => {
+    const json = await (await request.get('/dados/torre-simulacao.json')).json();
+    const c = json.cargas.colunas as string[];
+    const linhas = (json.cargas.linhas as unknown[][]).map((l) => Object.fromEntries(c.map((k, i) => [k, l[i]])));
+    const dias = [...new Set(linhas.map((l) => l.data as string))].sort();
+    const ultimo = dias[dias.length - 1];
+    const semPend = linhas.find((l) => l.data === ultimo && l.pendentes === 0);
+    test.skip(!semPend, 'Último dia sem transportadora livre de pendências nos dados gerados.');
+    await page.goto('/projetos/simulacao-torre-controle/');
+    await page.selectOption('select[name="periodo"]', '1');
+    await page.selectOption('select[name="transportadora"]', semPend!.transportadora as string);
+    await expect(page.locator('.pend-resumo')).toContainText('Nenhuma carga pendente');
+    await expect(page.locator('[data-kpi="tempo"] .valor')).toHaveText('sem pendências');
+    await expect(page.locator('.pendencias .tabela-rolagem')).toBeHidden();
+  });
+
+  test('mostra mensagem clara quando os dados não carregam', async ({ page }) => {
+    await page.route('**/dados/torre-simulacao.json', (r) => r.fulfill({ status: 500, body: '' }));
+    await page.goto('/projetos/simulacao-torre-controle/');
+    await expect(page.locator('.torre .estado')).toContainText('Não foi possível carregar a simulação');
+  });
+});
+
+test.describe('laboratório de roteirização', () => {
+  for (const qtd of [5, 14, 40]) {
+    test(`mapa e lista correspondem com ${qtd} pontos (saída e retorno sem número)`, async ({ page }) => {
+      const erros = vigiarErros(page);
+      await page.goto('/projetos/laboratorio-roteirizacao/');
+      await page.locator('input[name="qtd"]').fill(String(qtd));
+      await expect(page.locator('output')).toHaveText(String(qtd));
+      for (const modo of ['Vizinho mais próximo', 'Após 2-opt']) {
+        await page.locator('.segmentado label', { hasText: modo }).click();
+        await expect(page.locator('.mapa svg circle')).toHaveCount(qtd);
+        await expect(page.locator('.sequencia li')).toHaveCount(qtd);
+        const numerosMapa = await page.locator('.mapa svg text[data-ordem]').evaluateAll((ts) => ts.map((t) => Number(t.textContent)).sort((a, b) => a - b));
+        expect(numerosMapa).toEqual(Array.from({ length: qtd }, (_, i) => i + 1));
+        await expect(page.locator('[data-extremo="saida"]')).toHaveText('Saída do CD');
+        await expect(page.locator('[data-extremo="retorno"]')).toHaveText('Retorno ao CD');
+        await expect(page.locator('.sequencia li', { hasText: 'CD' })).toHaveCount(0);
+        await expect(page.locator('.resumo-rota')).toContainText(`${qtd} entregas`);
+        await expect(page.locator('table.trechos tbody tr')).toHaveCount(qtd + 1);
+      }
+      expect(erros).toEqual([]);
+    });
+  }
+
+  test('a soma dos trechos é igual à distância total e novos pontos atualizam tudo', async ({ page }) => {
     await page.goto('/projetos/laboratorio-roteirizacao/');
-    const ganho = page.locator('[data-m="ganho"]');
-    await expect(ganho).toHaveText(/%$/);
-    await expect(page.locator('.mapa svg circle')).toHaveCount(14);
-
-    await page.locator('input[name="qtd"]').fill('20');
-    await expect(page.locator('.mapa svg circle')).toHaveCount(20);
-    await expect(page.locator('output')).toHaveText('20');
-
-    await page.locator('.segmentado label', { hasText: 'Vizinho mais próximo' }).click();
-    await expect(page.getByRole('radio', { name: 'Vizinho mais próximo' })).toBeChecked();
-    await expect(page.locator('.resumo-rota')).toContainText('vizinho mais próximo');
-
+    await expect(page.locator('[data-m="ganho"]')).toHaveText(/%$/);
+    const num = (s: string) => Number(s.replace(/\./g, '').replace(',', '.'));
+    const conferir = async () => {
+      const trechos = (await page.locator('table.trechos tbody td.num').allTextContents()).map(num);
+      expect(trechos.every((v) => v > 0)).toBe(true);
+      const total = num((await page.locator('.total-trechos').textContent()) ?? '');
+      expect(total).toBeGreaterThan(0);
+      expect(Math.abs(trechos.reduce((a, b) => a + b, 0) - total)).toBeLessThan(0.05 * trechos.length);
+      expect(num(await page.locator('[data-m="otimizada"]').innerText())).toBeCloseTo(total, 1);
+    };
+    await conferir();
     const antes = await page.locator('[data-m="vizinho"]').textContent();
     await page.getByRole('button', { name: 'Gerar novos pontos' }).click();
     await expect(page.locator('[data-m="vizinho"]')).not.toHaveText(antes!);
-    await expect(page.locator('.sequencia li')).toHaveCount(21);
-    expect(erros).toEqual([]);
+    await conferir();
+    await expect(page.locator('[data-m="ganho"]')).toHaveText(/%$/);
+  });
+
+  test('números do mapa ficam legíveis no celular (≥ 11 px)', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto('/projetos/laboratorio-roteirizacao/');
+    const alturas = await page.locator('.mapa svg text[data-ordem]').evaluateAll((ts) => ts.map((t) => t.getBoundingClientRect().height));
+    expect(alturas.length).toBeGreaterThan(0);
+    expect(Math.min(...alturas)).toBeGreaterThanOrEqual(10.5);
   });
 });
 

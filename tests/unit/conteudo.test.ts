@@ -3,9 +3,9 @@
  * (nada inventado, dados simulados identificados, privacidade).
  */
 import { describe, expect, it } from 'vitest';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { projetos, categorias } from '../../src/data/projetos';
-import { canais, canaisVisiveis, navegacao } from '../../src/data/site';
+import { canais, canaisVisiveis, navegacao, site } from '../../src/data/site';
 import { experiencias, cursos, formacaoAcademica, marcos } from '../../src/data/trajetoria';
 import { competencias } from '../../src/data/competencias';
 import { mesAno, periodo, duracao, url, percentual } from '../../src/lib/formato';
@@ -30,9 +30,9 @@ describe('projetos', () => {
     }
   });
 
-  it('demonstrações deixam explícito que os dados são simulados', () => {
+  it('demonstrações deixam explícito que os dados são fictícios', () => {
     for (const p of projetos.filter((x) => x.natureza === 'demonstracao')) {
-      expect(p.dados.origem).toMatch(/SIMULADOS/);
+      expect(p.dados.origem).toMatch(/FICTÍCIOS/);
       expect(p.notaAutoria).toBeTruthy();
     }
   });
@@ -60,6 +60,107 @@ describe('projetos', () => {
       }
     }
     for (const g of competencias) for (const c of g.itens) if (c.href) expect(rotasInternas.has(c.href.split('#')[0])).toBe(true);
+  });
+});
+
+const TERMOS_REGRAS_REAIS = /no-?show|\bspot\b|máximo\(|contrat/i;
+const profarma = experiencias.find((e) => e.nomeCurto === 'Profarma')!;
+const torre = projetos.find((p) => p.slug === 'torre-controle-expedicao')!;
+
+describe('correções factuais (E1–E7, E13, E14)', () => {
+  it('E1: nenhum cargo na Profarma associa SQL ao trabalho', () => {
+    for (const c of profarma.cargos) for (const a of c.atividades) expect(a, a).not.toMatch(/\bSQL\b/);
+  });
+
+  it('E1: o texto geral dos dashboards não generaliza o Roadnet como origem', () => {
+    const dash = profarma.cargos[0].atividades.find((a) => a.startsWith('Desenvolvimento e manutenção de dashboards'))!;
+    expect(dash).toMatch(/relatórios e arquivos operacionais exportados/);
+    expect(dash).toMatch(/Power Query/);
+    expect(dash).toMatch(/DAX/);
+    expect(dash).not.toMatch(/Roadnet|SAP|SQL/);
+  });
+
+  it('E3: SQL é competência de formação e nenhuma evidência de trabalho cita SQL', () => {
+    const itens = competencias.flatMap((g) => g.itens);
+    expect(itens.find((c) => c.nome === 'SQL')?.contexto).toBe('formacao');
+    for (const c of itens.filter((i) => i.contexto === 'trabalho')) expect(`${c.nome} ${c.evidencia}`).not.toMatch(/\bSQL\b/);
+  });
+
+  it('E4: estudo de caso da Torre com Roadnet e Excel, sem SQL, sem regras e com uso diário', () => {
+    expect(torre.tecnologias).toEqual(['Power BI', 'Power Query', 'DAX', 'Excel', 'Roadnet']);
+    expect(torre.categorias).not.toContain('sql');
+    expect(torre.dados.origem).toMatch(/Roadnet/);
+    const texto = JSON.stringify(torre);
+    expect(texto).not.toMatch(/\bSQL\b/);
+    expect(texto).not.toMatch(TERMOS_REGRAS_REAIS);
+    expect(torre.resultados).toContainEqual({ tipo: 'uso', texto: 'Em uso diário pela gerência.' });
+  });
+
+  it('E5: "Torre de Controle" não aparece como cargo ou etapa da carreira', () => {
+    for (const m of marcos) expect(m.titulo).not.toMatch(/Torre de Controle/);
+    for (const e of experiencias) for (const c of e.cargos) expect(c.titulo).not.toMatch(/Torre/);
+  });
+
+  it('E6: objetivo profissional é exatamente o texto aprovado', () => {
+    expect(site.objetivo).toBe(
+      'Atuar nas áreas de Análise de Dados, Business Intelligence e tecnologia, aplicando conhecimentos em Power BI, Excel, SQL, Python e automação para transformar dados em informações úteis à tomada de decisão.',
+    );
+  });
+
+  it('E7: descrição padrão não associa SQL a dashboards do trabalho', () => {
+    expect(site.descricaoPadrao).not.toMatch(/Power BI, SQL/);
+  });
+
+  it('E13: Atividade Flask não afirma publicação no GitHub sem repositório', () => {
+    const flask = projetos.find((p) => p.slug === 'atividade-flask')!;
+    const temRepo = flask.links.some((l) => /github\.com\/[^/]+\/[^/]+/.test(l.href));
+    if (!temRepo) {
+      expect(JSON.stringify(flask)).not.toMatch(/publicad[ao] no GitHub/i);
+      expect(flask.tecnologias.join(' ')).not.toMatch(/GitHub/);
+    }
+    for (const g of competencias) for (const c of g.itens) expect(c.evidencia).not.toMatch(/publicada no GitHub/i);
+  });
+
+  it('E14: banco de dados sem MySQL nem material não comprovado', () => {
+    const bd = projetos.find((p) => p.slug === 'banco-dados-relacional')!;
+    expect(JSON.stringify(bd)).not.toMatch(/MySQL/);
+    expect(bd.tecnologias).toEqual(['SQL', 'MER/DER']);
+    expect(bd.resultados.every((r) => r.tipo === 'pendente')).toBe(true);
+  });
+});
+
+describe('demonstrações independentes (E8–E11)', () => {
+  it('E8: nenhum texto afirma que uma demonstração reproduz o painel real', () => {
+    expect(JSON.stringify(projetos)).not.toMatch(/reproduz(em)? (apenas )?a lógica/i);
+  });
+
+  it('E9: projetos de demonstração não usam termos de regras reais', () => {
+    for (const p of projetos.filter((x) => x.natureza === 'demonstracao')) {
+      expect(JSON.stringify(p), p.slug).not.toMatch(TERMOS_REGRAS_REAIS);
+    }
+  });
+
+  it('E9: código das demonstrações não usa termos de regras reais', () => {
+    const arquivos = [
+      'src/lib/kpis.ts',
+      'src/scripts/painel-fretes.ts',
+      'src/scripts/simulacao-torre.ts',
+      'src/components/demos/PainelFretes.astro',
+      'src/components/demos/SimulacaoTorre.astro',
+      'dados-demo/sql/consultas.sql',
+      'dados-demo/sql/schema.sql',
+      'dados-demo/gerar_dados.py',
+    ];
+    for (const a of arquivos) expect(readFileSync(a, 'utf-8'), a).not.toMatch(TERMOS_REGRAS_REAIS);
+  });
+
+  it('E11: arquivos de dados publicados estão marcados como fictícios', () => {
+    for (const a of ['public/dados/fretes-simulados.json', 'public/dados/torre-simulacao.json']) {
+      const j = JSON.parse(readFileSync(a, 'utf-8'));
+      expect(j.simulado).toBe(true);
+      expect(j.aviso).toMatch(/FICTÍCIOS/);
+    }
+    expect(readFileSync('public/dados/entregas-simuladas.csv', 'utf-8').split('\n')[0]).toMatch(/FICTICIOS/);
   });
 });
 

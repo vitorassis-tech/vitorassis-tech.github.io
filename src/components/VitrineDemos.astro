@@ -1,0 +1,109 @@
+---
+/** Vitrine das demonstrações interativas (faixa escura). Miniaturas ilustrativas, sem dados. */
+import { url } from '../lib/formato';
+
+const demos = [
+  {
+    href: '/projetos/simulacao-torre-controle/',
+    selo: 'Simulação, dados fictícios',
+    titulo: 'Simulação da Torre de Controle',
+    texto: 'Cobertura de frota, taxa de expedição, pendências e faróis. Limites ajustáveis, identificados como parâmetros fictícios.',
+    tipo: 'torre',
+  },
+  {
+    href: '/projetos/painel-fretes-simulado/',
+    selo: 'Dados fictícios',
+    titulo: 'Painel de frota e entregas',
+    texto: 'Python gera a operação, o SQL calcula os indicadores e o painel responde aos filtros.',
+    tipo: 'painel',
+  },
+  {
+    href: '/projetos/laboratorio-roteirizacao/',
+    selo: 'Pontos fictícios',
+    titulo: 'Laboratório de roteirização',
+    texto: 'Vizinho mais próximo e 2-opt, com trechos, distâncias e a redução calculada.',
+    tipo: 'rota',
+  },
+] as const;
+---
+
+<ul class="vitrine">
+  {
+    demos.map((d) => (
+      <li class="demo">
+        <span class="selo-ficticio">{d.selo}</span>
+        <h3>
+          <a href={url(d.href)}>{d.titulo}</a>
+        </h3>
+        {d.tipo === 'torre' && (
+          <svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
+            <g font-family="ui-monospace,Consolas,monospace" font-size="11" fill="#A3B5CB">
+              <text x="12" y="22">A</text><text x="12" y="50">B</text><text x="12" y="78">C</text><text x="12" y="106">D</text>
+            </g>
+            <g fill="#4F9BD9">
+              <rect x="30" y="12" width="220" height="13" rx="3" />
+              <rect x="30" y="40" width="190" height="13" rx="3" />
+              <rect x="30" y="68" width="150" height="13" rx="3" />
+              <rect x="30" y="96" width="205" height="13" rx="3" />
+            </g>
+            <circle cx="282" cy="18" r="6" fill="#5FD08A" />
+            <path d="M282 41 l7 12 h-14 z" fill="#F2C14E" />
+            <rect x="276" y="68" width="12" height="12" fill="#F0645A" />
+            <circle cx="282" cy="102" r="6" fill="#5FD08A" />
+          </svg>
+        )}
+        {d.tipo === 'painel' && (
+          <svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
+            <g stroke="rgba(150,185,225,.18)">
+              <line x1="12" y1="30" x2="308" y2="30" />
+              <line x1="12" y1="70" x2="308" y2="70" />
+              <line x1="12" y1="108" x2="308" y2="108" />
+            </g>
+            <polyline points="12,72 48,74 84,66 120,40 156,80 192,60 228,70 264,74 300,64" fill="none" stroke="#4F9BD9" stroke-width="2.5" stroke-linejoin="round" />
+            <circle cx="300" cy="64" r="4" fill="#4F9BD9" stroke="#0B1A2C" stroke-width="2" />
+          </svg>
+        )}
+        {d.tipo === 'rota' && (
+          <svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
+            <polyline points="160,60 210,35 270,26 292,74 240,100 170,104 92,94 48,64 70,26 122,20 160,60" fill="none" stroke="#CFE2F6" stroke-width="2" stroke-linejoin="round" />
+            <g fill="#0B1A2C" stroke="#CFE2F6" stroke-width="2">
+              <circle cx="210" cy="35" r="4" /><circle cx="270" cy="26" r="4" /><circle cx="292" cy="74" r="4" /><circle cx="240" cy="100" r="4" />
+              <circle cx="170" cy="104" r="4" /><circle cx="92" cy="94" r="4" /><circle cx="48" cy="64" r="4" /><circle cx="70" cy="26" r="4" /><circle cx="122" cy="20" r="4" />
+            </g>
+            <rect x="153" y="53" width="14" height="14" rx="3" fill="#E58A2B" />
+          </svg>
+        )}
+        <p>{d.texto}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .vitrine { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  @media (min-width: 900px) { .vitrine { grid-template-columns: 1.2fr 1fr 1fr; } }
+  .demo {
+    position: relative;
+    display: grid;
+    gap: 0.8rem;
+    align-content: start;
+    padding: 1.15rem;
+    border: 1px solid var(--cmd-line-2);
+    border-radius: var(--radius-l);
+    background: rgba(16, 36, 59, 0.6);
+    transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .demo:hover { border-color: var(--signal); }
+  .demo:has(a:focus-visible) { box-shadow: var(--focus-escuro); }
+  .selo-ficticio { justify-self: start; }
+  h3 { font-size: 1.45rem; margin: 0; }
+  h3 a { text-decoration: none; }
+  /* Todo o cartão é clicável, com um único link acessível */
+  h3 a::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius-l); }
+  h3 a:focus-visible { box-shadow: none; }
+  svg { width: 100%; height: auto; border-radius: var(--radius-m); background: rgba(7, 17, 31, 0.6); border: 1px solid var(--cmd-line); }
+  p { margin: 0; color: var(--cmd-muted); font-size: 0.95rem; }
+  @media (prefers-reduced-motion: no-preference) {
+    .demo:hover { transform: translateY(-2px); }
+  }
+</style>

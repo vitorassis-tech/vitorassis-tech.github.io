@@ -5,6 +5,7 @@ import SeloNatureza from '../../components/SeloNatureza.astro';
 import FaixaContato from '../../components/FaixaContato.astro';
 import PainelFretes from '../../components/demos/PainelFretes.astro';
 import LaboratorioRotas from '../../components/demos/LaboratorioRotas.astro';
+import SimulacaoTorre from '../../components/demos/SimulacaoTorre.astro';
 import { projetos, categorias, naturezas, type Projeto } from '../../data/projetos';
 import { url } from '../../lib/formato';
 
@@ -31,7 +32,7 @@ const secoes = [
   ...(p.links.length || p.pendencias.length ? [{ id: 'materiais', titulo: 'Código e materiais' }] : []),
 ];
 
-const rotuloResultado = { medido: 'Resultado medido', funcional: 'Entrega funcional', pendente: 'Sem medição publicada' } as const;
+const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 'Demonstração funcional', pendente: 'Pendente' } as const;
 ---
 
 <BaseLayout title={p.titulo} description={`${p.subtitulo}. ${p.resumo}`} type="article">
@@ -90,6 +91,7 @@ const rotuloResultado = { medido: 'Resultado medido', funcional: 'Entrega funcio
             <h2 id="h-demo">Demonstração</h2>
             {p.demo === 'painel-fretes' && <PainelFretes />}
             {p.demo === 'roteirizacao' && <LaboratorioRotas />}
+            {p.demo === 'torre-simulacao' && <SimulacaoTorre />}
           </section>
         )
       }
@@ -236,6 +238,7 @@ const rotuloResultado = { medido: 'Resultado medido', funcional: 'Entrega funcio
   .resultados .tipo { font-size: 0.82rem; font-weight: 600; color: var(--navy); }
   .resultados li[data-tipo='pendente'] { background: repeating-linear-gradient(135deg, #fff, #fff 8px, #f4f6f9 8px, #f4f6f9 16px); border-style: dashed; }
   .resultados li[data-tipo='pendente'] .tipo { color: var(--muted); }
+  .resultados li[data-tipo='uso'] { border-left: 4px solid #2e8b57; }
 
   .links { list-style: none; padding: 0; display: grid; gap: 0.5rem; font-weight: 500; }
   .links a { display: inline-flex; min-height: 36px; align-items: center; }

@@ -8,7 +8,8 @@ interface Props {
 const { titulo, introducao, trilha } = Astro.props;
 ---
 
-<header class="cabecalho container">
+<header class="cabecalho cmd">
+  <div class="container">
   {
     trilha && (
       <nav aria-label="Trilha de navegação" class="trilha">
@@ -19,14 +20,17 @@ const { titulo, introducao, trilha } = Astro.props;
   <h1>{titulo}</h1>
   {introducao && <p class="lede">{introducao}</p>}
   <slot />
+  </div>
 </header>
 
 <style>
   .cabecalho {
     padding-top: clamp(2.5rem, 6vw, 4.5rem);
-    padding-bottom: clamp(2rem, 5vw, 3.5rem);
+    padding-bottom: clamp(2.25rem, 5vw, 3.75rem);
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    border-bottom: 1px solid var(--cmd-line);
   }
-  h1 { font-size: var(--step-5); max-width: 18ch; }
+  h1 { font-size: var(--step-5); max-width: 18ch; font-weight: 480; letter-spacing: -0.035em; }
   .lede { margin: 0; }
   .trilha { margin-bottom: 1.25rem; font-size: 0.95rem; }
   .trilha a { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 32px; }

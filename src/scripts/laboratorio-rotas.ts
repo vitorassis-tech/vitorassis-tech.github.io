@@ -1,10 +1,13 @@
-/** Laboratório de roteirização: desenha e compara rotas sobre pontos simulados. */
-import { distanciaRota, doisOpt, gerarPontos, vizinhoMaisProximo, type Ponto } from '../lib/roteirizacao';
+/** Laboratório de roteirização: desenha e compara rotas sobre pontos fictícios. */
+import { distanciaRota, doisOpt, gerarPontos, trechosRota, vizinhoMaisProximo, type Ponto } from '../lib/roteirizacao';
 import { numero, percentual } from '../lib/formato';
-import { svgEl, corToken } from './svg';
+import { corToken, svgEl } from './svg';
 
 const LARGURA = 100;
 const ALTURA = 60;
+/** Tamanhos mínimos em pixels na tela, para legibilidade em qualquer largura */
+const FONTE_PX = 11;
+const RAIO_PX = 8.5;
 
 export function iniciarLaboratorio(raiz: HTMLElement): void {
   const mapa = raiz.querySelector<HTMLElement>('.mapa')!;
@@ -13,6 +16,8 @@ export function iniciarLaboratorio(raiz: HTMLElement): void {
   const botao = raiz.querySelector<HTMLButtonElement>('.gerar')!;
   const lista = raiz.querySelector<HTMLOListElement>('.sequencia')!;
   const resumo = raiz.querySelector<HTMLElement>('.resumo-rota')!;
+  const corpoTrechos = raiz.querySelector<HTMLTableSectionElement>('table.trechos tbody')!;
+  const totalTrechos = raiz.querySelector<HTMLElement>('.total-trechos')!;
   const reducaoMovimento = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   let semente = 7;
@@ -31,79 +36,103 @@ export function iniciarLaboratorio(raiz: HTMLElement): void {
     raiz.querySelector('[data-m="vizinho"]')!.textContent = numero(dV, 1);
     raiz.querySelector('[data-m="otimizada"]')!.textContent = numero(dO, 1);
     raiz.querySelector('[data-m="ganho"]')!.textContent = percentual(dV > 0 ? ((dV - dO) / dV) * 100 : null);
-    desenhar();
+    desenhar(true);
   };
 
-  const desenhar = () => {
+  const rotulo = (indiceNaRota: number) => (indiceNaRota === 0 ? 'CD' : `Entrega ${indiceNaRota}`);
+
+  const desenhar = (animar = false) => {
     const rota = modo() === 'vizinho' ? rotaVizinho : rotaOtimizada;
-    const corRota = modo() === 'vizinho' ? corToken('--serie-1', '#2563a8') : corToken('--navy', '#17365d');
+    const otimizada = modo() === 'otimizada';
+    const corRota = otimizada ? corToken('--trace', '#cfe2f6') : corToken('--serie-1-escuro', '#4f9bd9');
+    const escalaPx = Math.max(1, mapa.clientWidth / LARGURA); // pixels por unidade do plano
+    const fonte = FONTE_PX / escalaPx;
+    const raio = RAIO_PX / escalaPx;
     const svg = svgEl('svg', { viewBox: `0 0 ${LARGURA} ${ALTURA}`, 'aria-hidden': 'true' });
 
-    // Rota fechada (volta ao depósito)
     const d = [...rota, rota[0]].map((idx, i) => `${i === 0 ? 'M' : 'L'} ${pontos[idx].x.toFixed(2)} ${pontos[idx].y.toFixed(2)}`).join(' ');
     const caminho = svgEl('path', {
       d,
       fill: 'none',
       stroke: corRota,
-      'stroke-width': 0.45,
+      'stroke-width': 2 / escalaPx,
       'stroke-linejoin': 'round',
       'stroke-linecap': 'round',
-      'stroke-dasharray': modo() === 'vizinho' ? '1.4 0.9' : 'none',
+      'stroke-dasharray': otimizada ? 'none' : `${6 / escalaPx} ${4 / escalaPx}`,
     });
     svg.append(caminho);
 
-    // Pontos de entrega com número da ordem de visita
+    // Entregas numeradas pela ordem de visita (1..N); o CD não recebe número
     rota.forEach((idx, ordem) => {
-      if (idx === 0) return;
+      if (ordem === 0) return;
       const p = pontos[idx];
-      svg.append(svgEl('circle', { cx: p.x, cy: p.y, r: 1.55, fill: '#fff', stroke: corRota, 'stroke-width': 0.35 }));
+      svg.append(svgEl('circle', { cx: p.x, cy: p.y, r: raio, fill: '#0b1a2c', stroke: corRota, 'stroke-width': 1.5 / escalaPx, 'data-ordem': ordem }));
       svg.append(
-        svgEl('text', { x: p.x, y: p.y + 0.62, 'text-anchor': 'middle', 'font-size': 1.7, 'font-weight': 600, fill: corToken('--ink', '#15253b') }, String(ordem)),
+        svgEl('text', { x: p.x, y: p.y + fonte * 0.36, 'text-anchor': 'middle', 'font-size': fonte, 'font-weight': 600, fill: '#ffffff', 'data-ordem': ordem }, String(ordem)),
       );
     });
 
-    // Depósito (CD)
     const cd = pontos[0];
-    svg.append(svgEl('rect', { x: cd.x - 2.2, y: cd.y - 2.2, width: 4.4, height: 4.4, rx: 0.8, fill: corToken('--accent', '#e58a2b'), stroke: '#fff', 'stroke-width': 0.4 }));
-    svg.append(svgEl('text', { x: cd.x, y: cd.y + 0.62, 'text-anchor': 'middle', 'font-size': 1.7, 'font-weight': 700, fill: '#2b1603' }, 'CD'));
+    const lado = raio * 2.6;
+    svg.append(svgEl('rect', { x: cd.x - lado / 2, y: cd.y - lado / 2, width: lado, height: lado, rx: lado * 0.18, fill: corToken('--signal', '#e58a2b') }));
+    svg.append(svgEl('text', { x: cd.x, y: cd.y + fonte * 0.36, 'text-anchor': 'middle', 'font-size': fonte, 'font-weight': 700, fill: '#1b0f02' }, 'CD'));
 
     mapa.replaceChildren(svg);
 
-    if (!reducaoMovimento.matches && typeof caminho.getTotalLength === 'function') {
+    if (animar && otimizada && !reducaoMovimento.matches && typeof caminho.getTotalLength === 'function') {
       const comprimento = caminho.getTotalLength();
-      if (modo() === 'otimizada') {
-        caminho.style.strokeDasharray = String(comprimento);
-        caminho.style.strokeDashoffset = String(comprimento);
-        caminho.getBoundingClientRect();
-        caminho.style.transition = 'stroke-dashoffset 0.9s cubic-bezier(0.2, 0.7, 0.2, 1)';
-        caminho.style.strokeDashoffset = '0';
-      }
+      caminho.style.strokeDasharray = String(comprimento);
+      caminho.style.strokeDashoffset = String(comprimento);
+      caminho.getBoundingClientRect();
+      caminho.style.transition = 'stroke-dashoffset 0.9s cubic-bezier(0.2, 0.7, 0.2, 1)';
+      caminho.style.strokeDashoffset = '0';
     }
 
-    // Lista textual acessível
+    // Sequência: "Saída do CD" e "Retorno ao CD" ficam fora da lista numerada
     lista.replaceChildren(
       ...rota.slice(1).map((idx) => {
         const li = document.createElement('li');
-        li.textContent = `Ponto ${idx} (x ${numero(pontos[idx].x, 0)}, y ${numero(pontos[idx].y, 0)})`;
+        li.textContent = `Ponto em x ${numero(pontos[idx].x, 0)}, y ${numero(pontos[idx].y, 0)}`;
         return li;
       }),
     );
-    const final = document.createElement('li');
-    final.textContent = 'Retorno ao CD';
-    lista.append(final);
 
-    resumo.textContent = `Exibindo a rota ${modo() === 'vizinho' ? 'do vizinho mais próximo' : 'após 2-opt'} com ${rota.length - 1} entregas.`;
+    // Trechos com distância; a soma é exatamente a distância total exibida
+    const trechos = trechosRota(pontos, rota);
+    const posicao = new Map(rota.map((idx, i) => [idx, i]));
+    corpoTrechos.replaceChildren(
+      ...trechos.map((t) => {
+        const tr = document.createElement('tr');
+        const td1 = document.createElement('td');
+        td1.textContent = `${rotulo(posicao.get(t.de)!)} → ${rotulo(posicao.get(t.para)!)}`;
+        const td2 = document.createElement('td');
+        td2.className = 'num';
+        td2.textContent = numero(t.distancia, 1);
+        tr.append(td1, td2);
+        return tr;
+      }),
+    );
+    totalTrechos.textContent = numero(distanciaRota(pontos, rota), 1);
+
+    resumo.textContent = `Exibindo a rota ${otimizada ? 'após 2-opt' : 'do vizinho mais próximo'}: saída do CD, ${rota.length - 1} entregas e retorno ao CD.`;
   };
 
   faixa.addEventListener('input', () => {
     saida.value = faixa.value;
     calcular();
   });
-  raiz.querySelectorAll<HTMLInputElement>('input[name="modo"]').forEach((r) => r.addEventListener('change', desenhar));
+  raiz.querySelectorAll<HTMLInputElement>('input[name="modo"]').forEach((r) => r.addEventListener('change', () => desenhar(true)));
   botao.addEventListener('click', () => {
     semente = (semente * 48271 + 11) % 2147483647;
     calcular();
   });
+
+  let largura = 0;
+  new ResizeObserver(() => {
+    if (Math.abs(mapa.clientWidth - largura) < 1) return;
+    largura = mapa.clientWidth;
+    if (pontos.length) desenhar(false);
+  }).observe(mapa);
 
   calcular();
 }
