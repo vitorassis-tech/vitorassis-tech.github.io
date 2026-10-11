@@ -1,0 +1,76 @@
+---
+import { canaisVisiveis, navegacao, site } from '../data/site';
+import { mesAno, url } from '../lib/formato';
+const canais = canaisVisiveis();
+const ano = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container grade">
+    <div>
+      <p class="nome">{site.nome}</p>
+      <p class="muted">{site.posicionamento}. {site.local}.</p>
+    </div>
+    <nav aria-label="Rodapé">
+      <ul>
+        {navegacao.map((n) => <li><a href={url(n.href)}>{n.rotulo}</a></li>)}
+      </ul>
+    </nav>
+    <ul class="canais" aria-label="Perfis e contato">
+      {
+        canais.map((c) => (
+          <li>
+            <a href={c.href} rel={c.id === 'email' ? undefined : 'noopener noreferrer'} target={c.id === 'email' ? undefined : '_blank'}>
+              {c.rotulo}
+              {c.id !== 'email' && <span class="visually-hidden"> (abre em nova aba)</span>}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="container nota">
+    <p>
+      © {ano} {site.nomeCompleto}. As demonstrações deste site usam dados simulados, sempre identificados. Nenhum dado
+      interno de empresa é publicado. Conteúdo revisado em {mesAno(site.revisadoEm.slice(0, 7))}.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    padding-block: 3rem 2rem;
+    font-size: 0.95rem;
+  }
+  .grade {
+    display: grid;
+    gap: 2rem;
+  }
+  @media (min-width: 760px) {
+    .grade { grid-template-columns: 2fr 1fr 1fr; }
+  }
+  .nome {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--navy);
+    margin-bottom: 0.25rem;
+  }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.15rem; }
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    color: var(--ink);
+    text-decoration-color: var(--line-strong);
+  }
+  a:hover { text-decoration-color: var(--accent); }
+  .nota {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+  .nota p { margin: 0; max-width: 80ch; }
+</style>

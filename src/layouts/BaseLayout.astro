@@ -1,0 +1,86 @@
+---
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/500.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '../styles/global.css';
+// Pré-carrega as duas fontes usadas acima da dobra (subconjunto latino)
+import fonteTitulo from '@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2?url';
+import fonteTexto from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2?url';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site, canaisVisiveis } from '../data/site';
+import { url } from '../lib/formato';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** 'website' | 'article' */
+  type?: string;
+  noindex?: boolean;
+}
+
+const { title, description = site.descricaoPadrao, type = 'website', noindex = false } = Astro.props;
+const fullTitle = title === site.nome ? `${site.nome} | ${site.posicionamento}` : `${title} | ${site.nome}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(url('/og-image.png'), Astro.site);
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.nomeCompleto,
+  alternateName: site.nome,
+  jobTitle: site.cargoAtual,
+  worksFor: { '@type': 'Organization', name: site.empresaAtual },
+  address: { '@type': 'PostalAddress', addressLocality: 'Rio de Janeiro', addressRegion: 'RJ', addressCountry: 'BR' },
+  url: new URL(url('/'), Astro.site).toString(),
+  sameAs: canaisVisiveis()
+    .filter((c) => c.id === 'linkedin' || c.id === 'github')
+    .map((c) => c.href),
+  knowsAbout: ['Logística', 'Roteirização', 'Gestão de fretes', 'Power BI', 'SQL', 'Python', 'Análise de dados'],
+};
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="author" content={site.nomeCompleto} />
+    <meta name="theme-color" content="#17365D" />
+    <link rel="preload" href={fonteTitulo} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={fonteTexto} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={site.nome} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Vitor Assis: logística, dados e tecnologia" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <Header />
+    <main id="conteudo" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  main:focus { outline: none; }
+</style>

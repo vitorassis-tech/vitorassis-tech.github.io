@@ -1,0 +1,34 @@
+---
+interface Props {
+  titulo: string;
+  introducao?: string;
+  /** Texto curto acima do título, usado só quando agrega informação (ex.: trilha de navegação) */
+  trilha?: { href: string; rotulo: string };
+}
+const { titulo, introducao, trilha } = Astro.props;
+---
+
+<header class="cabecalho container">
+  {
+    trilha && (
+      <nav aria-label="Trilha de navegação" class="trilha">
+        <a href={trilha.href}>{trilha.rotulo}</a>
+      </nav>
+    )
+  }
+  <h1>{titulo}</h1>
+  {introducao && <p class="lede">{introducao}</p>}
+  <slot />
+</header>
+
+<style>
+  .cabecalho {
+    padding-top: clamp(2.5rem, 6vw, 4.5rem);
+    padding-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+  h1 { font-size: var(--step-5); max-width: 18ch; }
+  .lede { margin: 0; }
+  .trilha { margin-bottom: 1.25rem; font-size: 0.95rem; }
+  .trilha a { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 32px; }
+  .trilha a::before { content: '‹'; font-size: 1.3em; line-height: 1; text-decoration: none; }
+</style>

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+dados-demo/saida/
+test-results/
+playwright-report/
+__pycache__/
+*.pyc
+.env
+.env.*
+.DS_Store

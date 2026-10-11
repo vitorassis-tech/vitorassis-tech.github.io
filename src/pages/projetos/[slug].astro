@@ -1,0 +1,251 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CabecalhoPagina from '../../components/CabecalhoPagina.astro';
+import SeloNatureza from '../../components/SeloNatureza.astro';
+import FaixaContato from '../../components/FaixaContato.astro';
+import PainelFretes from '../../components/demos/PainelFretes.astro';
+import LaboratorioRotas from '../../components/demos/LaboratorioRotas.astro';
+import { projetos, categorias, naturezas, type Projeto } from '../../data/projetos';
+import { url } from '../../lib/formato';
+
+export function getStaticPaths() {
+  return projetos.map((p) => ({ params: { slug: p.slug }, props: { projeto: p } }));
+}
+
+interface Props {
+  projeto: Projeto;
+}
+const { projeto: p } = Astro.props;
+const indice = projetos.findIndex((x) => x.slug === p.slug);
+const proximo = projetos[(indice + 1) % projetos.length];
+
+const secoes = [
+  { id: 'contexto', titulo: 'Contexto' },
+  { id: 'problema', titulo: 'Problema e objetivo' },
+  { id: 'dados', titulo: 'Dados utilizados' },
+  ...(p.demo ? [{ id: 'demonstracao', titulo: 'Demonstração' }] : []),
+  { id: 'solucao', titulo: 'Solução' },
+  ...(p.decisoes.length ? [{ id: 'decisoes', titulo: 'Decisões técnicas' }] : []),
+  { id: 'resultados', titulo: 'Resultados' },
+  { id: 'limitacoes', titulo: 'Limitações e próximos passos' },
+  ...(p.links.length || p.pendencias.length ? [{ id: 'materiais', titulo: 'Código e materiais' }] : []),
+];
+
+const rotuloResultado = { medido: 'Resultado medido', funcional: 'Entrega funcional', pendente: 'Sem medição publicada' } as const;
+---
+
+<BaseLayout title={p.titulo} description={`${p.subtitulo}. ${p.resumo}`} type="article">
+  <CabecalhoPagina titulo={p.titulo} introducao={p.subtitulo} trilha={{ href: url('/projetos/'), rotulo: 'Todos os projetos' }}>
+    <div class="ficha">
+      <SeloNatureza natureza={p.natureza} detalhe={p.instituicao} />
+      <span class="muted">{p.periodo}</span>
+      <span class="muted">{p.categorias.map((c) => categorias[c]).join(', ')}</span>
+    </div>
+    <p class="explica-natureza muted">{naturezas[p.natureza].explicacao}</p>
+  </CabecalhoPagina>
+
+  <div class="container corpo">
+    <nav class="sumario" aria-label="Seções do estudo de caso">
+      <p class="sumario-titulo">Neste estudo de caso</p>
+      <ol>
+        {secoes.map((s) => <li><a href={`#${s.id}`}>{s.titulo}</a></li>)}
+      </ol>
+      <div class="tecnologias">
+        <p class="sumario-titulo">Tecnologias</p>
+        <ul class="tag-list">{p.tecnologias.map((t) => <li>{t}</li>)}</ul>
+      </div>
+    </nav>
+
+    <article class="conteudo">
+      <section id="contexto" aria-labelledby="h-contexto">
+        <h2 id="h-contexto">Contexto</h2>
+        <p class="destaque">{p.contexto}</p>
+      </section>
+
+      <section id="problema" aria-labelledby="h-problema">
+        <h2 id="h-problema">Problema e objetivo</h2>
+        <div class="duas">
+          <div>
+            <h3>Problema</h3>
+            <p>{p.problema}</p>
+          </div>
+          <div>
+            <h3>Objetivo</h3>
+            <p>{p.objetivo}</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="dados" aria-labelledby="h-dados">
+        <h2 id="h-dados">Dados utilizados</h2>
+        <p>{p.dados.descricao}</p>
+        <p class:list={['origem', { simulada: p.natureza === 'demonstracao' }]}>
+          <strong>Origem:</strong>{' '}{p.dados.origem}
+        </p>
+      </section>
+
+      {
+        p.demo && (
+          <section id="demonstracao" aria-labelledby="h-demo" class="secao-demo">
+            <h2 id="h-demo">Demonstração</h2>
+            {p.demo === 'painel-fretes' && <PainelFretes />}
+            {p.demo === 'roteirizacao' && <LaboratorioRotas />}
+          </section>
+        )
+      }
+
+      <section id="solucao" aria-labelledby="h-solucao">
+        <h2 id="h-solucao">Solução</h2>
+        <ol class="passos">{p.solucao.map((s) => <li>{s}</li>)}</ol>
+      </section>
+
+      {
+        p.decisoes.length > 0 && (
+          <section id="decisoes" aria-labelledby="h-decisoes">
+            <h2 id="h-decisoes">Decisões técnicas</h2>
+            <dl class="decisoes">
+              {p.decisoes.map((d) => (
+                <div>
+                  <dt>{d.decisao}</dt>
+                  <dd>{d.motivo}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )
+      }
+
+      <section id="resultados" aria-labelledby="h-resultados">
+        <h2 id="h-resultados">Resultados</h2>
+        <ul class="resultados">
+          {
+            p.resultados.map((r) => (
+              <li data-tipo={r.tipo}>
+                <span class="tipo">{rotuloResultado[r.tipo]}</span>
+                <span>{r.texto}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section id="limitacoes" aria-labelledby="h-limitacoes">
+        <h2 id="h-limitacoes">Limitações e próximos passos</h2>
+        <div class="duas">
+          <div>
+            <h3>Limitações</h3>
+            {p.limitacoes.length ? <ul>{p.limitacoes.map((l) => <li>{l}</li>)}</ul> : <p><span class="pendente">Informação pendente</span></p>}
+          </div>
+          <div>
+            <h3>Próximos passos</h3>
+            <ul>{p.proximosPassos.map((l) => <li>{l}</li>)}</ul>
+          </div>
+        </div>
+      </section>
+
+      {
+        (p.links.length > 0 || p.pendencias.length > 0) && (
+          <section id="materiais" aria-labelledby="h-materiais">
+            <h2 id="h-materiais">Código e materiais</h2>
+            {p.links.length > 0 && (
+              <ul class="links">
+                {p.links.map((l) => (
+                  <li>
+                    <a href={url(l.href)} target={l.externo ? '_blank' : undefined} rel={l.externo ? 'noopener noreferrer' : undefined}>
+                      {l.rotulo}
+                      {l.externo && <span class="visually-hidden"> (abre em nova aba)</span>}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {p.pendencias.length > 0 && (
+              <div class="pendencias">
+                <h3>Informações pendentes</h3>
+                <ul>
+                  {p.pendencias.map((x) => (
+                    <li>{x}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {p.notaAutoria && <p class="autoria muted">{p.notaAutoria}</p>}
+          </section>
+        )
+      }
+
+      <nav class="proximo" aria-label="Próximo projeto">
+        <span class="muted">Próximo projeto</span>
+        <a href={url(`/projetos/${proximo.slug}/`)}>{proximo.titulo}</a>
+      </nav>
+    </article>
+  </div>
+
+  <FaixaContato />
+</BaseLayout>
+
+<style>
+  .ficha { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.25rem; margin-top: 1.75rem; font-size: 0.95rem; }
+  .explica-natureza { font-size: 0.95rem; margin: 0.75rem 0 0; max-width: 70ch; }
+
+  .corpo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem 4rem; padding-bottom: var(--section); }
+  @media (min-width: 1024px) {
+    .corpo { grid-template-columns: 14rem minmax(0, 1fr); }
+    .sumario { position: sticky; top: 6rem; align-self: start; }
+  }
+  .sumario { border-top: 3px solid var(--navy); padding-top: 1rem; font-size: 0.95rem; }
+  .sumario-titulo { font-weight: 600; margin-bottom: 0.5rem; }
+  .sumario ol { list-style: none; padding: 0; margin: 0 0 1.75rem; display: grid; gap: 0.1rem; }
+  .sumario ol a { display: inline-flex; min-height: 32px; align-items: center; color: var(--ink); text-decoration-color: var(--line-strong); }
+  .sumario ol a:hover { text-decoration-color: var(--accent); }
+  @media (max-width: 1023px) {
+    .sumario ol { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+  }
+
+  .conteudo { min-width: 0; }
+  .conteudo > section { padding-bottom: clamp(2.5rem, 5vw, 3.5rem); margin-bottom: clamp(2.5rem, 5vw, 3.5rem); border-bottom: 1px solid var(--line); scroll-margin-top: 6rem; }
+  .conteudo h2 { font-size: var(--step-3); }
+  .conteudo h3 { font-size: var(--step-1); font-family: var(--font-body); font-weight: 600; color: var(--ink); letter-spacing: 0; }
+  .conteudo p, .conteudo ul, .conteudo ol, .conteudo dl { max-width: 70ch; }
+  .destaque { font-family: var(--font-display); font-size: var(--step-2); line-height: 1.4; color: var(--navy); font-weight: 400; max-width: 34ch !important; }
+  .duas { display: grid; gap: 1.5rem 3rem; }
+  @media (min-width: 760px) { .duas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .duas p { margin: 0; }
+  .duas ul { padding-left: 1.1rem; margin: 0; display: grid; gap: 0.4rem; }
+
+  .origem { padding: 0.85rem 1rem; background: var(--navy-wash); border-radius: var(--radius-m); font-size: 0.97rem; }
+  .origem.simulada { background: var(--accent-wash); border: 1px solid #efc79c; }
+
+  .passos { counter-reset: passo; list-style: none; padding: 0; display: grid; gap: 1rem; }
+  .passos li { counter-increment: passo; display: grid; grid-template-columns: 2.25rem 1fr; gap: 0.75rem; align-items: baseline; }
+  .passos li::before {
+    content: counter(passo);
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    color: var(--accent-ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .decisoes { margin: 0; display: grid; gap: 1.25rem; }
+  .decisoes > div { border-left: 3px solid var(--navy); padding-left: 1.1rem; }
+  .decisoes dt { font-weight: 600; color: var(--navy); }
+  .decisoes dd { margin: 0.25rem 0 0; color: var(--muted); }
+
+  .resultados { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.85rem; }
+  .resultados li { display: grid; gap: 0.25rem; padding: 0.9rem 1rem; border-radius: var(--radius-m); border: 1px solid var(--line); background: var(--surface); }
+  .resultados .tipo { font-size: 0.82rem; font-weight: 600; color: var(--navy); }
+  .resultados li[data-tipo='pendente'] { background: repeating-linear-gradient(135deg, #fff, #fff 8px, #f4f6f9 8px, #f4f6f9 16px); border-style: dashed; }
+  .resultados li[data-tipo='pendente'] .tipo { color: var(--muted); }
+
+  .links { list-style: none; padding: 0; display: grid; gap: 0.5rem; font-weight: 500; }
+  .links a { display: inline-flex; min-height: 36px; align-items: center; }
+  .pendencias { margin-top: 1.5rem; padding: 1rem 1.25rem; border: 1px dashed var(--line-strong); border-radius: var(--radius-m); }
+  .pendencias h3 { margin-bottom: 0.5rem; }
+  .pendencias ul { margin: 0; padding-left: 1.1rem; color: var(--muted); }
+  .autoria { font-size: 0.92rem; margin-top: 1.25rem; }
+
+  .proximo { display: grid; gap: 0.25rem; }
+  .proximo a { font-family: var(--font-display); font-size: var(--step-3); text-decoration-thickness: 2px; }
+
+  .secao-demo { max-width: none; }
+</style>

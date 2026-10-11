@@ -1,0 +1,185 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CabecalhoPagina from '../components/CabecalhoPagina.astro';
+import FaixaContato from '../components/FaixaContato.astro';
+import { site } from '../data/site';
+import { formacaoAcademica, cursos } from '../data/trajetoria';
+import { competencias } from '../data/competencias';
+import { mesAno, numero, url } from '../lib/formato';
+
+const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s, c) => s + (c.cargaHoraria ?? 0), 0);
+---
+
+<BaseLayout
+  title="Sobre"
+  description="Trajetória de Vitor Assis: do armazém ao planejamento de transportes e à análise de dados com Power BI, SQL e Python. Formação, cursos e competências."
+>
+  <CabecalhoPagina
+    titulo="Logística na prática, dados como ferramenta"
+    introducao={`${site.nomeCompleto}, ${site.local}. Construí minha carreira dentro da operação e uso esse conhecimento para criar análises que fazem sentido para quem decide.`}
+  />
+
+  <section class="section container trajetoria" aria-labelledby="trajetoria-titulo">
+    <h2 id="trajetoria-titulo" class="visually-hidden">Trajetória</h2>
+    <div class="prose texto-longo">
+      <p>
+        Comecei na indústria, em 2017, abastecendo linhas de produção e fazendo manutenção de extintores. Em 2019 entrei na
+        Profarma como auxiliar de depósito: recebimento, armazenagem, separação, expedição, WMS, coletores RF e
+        inventários cíclicos e rotativos.
+      </p>
+      <p>
+        Em 2025 passei para a área de transportes como assistente de logística. Agendamento de coletas, controle de rotas,
+        custos de frete, cubagem, devoluções e sinistros, tudo acompanhado em Excel Avançado e por indicadores.
+      </p>
+      <p>
+        Em maio de 2026 fui promovido a Assistente de Logística II. Além da roteirização no Roadnet, do controle de fretes
+        spot e do faturamento de transportes, passei a desenvolver dashboards gerenciais em Power BI, entre eles a{" "}
+        <a href={url('/projetos/torre-controle-expedicao/')}>Torre de Controle Gerencial de Expedição</a>.
+      </p>
+      <p>
+        Em paralelo, venho construindo base técnica: Power BI, Data Analyst, Administrador de Banco de Dados e, agora,
+        Programação em Python e Inteligência Artificial.
+      </p>
+    </div>
+    <aside class="objetivo" aria-labelledby="objetivo-titulo">
+      <h3 id="objetivo-titulo">O que busco</h3>
+      <p>
+        Atuar em análise de dados e Business Intelligence, de preferência em contextos de logística e supply chain, onde
+        minha experiência operacional ajuda a fazer as perguntas certas aos dados.
+      </p>
+    </aside>
+  </section>
+
+  <section class="section container" aria-labelledby="formacao-titulo">
+    <div class="section-head">
+      <h2 id="formacao-titulo">Formação</h2>
+      <p>Formação técnica e superior em logística, complementada por cursos de dados e programação.</p>
+    </div>
+    <ul class="linhas">
+      {
+        formacaoAcademica.map((f) => (
+          <li>
+            <span class="curso">{f.curso}</span>
+            <span class="inst">{f.instituicao}</span>
+            <span class:list={['status', f.status]}>
+              {f.status === 'concluido' ? `Concluído em ${mesAno(f.data)}` : `Em andamento, previsão ${mesAno(f.data)}`}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="section container" aria-labelledby="cursos-titulo">
+    <div class="section-head">
+      <h2 id="cursos-titulo">Cursos e certificações</h2>
+      <p>{numero(horasConcluidas)} horas em cursos concluídos, além dos cursos em andamento listados abaixo.</p>
+    </div>
+    <div class="tabela-rolagem" role="region" aria-labelledby="cursos-titulo" tabindex="0">
+      <table class="tabela">
+        <caption class="visually-hidden">Cursos, instituição, carga horária e situação</caption>
+        <thead>
+          <tr>
+            <th scope="col">Curso</th>
+            <th scope="col">Instituição</th>
+            <th scope="col" class="num">Carga horária</th>
+            <th scope="col">Situação</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            cursos.map((c) => (
+              <tr>
+                <th scope="row">{c.curso}</th>
+                <td>{c.instituicao}</td>
+                <td class="num">{c.cargaHoraria ? `${c.cargaHoraria}h` : <span class="muted">não informada</span>}</td>
+                <td>
+                  <span class:list={['status', c.status]}>
+                    {c.status === 'concluido' ? `Concluído, ${mesAno(c.data)}` : `Em andamento, previsão ${mesAno(c.data)}`}
+                  </span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section container" id="competencias" aria-labelledby="comp-titulo">
+    <div class="section-head">
+      <h2 id="comp-titulo">Competências e evidências</h2>
+      <p>Cada competência aponta para onde ela foi usada ou aprendida. Não atribuo níveis sem uma avaliação formal.</p>
+    </div>
+    <div class="comp-grupos">
+      {
+        competencias.map((g) => (
+          <section class="comp-grupo" aria-labelledby={`g-${g.grupo}`}>
+            <h3 id={`g-${g.grupo}`}>{g.grupo}</h3>
+            <p class="muted">{g.descricao}</p>
+            <dl>
+              {g.itens.map((c) => (
+                <div class="comp" data-contexto={c.contexto}>
+                  <dt>
+                    {c.nome}
+                    <span class="contexto">{c.contexto === 'trabalho' ? 'Trabalho' : 'Formação'}</span>
+                  </dt>
+                  <dd>{c.href ? <a href={url(c.href)}>{c.evidencia}</a> : c.evidencia}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+
+  <FaixaContato />
+</BaseLayout>
+
+<style>
+  .trajetoria { display: grid; gap: 2.5rem 4rem; padding-top: 0; }
+  @media (min-width: 960px) { .trajetoria { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); align-items: start; } }
+  .texto-longo { font-size: 1.12rem; line-height: 1.7; }
+  .texto-longo p:first-child::first-line { font-weight: 500; color: var(--navy); }
+  .objetivo {
+    border-left: 3px solid var(--accent);
+    padding: 0.25rem 0 0.25rem 1.5rem;
+    position: sticky;
+    top: 6rem;
+  }
+  .objetivo h3 { font-size: var(--step-2); }
+  .objetivo p { margin: 0; color: var(--muted); }
+
+  .linhas { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .linhas li {
+    display: grid;
+    gap: 0.25rem 2rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (min-width: 760px) { .linhas li { grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) minmax(0, 3fr); align-items: baseline; } }
+  .curso { font-family: var(--font-display); font-size: var(--step-1); color: var(--navy); font-weight: 560; }
+  .inst { color: var(--muted); }
+
+  .status { font-size: 0.92rem; display: inline-flex; align-items: center; gap: 0.45rem; }
+  .status::before { content: ''; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--navy); flex: none; }
+  .status.andamento::before { background: transparent; border: 2px dashed var(--accent); }
+
+  .tabela-rolagem { overflow-x: auto; }
+  .tabela { width: 100%; border-collapse: collapse; font-size: 0.98rem; min-width: 34rem; }
+  .tabela th, .tabela td { text-align: left; padding: 0.8rem 1rem 0.8rem 0; border-bottom: 1px solid var(--line); vertical-align: baseline; }
+  .tabela thead th { font-size: var(--step--1); color: var(--muted); font-weight: 500; border-bottom-color: var(--line-strong); }
+  .tabela tbody th { font-weight: 500; color: var(--ink); }
+  .num { text-align: right !important; font-variant-numeric: tabular-nums; padding-right: 2rem !important; }
+
+  .comp-grupos { display: grid; gap: 3rem 4rem; }
+  @media (min-width: 900px) { .comp-grupos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .comp-grupo h3 { margin-bottom: 0.25rem; }
+  dl { margin: 1.25rem 0 0; border-top: 1px solid var(--line); }
+  .comp { padding-block: 0.75rem; border-bottom: 1px solid var(--line); }
+  dt { font-weight: 600; display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+  .contexto { font-weight: 500; font-size: 0.8rem; color: var(--navy); padding: 0.05rem 0.5rem; border-radius: 999px; border: 1.5px solid var(--navy); white-space: nowrap; }
+  .comp[data-contexto='formacao'] .contexto { border-style: dashed; border-color: var(--accent); color: var(--accent-ink); }
+  dd { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.95rem; }
+</style>

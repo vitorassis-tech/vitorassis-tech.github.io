@@ -1,0 +1,67 @@
+---
+import { canaisVisiveis } from '../data/site';
+import { url } from '../lib/formato';
+interface Props {
+  titulo?: string;
+  texto?: string;
+}
+const {
+  titulo = 'Vamos conversar sobre dados e operação?',
+  texto = 'Estou aberto a oportunidades em análise de dados, BI e logística orientada por dados.',
+} = Astro.props;
+const canais = canaisVisiveis();
+const email = canais.find((c) => c.id === 'email');
+---
+
+<section class="faixa-contato" aria-labelledby="faixa-contato-titulo">
+  <div class="container interno">
+    <div>
+      <h2 id="faixa-contato-titulo">{titulo}</h2>
+      <p>{texto}</p>
+    </div>
+    <div class="acoes">
+      {email && <a class="btn btn-claro" href={email.href}>Enviar e-mail</a>}
+      <a class="btn btn-contorno" href={url('/contato/')}>Ver todos os contatos</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faixa-contato {
+    background: var(--navy);
+    color: #e8eef6;
+    padding-block: clamp(3rem, 7vw, 5rem);
+    position: relative;
+    overflow: hidden;
+  }
+  /* Linha de rota decorativa discreta, coerente com o mapa da página inicial */
+  .faixa-contato::after {
+    content: '';
+    position: absolute;
+    right: -4rem;
+    bottom: -6rem;
+    width: 22rem;
+    height: 22rem;
+    border: 2px dashed rgba(229, 138, 43, 0.45);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .interno {
+    display: grid;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  @media (min-width: 900px) {
+    .interno { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: end; }
+    .acoes { justify-content: flex-end; }
+  }
+  h2 { color: #fff; font-size: var(--step-4); max-width: 18ch; }
+  p { margin: 0; max-width: 52ch; color: #d3deeb; }
+  .acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .btn-claro { background: #fff; color: var(--navy); border-color: #fff; }
+  .btn-claro:hover { background: var(--accent-wash); color: var(--navy-900); }
+  .btn-contorno { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.6); }
+  .btn-contorno:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+  a:focus-visible { box-shadow: 0 0 0 3px var(--navy), 0 0 0 6px #fff; }
+</style>

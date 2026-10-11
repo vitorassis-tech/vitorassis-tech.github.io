@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CabecalhoPagina from '../components/CabecalhoPagina.astro';
+import FaixaContato from '../components/FaixaContato.astro';
+import { experiencias } from '../data/trajetoria';
+import { site } from '../data/site';
+import { duracao, periodo } from '../lib/formato';
+
+const referencia = site.revisadoEm.slice(0, 7);
+---
+
+<BaseLayout
+  title="Experiência"
+  description="Experiência profissional de Vitor Assis: Profarma (Assistente de Logística II, Assistente de Logística I, Auxiliar de Depósito) e DAGAD."
+>
+  <CabecalhoPagina
+    titulo="Experiência profissional"
+    introducao="Promoções sucessivas na mesma empresa, do armazém ao planejamento de transportes e aos dashboards gerenciais."
+  />
+
+  <div class="container empresas">
+    {
+      experiencias.map((e) => (
+        <section class="empresa" aria-labelledby={`emp-${e.nomeCurto}`}>
+          <header class="emp-cab">
+            <h2 id={`emp-${e.nomeCurto}`}>{e.nomeCurto}</h2>
+            <p class="muted">{e.nome}</p>
+            <p class="periodo">
+              {periodo(e.inicio, e.fim)}
+              <span class="muted">, {duracao(e.inicio, e.fim, referencia)}</span>
+            </p>
+          </header>
+          <ol class="cargos" reversed>
+            {e.cargos.map((c, i) => (
+              <li class:list={['cargo', { atual: c.fim === null }]}>
+                <h3>{c.titulo}</h3>
+                <p class="periodo-cargo">
+                  {periodo(c.inicio, c.fim)}
+                  {c.fim === null && <span class="selo-atual">cargo atual</span>}
+                </p>
+                <ul>
+                  {c.atividades.map((a) => (
+                    <li>{a}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))
+    }
+  </div>
+
+  <FaixaContato />
+</BaseLayout>
+
+<style>
+  .empresas { display: grid; gap: var(--section); padding-bottom: var(--section); }
+  .empresa { display: grid; gap: 1.5rem 4rem; }
+  @media (min-width: 960px) {
+    .empresa { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+    .emp-cab { position: sticky; top: 6rem; align-self: start; }
+  }
+  .emp-cab h2 { margin-bottom: 0.25rem; }
+  .emp-cab p { margin: 0 0 0.35rem; }
+  .periodo { font-weight: 500; font-variant-numeric: tabular-nums; }
+
+  .cargos { list-style: none; margin: 0; padding: 0; }
+  .cargo {
+    position: relative;
+    padding: 0 0 2.5rem 2rem;
+    border-left: 2px solid var(--line-strong);
+  }
+  .cargo:last-child { padding-bottom: 0; border-left-color: transparent; }
+  .cargo::before {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: 0.45rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 3px solid var(--navy);
+  }
+  .cargo.atual::before { background: var(--accent); }
+  .cargo h3 { font-size: var(--step-2); margin-bottom: 0.25rem; }
+  .periodo-cargo { color: var(--muted); font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+  .selo-atual { font-size: 0.8rem; font-weight: 500; color: var(--accent-ink); border: 1.5px solid var(--accent); padding: 0 0.5rem; border-radius: 999px; }
+  .cargo ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.6rem; max-width: 70ch; }
+  .cargo ul li::marker { color: var(--accent); }
+</style>

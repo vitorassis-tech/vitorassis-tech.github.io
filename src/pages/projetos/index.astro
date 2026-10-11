@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CabecalhoPagina from '../../components/CabecalhoPagina.astro';
+import ListaProjetos from '../../components/ListaProjetos.astro';
+import FaixaContato from '../../components/FaixaContato.astro';
+import { projetos, naturezas, type Natureza } from '../../data/projetos';
+---
+
+<BaseLayout
+  title="Projetos"
+  description="Projetos de Vitor Assis em Power BI, SQL, Python, desenvolvimento web e logística, com estudos de caso detalhados e demonstrações interativas."
+>
+  <CabecalhoPagina
+    titulo="Projetos e estudos de caso"
+    introducao="Do painel feito para a gerência às demonstrações abertas com dados simulados. Cada estudo de caso mostra contexto, decisões, limitações e próximos passos."
+  >
+    <dl class="legenda-natureza">
+      {
+        (Object.keys(naturezas) as Natureza[]).map((n) => (
+          <div>
+            <dt>
+              <span class="natureza" data-natureza={n}>{naturezas[n].rotulo}</span>
+            </dt>
+            <dd>{naturezas[n].explicacao}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </CabecalhoPagina>
+
+  <section class="container" aria-label="Lista de projetos">
+    <ListaProjetos projetos={projetos} filtros nivelTitulo="h2" />
+  </section>
+
+  <div class="espaco"></div>
+  <FaixaContato />
+</BaseLayout>
+
+<style>
+  .legenda-natureza {
+    display: grid;
+    gap: 1rem 2rem;
+    margin: 2.25rem 0 0;
+  }
+  @media (min-width: 900px) { .legenda-natureza { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .legenda-natureza dd { margin: 0.5rem 0 0; color: var(--muted); font-size: 0.95rem; }
+  .espaco { height: var(--section); }
+</style>

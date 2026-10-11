@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CabecalhoPagina from '../components/CabecalhoPagina.astro';
+import { canaisVisiveis, site } from '../data/site';
+const canais = canaisVisiveis();
+---
+
+<BaseLayout title="Contato" description="Canais de contato profissional de Vitor Assis: e-mail, LinkedIn e GitHub.">
+  <CabecalhoPagina
+    titulo="Contato"
+    introducao="Para oportunidades, conversas sobre dados e logística ou feedback sobre os projetos, use um dos canais abaixo."
+  />
+
+  <section class="container" aria-label="Canais de contato">
+    <ul class="canais">
+      {
+        canais.map((c) => (
+          <li>
+            <span class="rotulo">{c.rotulo}</span>
+            <a
+              class="valor"
+              href={c.href}
+              target={c.id === 'email' ? undefined : '_blank'}
+              rel={c.id === 'email' ? undefined : 'noopener noreferrer'}
+            >
+              {c.valor}
+              {c.id !== 'email' && <span class="visually-hidden"> (abre em nova aba)</span>}
+            </a>
+            {c.id === 'email' && (
+              <button type="button" class="copiar" data-copiar={c.valor}>
+                Copiar e-mail
+              </button>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+    <p class="status-copia" role="status" aria-live="polite"></p>
+    <p class="muted local">{site.local}. Disponível para conversas on-line.</p>
+  </section>
+</BaseLayout>
+
+<script>
+  const status = document.querySelector<HTMLElement>('.status-copia');
+  document.querySelectorAll<HTMLButtonElement>('[data-copiar]').forEach((botao) => {
+    botao.addEventListener('click', async () => {
+      const texto = botao.dataset.copiar || '';
+      try {
+        if (!navigator.clipboard) throw new Error('Área de transferência indisponível');
+        await navigator.clipboard.writeText(texto);
+        botao.textContent = 'E-mail copiado';
+        if (status) status.textContent = `E-mail ${texto} copiado para a área de transferência.`;
+        window.setTimeout(() => (botao.textContent = 'Copiar e-mail'), 2500);
+      } catch {
+        if (status) status.textContent = `Não foi possível copiar automaticamente. Selecione e copie: ${texto}`;
+      }
+    });
+  });
+</script>
+
+<style>
+  .canais { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .canais li {
+    display: grid;
+    gap: 0.35rem 2rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+  }
+  @media (min-width: 760px) {
+    .canais li { grid-template-columns: 12rem minmax(0, 1fr) auto; }
+  }
+  .rotulo { color: var(--muted); font-weight: 500; }
+  .valor {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    text-decoration-thickness: 2px;
+  }
+  .copiar {
+    justify-self: start;
+    min-height: 44px;
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-m);
+    border: 1.5px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--navy);
+    font: 500 0.95rem var(--font-body);
+    cursor: pointer;
+  }
+  .copiar:hover { border-color: var(--navy); }
+  .status-copia { min-height: 1.5rem; margin-top: 1rem; color: var(--navy); }
+  .local { margin-bottom: var(--section); }
+</style>

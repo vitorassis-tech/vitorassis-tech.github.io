@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RotaCarreira from '../components/RotaCarreira.astro';
+import ListaProjetos from '../components/ListaProjetos.astro';
+import FaixaContato from '../components/FaixaContato.astro';
+import { site } from '../data/site';
+import { projetos } from '../data/projetos';
+import { competencias } from '../data/competencias';
+import { url } from '../lib/formato';
+
+const destaques = projetos.slice(0, 4);
+const frentes = [
+  {
+    titulo: 'Na operação',
+    texto: 'Roteirização e planejamento de cargas no Roadnet, controle de fretes spot, gestão de ocorrências e faturamento de transportes com conferência de XML para liberação de CT-e.',
+  },
+  {
+    titulo: 'Nos dados',
+    texto: 'Dashboards gerenciais em Power BI com dados do SAP e SQL, tratados no Power Query e calculados em DAX, para acompanhar KPIs operacionais e financeiros.',
+  },
+  {
+    titulo: 'Em formação',
+    texto: 'Python e Flask no Senac, administração de banco de dados no SENAI Firjan (concluído) e Inteligência Artificial na FAETEC.',
+  },
+];
+---
+
+<BaseLayout title={site.nome}>
+  <section class="hero container" aria-labelledby="hero-titulo">
+    <div class="hero-texto">
+      <p class="assinatura">{site.nome}, {site.cargoAtual} na {site.empresaAtual}</p>
+      <h1 id="hero-titulo">Da operação logística às decisões guiadas por dados.</h1>
+      <p class="lede">
+        Há mais de sete anos na logística, do armazém ao planejamento de transportes. Hoje roteirizo cargas, acompanho
+        fretes e construo painéis em Power BI e SQL para a gerência. Agora aprofundo Python, bancos de dados e
+        inteligência artificial.
+      </p>
+      <div class="cta">
+        <a class="btn btn-primary" href={url('/projetos/')}>Ver projetos</a>
+        <a class="btn btn-ghost" href={url('/sobre/')}>Conhecer minha trajetória</a>
+      </div>
+    </div>
+    <div class="hero-rota">
+      <h2 class="visually-hidden">Trajetória</h2>
+      <RotaCarreira />
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="frentes-titulo">
+    <div class="section-head">
+      <h2 id="frentes-titulo">Onde a operação encontra os dados</h2>
+      <p>Conheço o problema por dentro antes de transformá-lo em indicador. É isso que conecta as três frentes do meu trabalho.</p>
+    </div>
+    <div class="frentes">
+      {
+        frentes.map((f) => (
+          <div class="frente">
+            <h3>{f.titulo}</h3>
+            <p>{f.texto}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="projetos-titulo">
+    <div class="section-head">
+      <h2 id="projetos-titulo">Projetos selecionados</h2>
+      <p>
+        Cada projeto informa se é profissional, acadêmico ou uma demonstração com dados simulados. Nada de números
+        inventados.
+      </p>
+    </div>
+    <ListaProjetos projetos={destaques} />
+    <p class="ver-todos"><a href={url('/projetos/')}>Ver todos os {projetos.length} projetos</a></p>
+  </section>
+
+  <section class="section container" aria-labelledby="competencias-titulo">
+    <div class="section-head">
+      <h2 id="competencias-titulo">Competências com evidência</h2>
+      <p>
+        <span class="chave chave-trabalho" aria-hidden="true"></span> usada no trabalho
+        <span class="chave chave-formacao" aria-hidden="true"></span> em formação ou curso.
+        Os detalhes de cada evidência estão na página <a href={url('/sobre/#competencias')}>Sobre</a>.
+      </p>
+    </div>
+    <div class="grupos">
+      {
+        competencias.map((g) => (
+          <div class="grupo">
+            <h3>{g.grupo}</h3>
+            <ul>
+              {g.itens.map((c) => (
+                <li data-contexto={c.contexto}>
+                  {c.nome}
+                  <span class="visually-hidden">{c.contexto === 'trabalho' ? ' (usada no trabalho)' : ' (em formação)'}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <FaixaContato />
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-top: clamp(2.5rem, 7vw, 5.5rem);
+    padding-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+  .hero-texto { max-width: 58rem; }
+  .assinatura {
+    font-size: 1rem;
+    color: var(--accent-ink);
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .assinatura::before {
+    content: '';
+    width: 2.5rem;
+    height: 2px;
+    background: var(--accent);
+    flex: none;
+  }
+  h1 { max-width: 15ch; margin-bottom: 1.5rem; }
+  .cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+  .hero-rota {
+    margin-top: clamp(3rem, 7vw, 5rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .frentes { display: grid; gap: 2rem 3rem; }
+  @media (min-width: 760px) { .frentes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .frente { border-top: 3px solid var(--navy); padding-top: 1.25rem; }
+  .frente:last-child { border-top-color: var(--accent); }
+  .frente h3 { font-size: var(--step-2); }
+  .frente p { color: var(--muted); margin: 0; }
+
+  .ver-todos { margin-top: 1.75rem; font-weight: 500; }
+
+  .grupos { display: grid; gap: 2.25rem 3rem; }
+  @media (min-width: 760px) { .grupos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .grupo h3 { font-size: var(--step-1); font-family: var(--font-body); font-weight: 600; color: var(--ink); letter-spacing: 0; }
+  .grupo ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .grupo li {
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-s);
+    font-size: 0.95rem;
+    border: 1.5px solid var(--navy);
+    background: var(--surface);
+    color: var(--navy);
+  }
+  .grupo li[data-contexto='formacao'] { border-style: dashed; border-color: var(--accent); color: var(--ink); }
+  .chave { display: inline-block; width: 1.4rem; height: 0.9rem; border-radius: 3px; vertical-align: -0.1rem; margin-right: 0.2rem; }
+  .chave-trabalho { border: 1.5px solid var(--navy); }
+  .chave-formacao { border: 1.5px dashed var(--accent); margin-left: 0.6rem; }
+</style>

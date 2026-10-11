@@ -1,0 +1,37 @@
+{
+  "name": "portfolio-vitor-assis",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portfólio profissional de Vitor Assis — logística, dados, BI e tecnologia.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "dados": "python3 dados-demo/gerar_dados.py",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:dados": "python3 -m unittest discover -s dados-demo/tests -v",
+    "test:all": "npm run test:dados && npm run typecheck && npm run test && npm run build && npm run test:e2e",
+    "og": "node scripts/gerar-og.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.4",
+    "@fontsource-variable/fraunces": "5.3.0",
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "astro": "7.3.8"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.11.3",
+    "@playwright/test": "1.56.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.11"
+  },
+  "overrides": {
+    "playwright-core": "1.56.1"
+  }
+}

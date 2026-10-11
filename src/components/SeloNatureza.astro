@@ -1,0 +1,12 @@
+---
+import { naturezas, type Natureza } from '../data/projetos';
+interface Props {
+  natureza: Natureza;
+  detalhe?: string;
+}
+const { natureza, detalhe } = Astro.props;
+---
+
+<span class="natureza" data-natureza={natureza} title={naturezas[natureza].explicacao}>
+  {naturezas[natureza].rotulo}{detalhe && `, ${detalhe}`}
+</span>

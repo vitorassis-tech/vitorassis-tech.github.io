@@ -1,0 +1,204 @@
+---
+/**
+ * "Mapa de rota" da carreira: cada parada é um marco real do currículo.
+ * Desktop: rota horizontal ascendente (SVG) com rótulos alternados.
+ * Celular/tablet: lista vertical.
+ */
+import { marcos } from '../data/trajetoria';
+import { mesAno } from '../lib/formato';
+
+const n = marcos.length;
+const FOLGA = 1.7; // coluna extra à direita para o rótulo da última parada
+const W = n + FOLGA;
+const ultimoConcluido = marcos.findLastIndex((m) => !m.proxima);
+
+// Geometria da faixa da rota (viewBox 1000 x 100)
+const pts = marcos.map((_, i) => {
+  const x = ((i + 0.5) / W) * 1000;
+  const subida = 82 - (i / (n - 1)) * 64; // sobe da esquerda para a direita
+  const oscilacao = i % 2 === 0 ? 6 : -6;
+  return { x, y: Math.max(8, Math.min(92, subida + oscilacao)) };
+});
+
+const curva = (lista: { x: number; y: number }[]) =>
+  lista.reduce((d, p, i) => {
+    if (i === 0) return `M ${p.x} ${p.y}`;
+    const a = lista[i - 1];
+    const dx = (p.x - a.x) / 2;
+    return `${d} C ${a.x + dx} ${a.y}, ${p.x - dx} ${p.y}, ${p.x} ${p.y}`;
+  }, '');
+
+const trechoConcluido = curva(pts.slice(0, ultimoConcluido + 1));
+const trechoPrevisto = curva(pts.slice(ultimoConcluido));
+---
+
+<figure class="rota" aria-labelledby="rota-titulo" style={`--n:${n};--folga:${FOLGA}fr`}>
+  <figcaption id="rota-titulo" class="visually-hidden">Trajetória profissional e de formação, de 2017 até as próximas etapas previstas</figcaption>
+  <div class="faixa" aria-hidden="true">
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none" focusable="false">
+      <path class="trilha" d={curva(pts)} vector-effect="non-scaling-stroke"></path>
+      <path class="concluido" d={trechoConcluido} vector-effect="non-scaling-stroke"></path>
+      <path class="previsto" d={trechoPrevisto} vector-effect="non-scaling-stroke"></path>
+    </svg>
+  </div>
+  <ol>
+    {
+      marcos.map((m, i) => (
+        <li
+          class:list={['parada', { proxima: m.proxima, atual: i === ultimoConcluido, acima: i % 2 === 1 }]}
+          style={`--i:${i};--x:${pts[i].x / 10}%;--y:${pts[i].y / 100}`}
+        >
+          <span class="marcador" aria-hidden="true" />
+          <span class="rotulo">
+            <time datetime={m.data}>{mesAno(m.data)}</time>
+            <strong>{m.titulo}</strong>
+            <span class="detalhe">{m.detalhe}</span>
+            {m.proxima && <span class="visually-hidden">(etapa prevista)</span>}
+            {i === ultimoConcluido && <span class="visually-hidden">(etapa mais recente concluída)</span>}
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+  <p class="legenda" aria-hidden="true">
+    <span class="leg-concluido"></span> concluído
+    <span class="leg-previsto"></span> previsto
+  </p>
+</figure>
+
+<style>
+  .rota {
+    margin: 0;
+    position: relative;
+    --acima: 7.25rem;
+    --banda: 8.5rem;
+    --abaixo: 7.25rem;
+  }
+  .faixa { display: none; }
+  ol { list-style: none; margin: 0; padding: 0; }
+
+  /* --- Lista vertical (padrão: celular e tablet) --- */
+  .parada {
+    position: relative;
+    padding: 0 0 1.35rem 2rem;
+  }
+  .parada::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 0.9rem;
+    bottom: -0.35rem;
+    width: 2px;
+    background: var(--navy);
+  }
+  .parada:last-child::before { display: none; }
+  .parada.atual::before,
+  .parada.proxima::before {
+    background: repeating-linear-gradient(to bottom, var(--accent) 0 5px, transparent 5px 10px);
+  }
+  .marcador {
+    position: absolute;
+    left: 0;
+    top: 0.35rem;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 3px solid var(--navy);
+  }
+  .atual .marcador { background: var(--accent); border-color: var(--navy); box-shadow: 0 0 0 4px var(--accent-wash); }
+  .proxima .marcador { border-style: dashed; border-color: var(--accent); border-width: 2px; }
+
+  .rotulo { display: grid; gap: 0.05rem; }
+  time {
+    font-size: var(--step--1);
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  strong {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+  .detalhe { font-size: 0.92rem; color: var(--muted); line-height: 1.4; }
+
+  .legenda {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--step--1);
+    color: var(--muted);
+    margin: 0.5rem 0 0;
+  }
+  .legenda span { display: inline-block; width: 1.75rem; height: 0; margin-left: 0.5rem; }
+  .legenda span:first-child { margin-left: 0; }
+  .leg-concluido { border-top: 2.5px solid var(--navy); }
+  .leg-previsto { border-top: 2.5px dashed var(--accent); }
+
+  /* --- Mapa de rota horizontal (telas largas) --- */
+  @media (min-width: 960px) {
+    ol {
+      display: grid;
+      grid-template-columns: repeat(var(--n), minmax(0, 1fr)) minmax(0, var(--folga));
+      grid-template-rows: var(--acima) var(--banda) var(--abaixo);
+      position: relative;
+      z-index: 1;
+    }
+    .faixa {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: var(--acima);
+      height: var(--banda);
+    }
+    .faixa svg { width: 100%; height: 100%; overflow: visible; }
+    path { fill: none; stroke-linecap: round; }
+    .trilha { stroke: var(--line); stroke-width: 10; }
+    .concluido { stroke: var(--navy); stroke-width: 3; }
+    .previsto { stroke: var(--accent); stroke-width: 3; stroke-dasharray: 7 7; }
+
+    .parada {
+      grid-column: calc(var(--i) + 1);
+      grid-row: 3;
+      padding: 0.6rem 0 0 0.75rem;
+      margin-left: calc(50% - 1px);
+      width: 180%;
+      border-left: 1px solid var(--line-strong);
+      align-self: start;
+    }
+    .parada.acima {
+      grid-row: 1;
+      align-self: end;
+      padding: 0 0 0.6rem 0.75rem;
+    }
+    .parada::before { display: none; }
+    .marcador {
+      position: absolute;
+      left: calc(var(--x) - 9px);
+      top: calc(var(--acima) + var(--y) * var(--banda) - 9px);
+      width: 18px;
+      height: 18px;
+    }
+    /* O marcador precisa ser posicionado em relação à lista, não ao item */
+    .parada { position: static; }
+    strong { font-size: 1.05rem; }
+    .detalhe { font-size: 0.85rem; max-width: 22ch; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .faixa svg { animation: revelar 1.8s var(--ease) 0.2s both; }
+      .marcador { animation: surgir 0.5s var(--ease) both; animation-delay: calc(0.3s + var(--i) * 0.18s); }
+    }
+  }
+
+  @keyframes revelar {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0 0 0); }
+  }
+  @keyframes surgir {
+    from { opacity: 0; transform: scale(0.4); }
+    to { opacity: 1; transform: scale(1); }
+  }
+</style>

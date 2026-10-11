@@ -1,0 +1,159 @@
+---
+/**
+ * Índice de projetos em formato de lista editorial.
+ * Com `filtros`, exibe botões de categoria (melhoria progressiva:
+ * sem JavaScript, todos os projetos continuam visíveis).
+ */
+import { categorias, categoriasEmUso, type Projeto } from '../data/projetos';
+import SeloNatureza from './SeloNatureza.astro';
+import { url } from '../lib/formato';
+
+interface Props {
+  projetos: Projeto[];
+  filtros?: boolean;
+  nivelTitulo?: 'h2' | 'h3';
+}
+const { projetos, filtros = false, nivelTitulo = 'h3' } = Astro.props;
+const Titulo = nivelTitulo;
+const usadas = categoriasEmUso();
+---
+
+<div class="lista-projetos" data-filtravel={filtros ? '' : undefined}>
+  {
+    filtros && (
+      <div class="filtros" role="group" aria-label="Filtrar projetos por categoria" hidden>
+        <button type="button" class="filtro" data-categoria="todas" aria-pressed="true">
+          Todos <span class="contagem">{projetos.length}</span>
+        </button>
+        {usadas.map((c) => (
+          <button type="button" class="filtro" data-categoria={c} aria-pressed="false">
+            {categorias[c]} <span class="contagem">{projetos.filter((p) => p.categorias.includes(c)).length}</span>
+          </button>
+        ))}
+      </div>
+    )
+  }
+  {filtros && <p class="status-filtro visually-hidden" aria-live="polite" />}
+
+  <ul class="itens">
+    {
+      projetos.map((p) => (
+        <li class="item" data-categorias={p.categorias.join(' ')}>
+          <article>
+            <div class="meta">
+              <SeloNatureza natureza={p.natureza} detalhe={p.instituicao} />
+              <span class="muted ano">{p.periodo}</span>
+            </div>
+            <Titulo class="titulo">
+              <a href={url(`/projetos/${p.slug}/`)}>{p.titulo}</a>
+            </Titulo>
+            <p class="resumo">{p.resumo}</p>
+            <ul class="tag-list" aria-label="Tecnologias">
+              {p.tecnologias.slice(0, 6).map((t) => <li>{t}</li>)}
+            </ul>
+          </article>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<script>
+      const raiz = document.querySelector<HTMLElement>('[data-filtravel]');
+      if (raiz) {
+        const grupo = raiz.querySelector<HTMLElement>('.filtros');
+        const botoes = [...raiz.querySelectorAll<HTMLButtonElement>('.filtro')];
+        const itens = [...raiz.querySelectorAll<HTMLElement>('.item')];
+        const status = raiz.querySelector<HTMLElement>('.status-filtro');
+        if (grupo) grupo.hidden = false;
+
+        const aplicar = (categoria: string, atualizarUrl = true) => {
+          let visiveis = 0;
+          for (const item of itens) {
+            const cats = (item.dataset.categorias || '').split(' ');
+            const mostrar = categoria === 'todas' || cats.includes(categoria);
+            item.hidden = !mostrar;
+            if (mostrar) visiveis++;
+          }
+          for (const b of botoes) b.setAttribute('aria-pressed', String(b.dataset.categoria === categoria));
+          if (status) status.textContent = `${visiveis} ${visiveis === 1 ? 'projeto exibido' : 'projetos exibidos'}`;
+          if (atualizarUrl) {
+            const u = new URL(window.location.href);
+            if (categoria === 'todas') u.searchParams.delete('categoria');
+            else u.searchParams.set('categoria', categoria);
+            history.replaceState(null, '', u);
+          }
+        };
+
+        botoes.forEach((b) => b.addEventListener('click', () => aplicar(b.dataset.categoria || 'todas')));
+        const inicial = new URLSearchParams(window.location.search).get('categoria');
+        if (inicial && botoes.some((b) => b.dataset.categoria === inicial)) aplicar(inicial, false);
+      }
+</script>
+
+<style>
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .filtros[hidden] { display: none; }
+  .filtro {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.4rem 0.95rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--ink);
+    font: 500 0.95rem var(--font-body);
+    cursor: pointer;
+    transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease);
+  }
+  .filtro:hover { border-color: var(--navy); }
+  .filtro[aria-pressed='true'] { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .contagem {
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+    padding: 0 0.4rem;
+    border-radius: 999px;
+    background: var(--navy-wash);
+    color: var(--navy);
+  }
+  .filtro[aria-pressed='true'] .contagem { background: rgba(255, 255, 255, 0.18); color: #fff; }
+
+  .itens { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .item { border-bottom: 1px solid var(--line); }
+  .item[hidden] { display: none; }
+  article {
+    display: grid;
+    gap: 0.6rem 2.5rem;
+    padding-block: 1.75rem;
+    position: relative;
+  }
+  @media (min-width: 900px) {
+    article {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      grid-template-areas: 'meta resumo' 'titulo resumo' 'titulo tags';
+      align-items: start;
+    }
+    .meta { grid-area: meta; }
+    .titulo { grid-area: titulo; }
+    .resumo { grid-area: resumo; }
+    .tag-list { grid-area: tags; }
+  }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+  .ano { font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+  .titulo { font-size: var(--step-3); margin: 0; }
+  .titulo a { text-decoration: none; color: var(--navy); background-image: linear-gradient(var(--accent), var(--accent)); background-size: 0 2px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size 0.35s var(--ease); }
+  .titulo a:hover, .titulo a:focus-visible { background-size: 100% 2px; }
+  /* Toda a linha é clicável, mantendo um único link acessível */
+  .titulo a::after { content: ''; position: absolute; inset: 0; }
+  .titulo a:focus-visible { box-shadow: none; }
+  article:has(.titulo a:focus-visible) { box-shadow: var(--focus); border-radius: var(--radius-m); }
+  .resumo { margin: 0; color: var(--muted); max-width: 60ch; }
+  .tag-list { position: relative; }
+</style>
