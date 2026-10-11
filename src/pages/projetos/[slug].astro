@@ -6,7 +6,7 @@ import FaixaContato from '../../components/FaixaContato.astro';
 import PainelFretes from '../../components/demos/PainelFretes.astro';
 import LaboratorioRotas from '../../components/demos/LaboratorioRotas.astro';
 import SimulacaoTorre from '../../components/demos/SimulacaoTorre.astro';
-import { projetos, categorias, naturezas, type Projeto } from '../../data/projetos';
+import { projetos, categorias, naturezas, rotulosStatus, type Projeto } from '../../data/projetos';
 import { url } from '../../lib/formato';
 
 export function getStaticPaths() {
@@ -35,7 +35,7 @@ const secoes = [
 const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 'Demonstração funcional', pendente: 'Pendente' } as const;
 ---
 
-<BaseLayout title={p.titulo} description={`${p.subtitulo}. ${p.resumo}`} type="article">
+<BaseLayout title={p.titulo} description={`${p.subtitulo}. ${p.resumo}`} type="article" noindex={p.status !== 'publicado'}>
   <CabecalhoPagina titulo={p.titulo} introducao={p.subtitulo} trilha={{ href: url('/projetos/'), rotulo: 'Todos os projetos' }}>
     <div class="ficha">
       <SeloNatureza natureza={p.natureza} detalhe={p.instituicao} />
@@ -45,6 +45,23 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
     <p class="explica-natureza muted">{naturezas[p.natureza].explicacao}</p>
   </CabecalhoPagina>
 
+  {
+    p.status !== 'publicado' && (
+      <div class="container">
+        <p class="aviso-previa" role="note">
+          <strong>Prévia: {rotulosStatus[p.status]}.</strong> Este projeto não aparece no site publicado. Para exibi-lo,
+          mude o status para Publicado no painel.
+        </p>
+      </div>
+    )
+  }
+  {
+    p.imagem && (
+      <figure class="container capa">
+        <img src={url(p.imagem.arquivo)} alt={p.imagem.alt} loading="eager" decoding="async" />
+      </figure>
+    )
+  }
   <div class="container corpo">
     <nav class="sumario" aria-label="Seções do estudo de caso">
       <p class="sumario-titulo">Neste estudo de caso</p>
@@ -189,6 +206,9 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
 <style>
   .ficha { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.25rem; margin-top: 1.75rem; font-size: 0.95rem; }
   .explica-natureza { font-size: 0.95rem; margin: 0.75rem 0 0; max-width: 70ch; }
+  .aviso-previa { margin: 0 0 2rem; padding: 0.85rem 1rem; border-radius: var(--radius-m); background: #fff4de; border: 1px dashed #d9931e; color: #5c3700; }
+  .capa { margin-top: 0; margin-bottom: clamp(2rem, 5vw, 3rem); }
+  .capa img { width: 100%; max-height: 520px; object-fit: contain; border-radius: var(--radius-l); border: 1px solid var(--line); background: var(--surface); }
 
   .corpo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem 4rem; padding-bottom: var(--section); }
   @media (min-width: 1024px) {

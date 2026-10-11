@@ -15,9 +15,11 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:dados": "node scripts/python.mjs -m unittest discover -s dados-demo/tests -v",
-    "test:all": "npm run test:dados && npm run typecheck && npm run test && npm run build && npm run test:e2e",
+    "test:all": "npm run test:dados && npm run typecheck && npm run test && npm run build && npm run test:e2e && npm run test:painel",
     "og": "node scripts/gerar-og.mjs",
-    "typecheck": "astro sync && tsc --noEmit"
+    "typecheck": "astro sync && tsc --noEmit",
+    "admin": "node scripts/admin/iniciar.mjs",
+    "test:painel": "playwright test -c playwright.painel.config.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

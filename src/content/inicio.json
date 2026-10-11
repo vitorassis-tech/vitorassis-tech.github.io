@@ -1,0 +1,46 @@
+{
+  "titulo": "Da operação logística às decisões guiadas por dados.",
+  "apresentacao": "Assistente de Logística II na Profarma. Roteirizo cargas no Roadnet, acompanho fretes e construo dashboards em Power BI para a gerência, a partir de relatórios exportados da operação. Em formação: SQL, Python e inteligência artificial.",
+  "frentes": [
+    {
+      "rotulo": "Módulo operação",
+      "titulo": "Na operação",
+      "texto": "Roteirização e planejamento de cargas no Roadnet, controle de fretes spot, gestão de ocorrências e faturamento de transportes com conferência de XML para liberação de CT-e."
+    },
+    {
+      "rotulo": "Módulo dados",
+      "titulo": "Nos dados",
+      "texto": "Dashboards gerenciais em Power BI a partir de relatórios e arquivos operacionais exportados, tratados no Power Query e calculados em DAX, para acompanhar KPIs operacionais e financeiros."
+    },
+    {
+      "rotulo": "Módulo em formação",
+      "titulo": "Em formação",
+      "texto": "SQL e modelagem de dados (Administrador de Banco de Dados, SENAI Firjan, concluído), Python e Flask (Senac) e Inteligência Artificial (FAETEC).",
+      "formacao": true
+    }
+  ],
+  "faixa": [
+    {
+      "destaque": "Power BI, Power Query e DAX",
+      "complemento": "em dashboards gerenciais"
+    },
+    {
+      "destaque": "Roadnet",
+      "complemento": "na roteirização diária"
+    },
+    {
+      "destaque": "Banco de dados",
+      "complemento": "SENAI Firjan, 180h"
+    },
+    {
+      "destaque": "Python",
+      "complemento": "Senac, em andamento"
+    }
+  ],
+  "projetosDestaque": [
+    "torre-controle-expedicao",
+    "simulacao-torre-controle",
+    "painel-fretes-simulado",
+    "atividade-flask"
+  ]
+}

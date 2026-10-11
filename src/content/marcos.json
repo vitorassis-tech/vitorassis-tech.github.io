@@ -1,0 +1,52 @@
+[
+  {
+    "id": "2017-09-chao-de-fabrica",
+    "data": "2017-09",
+    "titulo": "Chão de fábrica",
+    "detalhe": "Linha de produção e manutenção de extintores na DAGAD"
+  },
+  {
+    "id": "2019-08-armazem",
+    "data": "2019-08",
+    "titulo": "Armazém",
+    "detalhe": "Auxiliar de Depósito na Profarma, com WMS e inventários"
+  },
+  {
+    "id": "2025-03-transportes",
+    "data": "2025-03",
+    "titulo": "Transportes",
+    "detalhe": "Assistente de Logística I: rotas, fretes e KPIs em Excel"
+  },
+  {
+    "id": "2025-10-power-bi",
+    "data": "2025-10",
+    "titulo": "Power BI",
+    "detalhe": "Curso de Power BI concluído no Senac"
+  },
+  {
+    "id": "2026-05-assistente-de-logistica-ii",
+    "data": "2026-05",
+    "titulo": "Assistente de Logística II",
+    "detalhe": "Dashboards gerenciais em Power BI"
+  },
+  {
+    "id": "2026-08-banco-de-dados",
+    "data": "2026-08",
+    "titulo": "Banco de dados",
+    "detalhe": "Administrador de Banco de Dados, SENAI Firjan"
+  },
+  {
+    "id": "2026-11-python",
+    "data": "2026-11",
+    "titulo": "Python",
+    "detalhe": "Programação em Python, Senac (previsão)",
+    "proxima": true
+  },
+  {
+    "id": "2026-12-inteligencia-artificial",
+    "data": "2026-12",
+    "titulo": "Inteligência Artificial",
+    "detalhe": "Curso na FAETEC (previsão)",
+    "proxima": true
+  }
+]

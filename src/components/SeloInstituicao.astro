@@ -1,0 +1,49 @@
+---
+/**
+ * Instituição de ensino com logotipo oficial (quando cadastrado no painel)
+ * ou um selo neutro genérico (quando não houver arquivo).
+ * O selo neutro NÃO imita a marca de nenhuma instituição.
+ * O logotipo é decorativo (alt=""), porque o nome aparece logo ao lado.
+ */
+import { url } from '../lib/formato';
+
+interface Props {
+  nome: string;
+  logo?: { arquivo: string; alt?: string };
+}
+const { nome, logo } = Astro.props;
+---
+
+<span class="instituicao">
+  <span class:list={['marca', { neutra: !logo }]} aria-hidden="true">
+    {
+      logo ? (
+        <img src={url(logo.arquivo)} alt="" width="40" height="40" loading="lazy" decoding="async" />
+      ) : (
+        <svg viewBox="0 0 24 24" width="20" height="20" focusable="false">
+          <path d="M12 3 2.5 8h19L12 3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+          <path d="M5 10v7M9.5 10v7M14.5 10v7M19 10v7M3 20h18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+      )
+    }
+  </span>
+  <span class="nome">{nome}</span>
+</span>
+
+<style>
+  .instituicao { display: inline-flex; align-items: center; gap: 0.6rem; min-width: 0; }
+  .marca {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-m);
+    background: #fff;
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .marca img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+  .marca.neutra { background: var(--navy-wash); color: var(--navy); border-color: transparent; }
+  .nome { overflow-wrap: break-word; }
+</style>

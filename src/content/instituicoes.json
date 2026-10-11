@@ -1,0 +1,38 @@
+[
+  {
+    "id": "unisuam",
+    "nome": "UNISUAM"
+  },
+  {
+    "id": "senac",
+    "nome": "Senac",
+    "logo": {
+      "arquivo": "/img/instituicoes/senac-logo-bfa6bcd0.svg",
+      "alt": "senac-logo"
+    }
+  },
+  {
+    "id": "seeduc-rj",
+    "nome": "SEEDUC-RJ"
+  },
+  {
+    "id": "faetec",
+    "nome": "FAETEC"
+  },
+  {
+    "id": "senai-firjan",
+    "nome": "SENAI Firjan"
+  },
+  {
+    "id": "xperium",
+    "nome": "Xperium"
+  },
+  {
+    "id": "senai",
+    "nome": "SENAI"
+  },
+  {
+    "id": "ctest",
+    "nome": "CTEST"
+  }
+]

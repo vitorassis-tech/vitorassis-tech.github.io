@@ -4,8 +4,9 @@ Site pessoal e profissional que conecta a experiência em logística e roteiriza
 
 - **Tecnologia:** [Astro](https://astro.build) (site estático), TypeScript, CSS próprio
 - **Visual:** direção híbrida "Centro de Comando": faixas escuras de comando e áreas claras de leitura
-- **Sem backend, banco de dados ou login.** O build gera HTML/CSS/JS estático, que pode ser hospedado de graça.
-- **Testes:** Python `unittest` (dados), Vitest (lógica e conteúdo), Playwright + axe (navegador, responsividade e acessibilidade)
+- **Site publicado sem backend, banco de dados ou login.** O build gera HTML/CSS/JS estático, que pode ser hospedado de graça.
+- **Painel administrativo local** (`npm run admin`): criar, editar e excluir todo o conteúdo, com validação, lixeira e histórico. Veja [docs/PAINEL.md](docs/PAINEL.md).
+- **Testes:** Python `unittest` (dados), Vitest (lógica, conteúdo e API do painel), Playwright + axe (site e painel no navegador, responsividade e acessibilidade)
 
 > As demonstrações usam **dados e parâmetros fictícios**, independentes de qualquer empresa e identificados no site, no código e nos arquivos. Nenhum dado interno da Profarma é publicado.
 
@@ -60,6 +61,7 @@ Depois abra **http://localhost:4321**.
 
 | Comando | O que faz |
 |---|---|
+| `npm run admin` | **Painel administrativo** em http://127.0.0.1:4330 e prévia do site em http://localhost:4321 |
 | `npm run dev` | Servidor de desenvolvimento |
 | `npm run build` | Gera o site final em `dist/` |
 | `npm run preview` | Serve o build final localmente |
@@ -68,7 +70,8 @@ Depois abra **http://localhost:4321**.
 | `npm run typecheck` | Verifica os tipos TypeScript |
 | `npm test` | Testes unitários e de conteúdo (Vitest) |
 | `npm run test:dados` | Testes do gerador de dados (Python) |
-| `npm run test:e2e` | Testes no navegador (Playwright + axe). Requer `npm run build` antes |
+| `npm run test:e2e` | Testes do site no navegador (Playwright + axe). Requer `npm run build` antes |
+| `npm run test:painel` | Testes do painel no navegador, sobre uma cópia temporária do conteúdo |
 | `npm run test:all` | Roda tudo, na ordem certa |
 
 **Primeira vez rodando os testes de navegador em um computador novo:** `npx playwright install chromium`.
@@ -78,11 +81,9 @@ Depois abra **http://localhost:4321**.
 ```
 portfolio-vitor-assis/
 ├── src/
-│   ├── data/              ← TODO O CONTEÚDO EDITÁVEL fica aqui
-│   │   ├── site.ts            nome, objetivo profissional, contatos (telefone oculto), menu
-│   │   ├── trajetoria.ts      experiência, formação, cursos, marcos da telemetria de carreira
-│   │   ├── competencias.ts    competências com evidência (trabalho × formação)
-│   │   └── projetos.ts        projetos e estudos de caso
+│   ├── content/           ← TODO O CONTEÚDO EDITÁVEL (JSON), editado pelo painel
+│   ├── data/              carrega e valida o conteúdo, com tipos para as páginas
+│   ├── lib/esquema.mjs    esquema único do conteúdo (build, servidor e painel)
 │   ├── pages/             rotas do site (uma página = um arquivo)
 │   ├── components/        cabeçalho, rodapé, telemetria, vitrine, lista de projetos
 │   │   └── demos/             PainelFretes, SimulacaoTorre, LaboratorioRotas
@@ -94,12 +95,17 @@ portfolio-vitor-assis/
 ├── dados-demo/            gerador Python + SQL dos dados fictícios, com testes
 ├── tests/unit/            testes Vitest
 ├── tests/e2e/             testes Playwright
+├── admin/                 interface do painel administrativo (não é publicada)
+├── scripts/admin/         servidor local do painel
 ├── scripts/               gerador da imagem OG e executor de Python multiplataforma
+├── tests/api/             testes da API do painel
+├── tests/painel/          testes do painel no navegador
 └── docs/                  edição, publicação, testes, decisões e pendências
 ```
 
 ## 5. Documentação complementar
 
+- [docs/PAINEL.md](docs/PAINEL.md): painel administrativo (uso, segurança, lixeira, histórico, logotipos)
 - [docs/EDICAO.md](docs/EDICAO.md): como editar textos, projetos, contatos, cores e imagens
 - [docs/PUBLICACAO.md](docs/PUBLICACAO.md): como publicar de graça, **somente quando você autorizar**
 - [docs/RELATORIO-TESTES.md](docs/RELATORIO-TESTES.md): testes executados e resultados
@@ -108,8 +114,9 @@ portfolio-vitor-assis/
 
 ## 6. Privacidade e segurança
 
-- Não há chaves, senhas ou tokens no projeto. Não há formulário que envie dados.
-- O telefone está **oculto** (`exibir: false` em `src/data/site.ts`).
+- Não há chaves, senhas ou tokens no projeto. O site publicado não tem formulário que envie dados.
+- O painel administrativo roda só em `127.0.0.1`, com token aleatório por sessão, e não faz parte do site publicado.
+- O telefone está **oculto** (`"exibir": false` em `src/content/contatos.json`).
 - O estudo de caso da Torre de Controle não publica dados internos, capturas, clientes, placas, quantidades, valores, percentuais nem regras da empresa.
 - As demonstrações usam indicadores didáticos e parâmetros fictícios, com testes que bloqueiam termos de regras reais.
 - Links externos abrem com `rel="noopener noreferrer"`. As fontes são servidas pelo próprio site, sem rastreadores.

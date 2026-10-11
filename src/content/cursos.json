@@ -1,0 +1,81 @@
+[
+  {
+    "id": "inteligencia-artificial-faetec",
+    "curso": "Inteligência Artificial",
+    "instituicao": "faetec",
+    "status": "andamento",
+    "data": "2026-12"
+  },
+  {
+    "id": "programacao-em-python-senac",
+    "curso": "Programação em Python",
+    "instituicao": "senac",
+    "status": "andamento",
+    "data": "2026-11",
+    "cargaHoraria": 168
+  },
+  {
+    "id": "administrador-de-banco-de-dados-senai-firjan",
+    "curso": "Administrador de Banco de Dados",
+    "instituicao": "senai-firjan",
+    "status": "concluido",
+    "data": "2026-08",
+    "cargaHoraria": 180
+  },
+  {
+    "id": "data-analyst-xperium",
+    "curso": "Data Analyst",
+    "instituicao": "xperium",
+    "status": "concluido",
+    "data": "2026-04",
+    "cargaHoraria": 60
+  },
+  {
+    "id": "informatica-fundamental-senac",
+    "curso": "Informática Fundamental",
+    "instituicao": "senac",
+    "status": "concluido",
+    "data": "2026-02",
+    "cargaHoraria": 60
+  },
+  {
+    "id": "power-bi-senac",
+    "curso": "Power BI",
+    "instituicao": "senac",
+    "status": "concluido",
+    "data": "2025-10",
+    "cargaHoraria": 60
+  },
+  {
+    "id": "assistente-de-logistica-senai",
+    "curso": "Assistente de Logística",
+    "instituicao": "senai",
+    "status": "concluido",
+    "data": "2025-09",
+    "cargaHoraria": 180
+  },
+  {
+    "id": "excel-avancado-senac",
+    "curso": "Excel Avançado",
+    "instituicao": "senac",
+    "status": "concluido",
+    "data": "2025-02",
+    "cargaHoraria": 36
+  },
+  {
+    "id": "departamento-pessoal-senac",
+    "curso": "Departamento Pessoal",
+    "instituicao": "senac",
+    "status": "concluido",
+    "data": "2024-11",
+    "cargaHoraria": 160
+  },
+  {
+    "id": "brigada-de-incendio-ctest",
+    "curso": "Brigada de Incêndio",
+    "instituicao": "ctest",
+    "status": "concluido",
+    "data": "2021-09",
+    "cargaHoraria": 16
+  }
+]

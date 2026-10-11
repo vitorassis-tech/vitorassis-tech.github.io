@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CabecalhoPagina from '../components/CabecalhoPagina.astro';
 import FaixaContato from '../components/FaixaContato.astro';
+import SeloInstituicao from '../components/SeloInstituicao.astro';
 import { site } from '../data/site';
 import { formacaoAcademica, cursos } from '../data/trajetoria';
 import { competencias } from '../data/competencias';
@@ -12,7 +13,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
 
 <BaseLayout
   title="Sobre"
-  description="Trajetória de Vitor Assis: do armazém ao planejamento de transportes e à dashboards em Power BI, com estudos em SQL, Python e bancos de dados. Formação, cursos e competências."
+  description="Trajetória de Vitor Assis: do armazém ao planejamento de transportes e aos dashboards em Power BI, com estudos em SQL, Python e bancos de dados. Formação, cursos e competências."
 >
   <CabecalhoPagina
     titulo="Logística na prática, dados como ferramenta"
@@ -57,7 +58,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
         formacaoAcademica.map((f) => (
           <li>
             <span class="curso">{f.curso}</span>
-            <span class="inst">{f.instituicao}</span>
+            <span class="inst"><SeloInstituicao nome={f.instituicao} logo={f.logo} /></span>
             <span class:list={['status', f.status]}>
               {f.status === 'concluido' ? `Concluído em ${mesAno(f.data)}` : `Em andamento, previsão ${mesAno(f.data)}`}
             </span>
@@ -88,7 +89,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
             cursos.map((c) => (
               <tr>
                 <th scope="row">{c.curso}</th>
-                <td>{c.instituicao}</td>
+                <td><SeloInstituicao nome={c.instituicao} logo={c.logo} /></td>
                 <td class="num">{c.cargaHoraria ? `${c.cargaHoraria}h` : <span class="muted">não informada</span>}</td>
                 <td>
                   <span class:list={['status', c.status]}>
@@ -155,7 +156,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
     padding-block: 1.1rem;
     border-bottom: 1px solid var(--line);
   }
-  @media (min-width: 760px) { .linhas li { grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) minmax(0, 3fr); align-items: baseline; } }
+  @media (min-width: 760px) { .linhas li { grid-template-columns: minmax(0, 5fr) minmax(0, 2.4fr) minmax(0, 3fr); align-items: center; } }
   .curso { font-family: var(--font-display); font-size: var(--step-1); color: var(--navy); font-weight: 560; }
   .inst { color: var(--muted); }
 
@@ -164,8 +165,9 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
   .status.andamento::before { background: transparent; border: 2px dashed var(--accent); }
 
   .tabela-rolagem { overflow-x: auto; }
-  .tabela { width: 100%; border-collapse: collapse; font-size: 0.98rem; min-width: 34rem; }
-  .tabela th, .tabela td { text-align: left; padding: 0.8rem 1rem 0.8rem 0; border-bottom: 1px solid var(--line); vertical-align: baseline; }
+  .tabela { width: 100%; border-collapse: collapse; font-size: 0.98rem; min-width: 38rem; }
+  .tabela td:nth-child(2) { white-space: nowrap; }
+  .tabela th, .tabela td { text-align: left; padding: 0.7rem 1rem 0.7rem 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
   .tabela thead th { font-size: var(--step--1); color: var(--muted); font-weight: 500; border-bottom-color: var(--line-strong); }
   .tabela tbody th { font-weight: 500; color: var(--ink); }
   .num { text-align: right !important; font-variant-numeric: tabular-nums; padding-right: 2rem !important; }

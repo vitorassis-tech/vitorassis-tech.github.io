@@ -6,7 +6,10 @@
 |---|---|
 | **Astro 7 com saída estática** | HTML pronto (SEO e velocidade) e JavaScript só nas páginas que precisam (filtros e demonstrações). A versão 7.3.8 foi escolhida porque a 5.x tinha alertas de segurança no `npm audit`. |
 | **Sem backend, banco ou autenticação** | Um portfólio não precisa deles: menos superfície de ataque e custo zero. |
-| **Conteúdo em `src/data/*.ts`** | Separa conteúdo de apresentação. Os tipos TypeScript impedem campos faltando, e os testes de conteúdo validam as regras do briefing. |
+| **Conteúdo em `src/content/*.json` + esquema único (`src/lib/esquema.mjs`)** | Separa conteúdo de apresentação. O mesmo esquema valida o conteúdo no build, no servidor e no formulário do painel; `src/data/*.ts` dá os tipos para as páginas. Se um dado estiver inválido, o build falha. |
+| **Painel administrativo local (Node puro, sem dependências)** | CRUD completo sem contas nem serviços externos. Roda só em 127.0.0.1, com token por sessão, validação no servidor, histórico, lixeira e detecção de edição simultânea. Não faz parte do site publicado. A versão on-line (Fase 2) depende de autorização. |
+| **Status dos projetos** | `publicado`, `rascunho` e `arquivado`. O build publica só os publicados e oculta links para os demais; a prévia (`npm run admin`) mostra todos, com aviso. |
+| **Logotipos das instituições** | Só arquivos oficiais enviados pelo proprietário. Sem arquivo, um selo neutro genérico (não imita nenhuma marca). |
 | **CSS próprio, sem framework e sem dependência nova** | A identidade "Centro de Comando" foi feita só com CSS e SVG e as fontes já instaladas (Fraunces e IBM Plex Sans). Os rótulos técnicos usam a fonte monoespaçada do próprio sistema. |
 | **Gráficos em SVG sem biblioteca** | Leves e sem dependência externa. As cores das séries foram validadas para daltonismo e contraste nas superfícies clara e escura. |
 | **Fontes auto-hospedadas** | Nenhuma requisição a terceiros. As duas fontes principais são pré-carregadas. |

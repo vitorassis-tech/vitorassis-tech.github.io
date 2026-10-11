@@ -4,36 +4,17 @@ import RotaCarreira from '../components/RotaCarreira.astro';
 import ListaProjetos from '../components/ListaProjetos.astro';
 import VitrineDemos from '../components/VitrineDemos.astro';
 import FaixaContato from '../components/FaixaContato.astro';
-import { site } from '../data/site';
+import { site, inicio } from '../data/site';
 import { projetos } from '../data/projetos';
 import { competencias } from '../data/competencias';
 import { marcos, experiencias } from '../data/trajetoria';
 import { mesAno, url } from '../lib/formato';
 
-const SLUGS_DESTAQUE = ['torre-controle-expedicao', 'simulacao-torre-controle', 'painel-fretes-simulado', 'atividade-flask'];
-const destaques = SLUGS_DESTAQUE.map((s) => projetos.find((p) => p.slug === s)).filter((p) => p !== undefined);
+// Projetos em destaque: definidos no painel (Página inicial). Só os publicados aparecem.
+const destaques = inicio.projetosDestaque.map((s) => projetos.find((p) => p.slug === s)).filter((p) => p !== undefined);
 const cargoAtual = experiencias[0].cargos[0];
 const proximas = marcos.filter((m) => m.proxima);
-const frentes = [
-  {
-    rotulo: 'Módulo operação',
-    titulo: 'Na operação',
-    texto: 'Roteirização e planejamento de cargas no Roadnet, controle de fretes spot, gestão de ocorrências e faturamento de transportes com conferência de XML para liberação de CT-e.',
-    formacao: false,
-  },
-  {
-    rotulo: 'Módulo dados',
-    titulo: 'Nos dados',
-    texto: 'Dashboards gerenciais em Power BI a partir de relatórios e arquivos operacionais exportados, tratados no Power Query e calculados em DAX, para acompanhar KPIs operacionais e financeiros.',
-    formacao: false,
-  },
-  {
-    rotulo: 'Módulo em formação',
-    titulo: 'Em formação',
-    texto: 'SQL e modelagem de dados (Administrador de Banco de Dados, SENAI Firjan, concluído), Python e Flask (Senac) e Inteligência Artificial (FAETEC).',
-    formacao: true,
-  },
-];
+const frentes = inicio.frentes;
 ---
 
 <BaseLayout title={site.nome}>
@@ -43,12 +24,8 @@ const frentes = [
         <p class="coord mono">
           <span>{site.local}</span><span>22°54′S 43°10′W</span><span>Logística, dados e BI</span>
         </p>
-        <h1 id="hero-titulo">Da operação logística às decisões guiadas por dados.</h1>
-        <p class="lede">
-          {site.cargoAtual} na {site.empresaAtual}. Roteirizo cargas no Roadnet, acompanho fretes e construo dashboards
-          em Power BI para a gerência, a partir de relatórios exportados da operação. Em formação: SQL, Python e
-          inteligência artificial.
-        </p>
+        <h1 id="hero-titulo">{inicio.titulo}</h1>
+        <p class="lede">{inicio.apresentacao}</p>
         <div class="cta">
           <a class="btn btn-sinal" href={url('/projetos/')}>Ver projetos</a>
           <a class="btn btn-linha" href="#demonstracoes">Experimentar as demonstrações</a>
@@ -82,10 +59,7 @@ const frentes = [
 
     <div class="container">
       <ul class="destaques mono" aria-label="Destaques">
-        <li><b>Power BI, Power Query e DAX</b> em dashboards gerenciais</li>
-        <li><b>Roadnet</b> na roteirização diária</li>
-        <li><b>Banco de dados</b> SENAI Firjan, 180h</li>
-        <li><b>Python</b> Senac, em andamento</li>
+        {inicio.faixa.map((f) => <li><b>{f.destaque}</b> {f.complemento}</li>)}
       </ul>
     </div>
   </div>

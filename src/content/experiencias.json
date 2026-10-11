@@ -1,0 +1,56 @@
+[
+  {
+    "id": "profarma",
+    "nome": "Profarma Distribuidora de Produtos Farmacêuticos",
+    "nomeCurto": "Profarma",
+    "inicio": "2019-08",
+    "fim": null,
+    "cargos": [
+      {
+        "titulo": "Assistente de Logística II",
+        "inicio": "2026-05",
+        "fim": null,
+        "atividades": [
+          "Desenvolvimento e manutenção de dashboards gerenciais em Power BI, a partir de relatórios e arquivos operacionais exportados, com tratamento no Power Query e indicadores em DAX, com foco em KPIs operacionais e financeiros para apoio à decisão da gerência.",
+          "Concepção do dashboard “Torre de Controle Gerencial de Expedição” (frota, expedição e pendências), em uso diário pela gerência, com atualização diária, acompanhamento por transportadora e indicadores de status.",
+          "Roteirização e planejamento de cargas (Roadnet), gestão de ocorrências e controle de fretes spot, com foco na redução de custos operacionais.",
+          "Faturamento de transportes (SAP e COBOL), conferência de XML para liberação de CT-e e interface com transportadoras e clientes para garantia do nível de serviço (SLA)."
+        ]
+      },
+      {
+        "titulo": "Assistente de Logística I",
+        "inicio": "2025-03",
+        "fim": "2026-04",
+        "atividades": [
+          "Apoio à operação de transportes: agendamento de coletas, controle de rotas e acompanhamento de pendências com motoristas e transportadoras.",
+          "Monitoramento de KPIs, controle de custos de frete e cubagem em Excel Avançado e tratamento de devoluções, sinistros e pendências da logística reversa."
+        ]
+      },
+      {
+        "titulo": "Auxiliar de Depósito",
+        "inicio": "2019-08",
+        "fim": "2025-02",
+        "atividades": [
+          "Recebimento, armazenagem, separação e expedição com WMS e coletores RF, com participação em inventários cíclicos e rotativos e garantia da acuracidade do estoque."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dagad",
+    "nome": "DAGAD Serviços e Comércio de Extintores Ltda",
+    "nomeCurto": "DAGAD",
+    "inicio": "2017-09",
+    "fim": "2018-04",
+    "cargos": [
+      {
+        "titulo": "Alimentador de Linha de Produção",
+        "inicio": "2017-09",
+        "fim": "2018-04",
+        "atividades": [
+          "Manutenção de extintores e testes hidrostáticos em mangueiras de incêndio; instalação de abrigos de incêndio e entrega de extintores a clientes; abastecimento das linhas de produção e movimentação interna de materiais."
+        ]
+      }
+    ]
+  }
+]

@@ -9,3 +9,6 @@ __pycache__/
 .env
 .env.*
 .DS_Store
+
+# Painel administrativo: lixeira e histórico locais
+.admin/

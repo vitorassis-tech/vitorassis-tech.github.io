@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="painel-token" content="__TOKEN__" />
+    <meta name="painel-url-site" content="__URL_SITE__" />
+    <title>Painel administrativo | Vitor Assis</title>
+    <link rel="stylesheet" href="/admin.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="pular" href="#principal">Pular para o conteúdo</a>
+    <div class="painel">
+      <aside class="lateral" aria-label="Navegação do painel">
+        <div class="marca">
+          <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><rect x="0.5" y="0.5" width="31" height="31" rx="7" fill="#17365D" stroke="#3B6290"></rect><path d="M7 22 L13 13 L19 18 L25 9" fill="none" stroke="#E58A2B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="7" cy="22" r="2.4" fill="#fff"></circle><circle cx="25" cy="9" r="2.4" fill="#fff"></circle></svg>
+          <div>
+            <p class="marca-nome">Vitor Assis</p>
+            <p class="marca-sub mono">painel administrativo</p>
+          </div>
+        </div>
+        <button type="button" id="botao-menu" class="botao-menu" aria-expanded="false" aria-controls="menu-colecoes">Menu de seções</button>
+        <nav id="menu-colecoes" aria-label="Seções"></nav>
+        <div class="lateral-rodape">
+          <p class="mono">Somente neste computador</p>
+          <a id="link-site" href="#" target="_blank" rel="noopener noreferrer">Abrir prévia do site<span class="visually-hidden"> (abre em nova aba)</span></a>
+        </div>
+      </aside>
+      <main id="principal" class="principal" tabindex="-1">
+        <p class="estado-vazio">Carregando…</p>
+      </main>
+    </div>
+    <div id="avisos" class="avisos" aria-live="polite"></div>
+    <noscript><p class="estado-vazio">O painel precisa de JavaScript ativado.</p></noscript>
+  </body>
+</html>

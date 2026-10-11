@@ -1,0 +1,30 @@
+[
+  {
+    "id": "graduacao-tecnologica-em-logistica-unisuam",
+    "curso": "Graduação Tecnológica em Logística",
+    "instituicao": "unisuam",
+    "status": "andamento",
+    "data": "2027-07"
+  },
+  {
+    "id": "tecnico-em-qualidade-senac",
+    "curso": "Técnico em Qualidade",
+    "instituicao": "senac",
+    "status": "andamento",
+    "data": "2026-11"
+  },
+  {
+    "id": "tecnico-em-logistica-senac",
+    "curso": "Técnico em Logística",
+    "instituicao": "senac",
+    "status": "concluido",
+    "data": "2026-03"
+  },
+  {
+    "id": "ensino-medio-seeduc-rj",
+    "curso": "Ensino Médio",
+    "instituicao": "seeduc-rj",
+    "status": "concluido",
+    "data": "2025-02"
+  }
+]

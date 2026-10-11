@@ -1,0 +1,163 @@
+[
+  {
+    "id": "dados-e-bi",
+    "grupo": "Dados e BI",
+    "descricao": "Do dado bruto ao painel que a gerência usa no dia a dia.",
+    "itens": [
+      {
+        "nome": "Power BI",
+        "contexto": "trabalho",
+        "evidencia": "Dashboards gerenciais na Profarma, em uso diário pela gerência; curso Senac (60h)",
+        "href": "/projetos/torre-controle-expedicao/"
+      },
+      {
+        "nome": "Power Query",
+        "contexto": "trabalho",
+        "evidencia": "Tratamento de relatórios e arquivos operacionais exportados",
+        "href": "/projetos/torre-controle-expedicao/"
+      },
+      {
+        "nome": "DAX",
+        "contexto": "trabalho",
+        "evidencia": "Medidas e indicadores de status nos dashboards",
+        "href": "/projetos/torre-controle-expedicao/"
+      },
+      {
+        "nome": "SQL",
+        "contexto": "formacao",
+        "evidencia": "Administrador de Banco de Dados (SENAI Firjan) e projetos de estudo",
+        "href": "/projetos/banco-dados-relacional/"
+      },
+      {
+        "nome": "Excel Avançado",
+        "contexto": "trabalho",
+        "evidencia": "Controle de fretes, cubagem e KPIs; organização dos relatórios da Torre de Controle; curso Senac (36h)"
+      },
+      {
+        "nome": "MySQL",
+        "contexto": "formacao",
+        "evidencia": "Listado no currículo como competência em desenvolvimento"
+      },
+      {
+        "nome": "Modelagem MER/DER",
+        "contexto": "formacao",
+        "evidencia": "Projeto de banco relacional no SENAI Firjan",
+        "href": "/projetos/banco-dados-relacional/"
+      },
+      {
+        "nome": "KPIs e indicadores",
+        "contexto": "trabalho",
+        "evidencia": "Indicadores operacionais e financeiros na Profarma"
+      }
+    ]
+  },
+  {
+    "id": "programacao",
+    "grupo": "Programação",
+    "descricao": "Em desenvolvimento, com projetos práticos de curso.",
+    "itens": [
+      {
+        "nome": "Python",
+        "contexto": "formacao",
+        "evidencia": "Programação em Python, Senac (168h, em andamento)",
+        "href": "/projetos/atividade-flask/"
+      },
+      {
+        "nome": "Flask",
+        "contexto": "formacao",
+        "evidencia": "Atividade Flask, Senac RJ",
+        "href": "/projetos/atividade-flask/"
+      },
+      {
+        "nome": "HTML5, CSS3 e JavaScript",
+        "contexto": "formacao",
+        "evidencia": "Interface da Atividade Flask",
+        "href": "/projetos/atividade-flask/"
+      },
+      {
+        "nome": "Git e GitHub",
+        "contexto": "formacao",
+        "evidencia": "Perfil github.com/vitorassis-tech; repositório da Atividade Flask pendente de confirmação"
+      },
+      {
+        "nome": "Inteligência Artificial",
+        "contexto": "formacao",
+        "evidencia": "Curso na FAETEC (em andamento, previsão dez/2026)"
+      }
+    ]
+  },
+  {
+    "id": "sistemas",
+    "grupo": "Sistemas",
+    "descricao": "Ferramentas usadas na rotina da operação.",
+    "itens": [
+      {
+        "nome": "SAP",
+        "contexto": "trabalho",
+        "evidencia": "Faturamento de transportes"
+      },
+      {
+        "nome": "WMS e coletores RF",
+        "contexto": "trabalho",
+        "evidencia": "Operação de armazém como Auxiliar de Depósito"
+      },
+      {
+        "nome": "COBOL (sistema legado)",
+        "contexto": "trabalho",
+        "evidencia": "Faturamento de transportes"
+      },
+      {
+        "nome": "Roadnet",
+        "contexto": "trabalho",
+        "evidencia": "Roteirização e planejamento de cargas; origem dos relatórios da Torre de Controle"
+      },
+      {
+        "nome": "Comprovei",
+        "contexto": "trabalho",
+        "evidencia": "Listado no currículo como sistema utilizado"
+      },
+      {
+        "nome": "Pacote Office",
+        "contexto": "trabalho",
+        "evidencia": "Rotina administrativa e relatórios"
+      }
+    ]
+  },
+  {
+    "id": "logistica-e-gestao",
+    "grupo": "Logística e gestão",
+    "descricao": "A base de negócio que orienta as análises.",
+    "itens": [
+      {
+        "nome": "Roteirização e planejamento de transportes",
+        "contexto": "trabalho",
+        "evidencia": "Assistente de Logística II, Profarma"
+      },
+      {
+        "nome": "Gestão de fretes (inclusive spot)",
+        "contexto": "trabalho",
+        "evidencia": "Controle de fretes spot e custos"
+      },
+      {
+        "nome": "Faturamento e CT-e",
+        "contexto": "trabalho",
+        "evidencia": "Conferência de XML para liberação de CT-e"
+      },
+      {
+        "nome": "Logística reversa",
+        "contexto": "trabalho",
+        "evidencia": "Devoluções, sinistros e pendências"
+      },
+      {
+        "nome": "Gestão de estoque e inventário",
+        "contexto": "trabalho",
+        "evidencia": "Inventários cíclicos e rotativos"
+      },
+      {
+        "nome": "Melhoria contínua e qualidade",
+        "contexto": "formacao",
+        "evidencia": "Técnico em Qualidade, Senac (em andamento)"
+      }
+    ]
+  }
+]

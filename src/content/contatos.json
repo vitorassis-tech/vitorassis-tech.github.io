@@ -1,0 +1,30 @@
+{
+  "canais": [
+    {
+      "id": "email",
+      "rotulo": "E-mail",
+      "valor": "vitorazziz@gmail.com",
+      "href": "mailto:vitorazziz@gmail.com",
+      "exibir": true
+    },
+    {
+      "id": "linkedin",
+      "rotulo": "LinkedIn",
+      "valor": "linkedin.com/in/vitorazziz",
+      "href": "https://www.linkedin.com/in/vitorazziz",
+      "exibir": true
+    },
+    {
+      "id": "github",
+      "rotulo": "GitHub",
+      "valor": "github.com/vitorassis-tech",
+      "href": "https://github.com/vitorassis-tech",
+      "exibir": true
+    },
+    {
+      "id": "telefone",
+      "rotulo": "Telefone / WhatsApp",
+      "exibir": false
+    }
+  ]
+}

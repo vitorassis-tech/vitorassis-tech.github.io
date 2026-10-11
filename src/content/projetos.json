@@ -1,0 +1,415 @@
+[
+  {
+    "titulo": "Torre de Controle Gerencial de Expedição",
+    "slug": "torre-controle-expedicao",
+    "subtitulo": "Dashboard diário de frota, expedição e pendências para a gerência",
+    "resumo": "Dashboard em Power BI, em uso diário pela gerência, que reúne frota, expedição e pendências por transportadora, com indicadores de status para sinalizar o que precisa de atenção.",
+    "natureza": "trabalho",
+    "instituicao": "Profarma",
+    "periodo": "2026",
+    "categorias": [
+      "bi",
+      "logistica"
+    ],
+    "tecnologias": [
+      "Power BI",
+      "Power Query",
+      "DAX",
+      "Excel",
+      "Roadnet"
+    ],
+    "contexto": "Na expedição, a gerência acompanha todos os dias a frota de cada transportadora, as cargas expedidas e as pendências.",
+    "problema": "As informações chegam em relatórios operacionais separados. Para enxergar desvios rapidamente, é preciso consolidá-las e acompanhá-las por transportadora em uma visão única.",
+    "objetivo": "Oferecer uma visão única e atualizada diariamente, com indicadores de status que mostrem onde a operação precisa de atenção.",
+    "dados": {
+      "descricao": "Relatórios operacionais de expedição e frota, consolidados para acompanhamento diário.",
+      "origem": "Relatórios e arquivos operacionais exportados do Roadnet, organizados em Excel e tratados no Power Query. São dados internos: nenhuma tabela, captura de tela, cliente, placa, quantidade ou regra da empresa é publicada aqui."
+    },
+    "solucao": [
+      "Exportação dos relatórios operacionais do Roadnet.",
+      "Organização dos arquivos em Excel antes da carga no Power BI.",
+      "Tratamento e padronização no Power Query, com atualização diária.",
+      "Modelagem relacionando cargas, frota e transportadoras.",
+      "Medidas DAX para os indicadores de frota, expedição e pendências por transportadora.",
+      "Indicadores de status (faróis) calculados em DAX, separando situação normal, atenção e crítica."
+    ],
+    "decisoes": [
+      {
+        "decisao": "Acompanhar frota e expedição em indicadores separados",
+        "motivo": "Falta de veículos e cargas pendentes são problemas diferentes. Analisados juntos, um esconderia o outro."
+      },
+      {
+        "decisao": "Calcular os faróis em DAX, e não com formatação manual",
+        "motivo": "O critério fica registrado no modelo e vale igual para todos os dias e transportadoras."
+      }
+    ],
+    "resultados": [
+      {
+        "tipo": "uso",
+        "texto": "Em uso diário pela gerência."
+      },
+      {
+        "tipo": "pendente",
+        "texto": "Ganhos quantitativos (tempo, custo ou eficiência) não são informados: não há medição autorizada para publicação."
+      }
+    ],
+    "limitacoes": [
+      "Por confidencialidade, o dashboard real não pode ser exibido.",
+      "A “Simulação da Torre de Controle” deste portfólio usa dados, indicadores e parâmetros fictícios, independentes deste dashboard."
+    ],
+    "proximosPassos": [
+      "Automatizar a atualização diária das bases.",
+      "Publicar capturas de tela anonimizadas, se houver autorização da empresa."
+    ],
+    "links": [
+      {
+        "rotulo": "Ver a simulação com dados fictícios",
+        "href": "/projetos/simulacao-torre-controle/"
+      }
+    ],
+    "pendencias": [
+      "Capturas de tela anonimizadas (somente com autorização da empresa).",
+      "Resultados medidos, caso existam e possam ser divulgados."
+    ],
+    "status": "publicado"
+  },
+  {
+    "titulo": "Simulação da Torre de Controle",
+    "slug": "simulacao-torre-controle",
+    "subtitulo": "Painel de status de frota, expedição e pendências com dados fictícios",
+    "resumo": "Simulação navegável de um painel de expedição: cobertura de frota, taxa de expedição, pendências e faróis de status, com limites ajustáveis. Tudo fictício e independente da Profarma.",
+    "natureza": "demonstracao",
+    "periodo": "2026",
+    "categorias": [
+      "bi",
+      "logistica",
+      "python",
+      "sql"
+    ],
+    "tecnologias": [
+      "Python",
+      "SQLite",
+      "SQL",
+      "TypeScript",
+      "SVG"
+    ],
+    "contexto": "O dashboard real da Torre de Controle usa dados internos e não pode ser mostrado. Esta simulação permite experimentar, com dados inteiramente fictícios, como um painel de expedição sinaliza frota, expedição e pendências.",
+    "problema": "Como demonstrar o funcionamento de um painel de status sem usar nenhum dado, quantidade, indicador ou regra real?",
+    "objetivo": "Oferecer uma simulação navegável, com indicadores didáticos e parâmetros fictícios ajustáveis.",
+    "dados": {
+      "descricao": "60 dias úteis de uma operação fictícia com 4 transportadoras genéricas (A, B, C e D): veículos necessários e disponíveis, cargas programadas, expedidas e pendentes, com motivos genéricos.",
+      "origem": "DADOS FICTÍCIOS, gerados pelo script dados-demo/gerar_dados.py com semente fixa. Independentes da Profarma: não reproduzem quantidades, indicadores, fórmulas ou regras reais."
+    },
+    "solucao": [
+      "Cobertura de frota = veículos disponíveis ÷ veículos necessários × 100.",
+      "Taxa de expedição = cargas expedidas ÷ cargas programadas × 100.",
+      "Farol com prioridade para Crítico: basta um indicador abaixo do limite crítico.",
+      "Limites de atenção e crítico ajustáveis na tela, identificados como parâmetros fictícios.",
+      "Lista de pendências com motivo e tempo médio, com tratamento para períodos sem pendências."
+    ],
+    "decisoes": [
+      {
+        "decisao": "Crítico tem prioridade sobre Atenção",
+        "motivo": "Um único indicador em situação crítica já pede ação; uma média esconderia o problema."
+      },
+      {
+        "decisao": "Ausência de dado não vira zero",
+        "motivo": "Sem veículos necessários ou cargas programadas, o indicador aparece como “sem dados”, e não como 0% ou 100%."
+      },
+      {
+        "decisao": "Farol com forma e texto, além da cor",
+        "motivo": "O status pode ser lido por quem tem daltonismo ou usa leitor de tela."
+      }
+    ],
+    "resultados": [
+      {
+        "tipo": "funcional",
+        "texto": "Simulação interativa nesta página, com filtros por período e transportadora e parâmetros ajustáveis."
+      },
+      {
+        "tipo": "funcional",
+        "texto": "Testes automatizados conferem os indicadores, a prioridade do farol e os casos sem dados."
+      }
+    ],
+    "limitacoes": [
+      "Todos os números são fictícios e não representam nenhuma operação real.",
+      "Os limites padrão de 95% e 85% são parâmetros didáticos desta demonstração, não regras de nenhuma empresa."
+    ],
+    "proximosPassos": [
+      "Recriar a simulação no Power BI a partir dos dados fictícios, para comparar as abordagens."
+    ],
+    "links": [
+      {
+        "rotulo": "Baixar os dados da simulação (JSON, fictícios)",
+        "href": "/dados/torre-simulacao.json"
+      }
+    ],
+    "demo": "torre-simulacao",
+    "pendencias": [],
+    "notaAutoria": "Desenvolvido com apoio de ferramentas de IA generativa.",
+    "status": "publicado"
+  },
+  {
+    "titulo": "Painel de frota e entregas",
+    "slug": "painel-fretes-simulado",
+    "subtitulo": "Python, SQL e visualização interativa a partir de uma operação fictícia",
+    "resumo": "Pipeline completo e reproduzível: Python gera uma operação logística fictícia, o SQL calcula OTIF, custo, cobertura de frota e entregas por veículo em rota, e o site apresenta um painel interativo com filtros.",
+    "natureza": "demonstracao",
+    "periodo": "2026",
+    "categorias": [
+      "bi",
+      "python",
+      "sql",
+      "logistica"
+    ],
+    "tecnologias": [
+      "Python",
+      "SQLite",
+      "SQL",
+      "JavaScript",
+      "SVG"
+    ],
+    "contexto": "Esta demonstração mostra, de forma aberta, um fluxo de dados completo: geração, modelagem, consulta e visualização. Os dados, os indicadores e os parâmetros são fictícios e independentes de qualquer empresa.",
+    "problema": "Como apresentar indicadores de transporte (pontualidade, completude, custo e uso de frota) de forma verificável sem usar nenhum dado real?",
+    "objetivo": "Construir um fluxo de ponta a ponta, do dado bruto ao painel, que qualquer pessoa possa executar e auditar.",
+    "dados": {
+      "descricao": "60 dias úteis de uma operação fictícia com 4 transportadoras genéricas (A, B, C e D) e 5 regiões. Cada entrega tem data, transportadora, região, prazo, completude, peso e custo.",
+      "origem": "DADOS FICTÍCIOS, gerados pelo script dados-demo/gerar_dados.py com semente fixa (resultado sempre igual). Não representam nenhuma empresa real."
+    },
+    "solucao": [
+      "Script Python (somente biblioteca padrão) gera a operação e grava em um banco SQLite.",
+      "Modelo relacional com tabelas de transportadora, região, operação diária, entrega e carga.",
+      "Consultas SQL calculam os agregados diários e o resumo por transportadora.",
+      "O resultado é exportado em JSON e CSV e consumido pelo painel do site.",
+      "Painel em JavaScript puro, com gráficos em SVG, filtros, navegação por teclado e tabela acessível."
+    ],
+    "decisoes": [
+      {
+        "decisao": "SQLite em vez de um servidor de banco",
+        "motivo": "Roda em qualquer computador sem instalação e é suficiente para o volume da demonstração."
+      },
+      {
+        "decisao": "Indicadores calculados no SQL e conferidos por testes",
+        "motivo": "Os testes comparam o resultado do SQL com o que o painel exibe."
+      },
+      {
+        "decisao": "Gráficos em SVG sem biblioteca externa",
+        "motivo": "O painel fica leve, rápido e sem dependências de terceiros."
+      },
+      {
+        "decisao": "OTIF = entregas no prazo e completas ÷ total",
+        "motivo": "É a definição mais comum de OTIF. As duas condições precisam ser atendidas na mesma entrega."
+      }
+    ],
+    "resultados": [
+      {
+        "tipo": "funcional",
+        "texto": "Painel interativo funcionando nesta página, com filtros por transportadora, região e período."
+      },
+      {
+        "tipo": "funcional",
+        "texto": "Testes automatizados conferem OTIF, cobertura de frota, entregas por veículo em rota e os casos sem dados."
+      }
+    ],
+    "limitacoes": [
+      "Os números do painel são fictícios e não devem ser lidos como desempenho real de nenhuma operação.",
+      "A geração de dados usa probabilidades simples e não modela sazonalidade mensal, feriados ou janelas de entrega."
+    ],
+    "proximosPassos": [
+      "Recriar o mesmo painel no Power BI a partir do CSV, para comparar as duas abordagens.",
+      "Adicionar a análise de custo por região em Python (pandas)."
+    ],
+    "links": [
+      {
+        "rotulo": "Baixar a base agregada (CSV, dados fictícios)",
+        "href": "/dados/entregas-simuladas.csv"
+      },
+      {
+        "rotulo": "Baixar os dados do painel (JSON, fictícios)",
+        "href": "/dados/fretes-simulados.json"
+      }
+    ],
+    "demo": "painel-fretes",
+    "pendencias": [],
+    "notaAutoria": "Desenvolvido com apoio de ferramentas de IA generativa.",
+    "status": "publicado"
+  },
+  {
+    "titulo": "Laboratório de roteirização",
+    "slug": "laboratorio-roteirizacao",
+    "subtitulo": "Como um algoritmo monta e melhora a sequência de entregas",
+    "resumo": "Demonstração interativa que monta uma rota com a heurística do vizinho mais próximo e a melhora com 2-opt, mostrando trechos, distâncias e a redução calculada sobre pontos fictícios.",
+    "natureza": "demonstracao",
+    "periodo": "2026",
+    "categorias": [
+      "logistica",
+      "web"
+    ],
+    "tecnologias": [
+      "TypeScript",
+      "SVG",
+      "Algoritmos de roteirização"
+    ],
+    "contexto": "No dia a dia, roteirizo cargas com o Roadnet. Esta demonstração mostra, de forma simplificada e aberta, a lógica que existe por trás de um roteirizador.",
+    "problema": "Dado um centro de distribuição e um conjunto de pontos de entrega, em que ordem visitar os pontos para percorrer a menor distância?",
+    "objetivo": "Tornar visível a diferença entre uma rota construída de forma gulosa e uma rota otimizada localmente.",
+    "dados": {
+      "descricao": "Pontos de entrega gerados aleatoriamente em um plano fictício, sem endereços reais.",
+      "origem": "DADOS FICTÍCIOS, gerados no navegador a cada clique em “Gerar novos pontos”."
+    },
+    "solucao": [
+      "Vizinho mais próximo: a partir do CD, vai sempre ao ponto ainda não visitado mais próximo.",
+      "2-opt: inverte trechos da rota enquanto isso reduzir a distância total.",
+      "O painel compara as duas rotas, lista cada trecho com sua distância e calcula a redução para os pontos exibidos."
+    ],
+    "decisoes": [
+      {
+        "decisao": "Distância euclidiana (linha reta)",
+        "motivo": "Mantém a demonstração simples e verificável. Um roteirizador real usa a malha viária."
+      },
+      {
+        "decisao": "Lista textual da sequência ao lado do mapa",
+        "motivo": "Garante que a informação seja acessível também para leitores de tela."
+      },
+      {
+        "decisao": "Distância mínima entre pontos gerados",
+        "motivo": "Evita marcadores sobrepostos e ilegíveis no mapa."
+      }
+    ],
+    "resultados": [
+      {
+        "tipo": "funcional",
+        "texto": "A redução exibida é calculada na hora para os pontos fictícios da tela. Ela não representa ganho em operação real."
+      }
+    ],
+    "limitacoes": [
+      "Não considera trânsito, janelas de horário, capacidade de veículo, restrições de circulação nem múltiplos veículos.",
+      "O 2-opt encontra um bom resultado local, não necessariamente a rota ótima."
+    ],
+    "proximosPassos": [
+      "Adicionar capacidade de veículo e múltiplas rotas (problema de roteirização de veículos, VRP).",
+      "Implementar a mesma lógica em Python, comparando com bibliotecas como OR-Tools."
+    ],
+    "links": [],
+    "demo": "roteirizacao",
+    "pendencias": [],
+    "notaAutoria": "Desenvolvido com apoio de ferramentas de IA generativa.",
+    "status": "publicado"
+  },
+  {
+    "titulo": "Atividade Flask",
+    "slug": "atividade-flask",
+    "subtitulo": "Aplicação web de gerenciamento de conteúdo com Python",
+    "resumo": "Aplicação web com cadastro, consulta, edição e exclusão lógica de conteúdos, construída com Python, Flask e SQLite como atividade prática do curso de Python.",
+    "natureza": "academico",
+    "instituicao": "Senac RJ",
+    "periodo": "2026",
+    "categorias": [
+      "web",
+      "python",
+      "sql"
+    ],
+    "tecnologias": [
+      "Python",
+      "Flask",
+      "SQLite",
+      "Jinja",
+      "HTML5",
+      "CSS3",
+      "JavaScript"
+    ],
+    "contexto": "Atividade prática proposta no curso de Programação em Python do Senac RJ.",
+    "problema": "Criar um pequeno site dinâmico capaz de gerenciar conteúdos armazenados em banco de dados.",
+    "objetivo": "Praticar o ciclo completo de uma aplicação web: rotas, templates, banco de dados e operações CRUD.",
+    "dados": {
+      "descricao": "Tabela de conteúdos criada pelo próprio projeto (script de criação do banco).",
+      "origem": "Dados de exemplo cadastrados durante o desenvolvimento."
+    },
+    "solucao": [
+      "Rotas em Flask para listar, criar, visualizar e editar conteúdos.",
+      "Templates Jinja com um layout base reaproveitado nas páginas Início, Novo conteúdo, Sobre e Contatos.",
+      "Banco SQLite com script de criação (setupdb.py e database.sql).",
+      "Exclusão lógica: o registro não é apagado; o campo de status muda de “on” para “off”."
+    ],
+    "decisoes": [
+      {
+        "decisao": "Exclusão lógica em vez de física",
+        "motivo": "Preserva o histórico e permite recuperar um conteúdo removido por engano."
+      },
+      {
+        "decisao": "Template base com herança no Jinja",
+        "motivo": "Cabeçalho, menu e rodapé ficam em um só lugar, evitando repetição."
+      }
+    ],
+    "resultados": [
+      {
+        "tipo": "funcional",
+        "texto": "Aplicação funcional executada em ambiente local."
+      }
+    ],
+    "limitacoes": [
+      "Projeto de estudo, executado em ambiente local. Não há demonstração on-line publicada."
+    ],
+    "proximosPassos": [
+      "Publicar o código em um repositório específico, com instruções de execução."
+    ],
+    "links": [
+      {
+        "rotulo": "Perfil no GitHub",
+        "href": "https://github.com/vitorassis-tech",
+        "externo": true
+      }
+    ],
+    "pendencias": [
+      "Link do repositório específico da Atividade Flask (necessário para indicar a publicação no GitHub).",
+      "Capturas de tela reais da aplicação."
+    ],
+    "status": "publicado"
+  },
+  {
+    "titulo": "Banco de dados relacional",
+    "slug": "banco-dados-relacional",
+    "subtitulo": "Modelagem MER/DER, dicionário de dados e implementação em SQL",
+    "resumo": "Projeto do curso de Administrador de Banco de Dados: modelagem MER/DER, dicionário de dados, criação de tabelas e inserção de dados em SQL.",
+    "natureza": "academico",
+    "instituicao": "SENAI Firjan",
+    "periodo": "2026",
+    "categorias": [
+      "sql"
+    ],
+    "tecnologias": [
+      "SQL",
+      "MER/DER"
+    ],
+    "contexto": "Projeto prático do curso Administrador de Banco de Dados (180h), concluído em agosto de 2026.",
+    "problema": "Estruturar um banco de dados relacional, da modelagem à criação das tabelas.",
+    "objetivo": "Aplicar as etapas de modelagem MER/DER, documentação em dicionário de dados e implementação em SQL.",
+    "dados": {
+      "descricao": "Tema e dados do projeto ainda não publicados neste portfólio.",
+      "origem": "Material acadêmico do curso, pendente de envio e autorização para publicação."
+    },
+    "solucao": [
+      "Modelo Entidade-Relacionamento (MER) e Diagrama Entidade-Relacionamento (DER).",
+      "Dicionário de dados.",
+      "Criação de tabelas e inserção de dados em SQL."
+    ],
+    "decisoes": [],
+    "resultados": [
+      {
+        "tipo": "pendente",
+        "texto": "Material do projeto (diagrama e scripts) ainda não publicado."
+      }
+    ],
+    "limitacoes": [],
+    "proximosPassos": [
+      "Publicar o DER e os scripts SQL, se o material puder ser divulgado."
+    ],
+    "links": [],
+    "pendencias": [
+      "Tema do banco (qual negócio foi modelado).",
+      "Imagem do DER e scripts SQL, se puderem ser publicados.",
+      "Confirmação do sistema gerenciador de banco de dados utilizado."
+    ],
+    "status": "publicado"
+  }
+]

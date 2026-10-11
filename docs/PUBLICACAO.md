@@ -7,7 +7,8 @@ O site é estático: o comando `npm run build` gera a pasta `dist/`, que pode ir
 ## Antes de publicar (checklist)
 
 - [ ] Revisar as [pendências](PENDENCIAS.md), principalmente os textos do projeto profissional.
-- [ ] Confirmar quais contatos devem aparecer (`src/data/site.ts`).
+- [ ] Confirmar quais contatos devem aparecer (painel → Contato, ou `src/content/contatos.json`).
+- [ ] Conferir no painel quais projetos estão como **Publicado** (rascunhos e arquivados não vão para o site).
 - [ ] Rodar `npm run test:all` e confirmar que tudo passa.
 - [ ] Definir o endereço final do site (necessário para SEO, sitemap e imagem de compartilhamento).
 
