@@ -1,6 +1,6 @@
 # Relatório de testes
 
-**Última execução:** 11/10/2026, após a galeria de telas e o repositório da Atividade Flask
+**Última execução:** 11/10/2026, após o estudo de caso do banco de dados (SENAI Firjan)
 **Ambiente:** container Linux na nuvem, Node 22.22, npm 10.9, Python 3.13, Chromium 141 (Playwright 1.56.1)
 **Base:** versão E1–E16 (sobre o commit `6369885`), com as alterações ainda **não commitadas**
 
@@ -14,11 +14,19 @@ Neste relatório, "passou" significa que o teste **foi executado** e passou. O q
 | Tipos TypeScript | `npm run typecheck` | **Sem erros** |
 | Lógica, conteúdo, esquema, API do painel e `npm run admin` | `npm test` (Vitest, 6 arquivos) | **100 de 100 passaram** |
 | Build de produção | `npm run build` | **12 páginas, sem erros** |
-| Site no navegador | `npm run test:e2e` (Playwright + axe) | **57 de 57 passaram** |
+| Site no navegador | `npm run test:e2e` (Playwright + axe) | **58 de 58 passaram** |
 | Painel no navegador | `npm run test:painel` (Playwright + axe) | **11 de 11 passaram** |
 | Bateria completa | `npm run test:all` | **Código de saída 0** |
 | Vulnerabilidades | `npm audit` | **0** (nenhuma dependência nova) |
 | Lighthouse (celular, local) | Início e Sobre | **99 / 100 / 100 / 100** (desempenho, acessibilidade, boas práticas, SEO) |
+
+## Banco de dados (SENAI Firjan): scripts executados
+
+- **Execução:** os 6 scripts enviados (criação, carga de cadastros, carga de turmas e matrículas, consultas, índices e views, procedures) foram executados em ordem num MariaDB 10.11 temporário, fora do projeto. Tudo rodou sem erro, exceto o **erro esperado** do teste 2 das procedures (matrícula duplicada), que o próprio script anuncia.
+- **Conferências extras:** `CHECK` recusou semestre 3; `ON DELETE RESTRICT` impediu excluir professor com turmas; os testes 1, 3 e 4 das procedures deram o resultado descrito no script.
+- **Imagens:** diagrama gerado a partir das colunas reais do banco (conferidas com o `information_schema`) e saídas reais das views, do JOIN e das procedures. Nenhuma imagem mostra CPF, RG ou telefone.
+- **Não verificado:** execução em MySQL propriamente dito (só MariaDB, compatível).
+- **Teste novo (e2e):** página com 4 imagens carregadas, menção a dados fictícios e ao MariaDB, sem "Informações pendentes". O teste E14 foi reescrito para refletir o material enviado.
 
 ## Atividade Flask: repositório e telas
 

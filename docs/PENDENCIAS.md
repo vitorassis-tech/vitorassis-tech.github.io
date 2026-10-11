@@ -1,26 +1,26 @@
 # Pendências e limitações conhecidas
 
-Atualizado em 11/10/2026, após o repositório e as telas da Atividade Flask.
+Atualizado em 11/10/2026, após o estudo de caso do banco de dados (SENAI Firjan).
 
 ## Informações e materiais que dependem de você
 
 | # | Pendência | Onde aparece / onde editar | Impacto |
 |---|---|---|---|
 | 1 | Se o professor deve ser **creditado nominalmente** na Atividade Flask | `atividade-flask` | Baixo |
-| 2 | **Banco de dados (SENAI Firjan):** tema, imagem do DER, scripts SQL e qual SGBD foi usado. Hoje a página só mostra o que está no currículo, e o MySQL foi retirado do projeto | `banco-dados-relacional` | Médio |
-| 3 | **Capturas anonimizadas da Torre de Controle real**, somente com autorização da empresa | `torre-controle-expedicao` | Opcional |
-| 4 | **Resultados medidos** de projetos reais, se existirem e puderem ser divulgados | campo `resultados` | Opcional |
-| 5 | **Endereço final do site** (`SITE_URL`) e plataforma de hospedagem | `docs/PUBLICACAO.md` | Só para publicar |
-| 6 | **Logotipos das instituições:** 7 de 8 enviados pelo painel. Quando possível, troque os que não vieram do site oficial ou do manual de marca da instituição | Painel → Instituições | Opcional |
-| 7 | **Sites oficiais das instituições** (opcional, campo já existe) | Painel → Instituições | Opcional |
-| 8 | **Revisão no Windows:** `npm run dev`, `npm run admin`, `npm run build` e `npm test` já foram executados por você com sucesso. Falta só `npm run dados` | — | Baixo |
-| 9 | **Fase 2 do painel** (on-line, com login): depende da sua autorização e da criação de contas | `docs/PAINEL.md` | Futuro |
+| 2 | **Capturas anonimizadas da Torre de Controle real**, somente com autorização da empresa | `torre-controle-expedicao` | Opcional |
+| 3 | **Resultados medidos** de projetos reais, se existirem e puderem ser divulgados | campo `resultados` | Opcional |
+| 4 | **Endereço final do site** (`SITE_URL`) e plataforma de hospedagem | `docs/PUBLICACAO.md` | Só para publicar |
+| 5 | **Logotipos das instituições:** 7 de 8 enviados pelo painel. Quando possível, troque os que não vieram do site oficial ou do manual de marca da instituição | Painel → Instituições | Opcional |
+| 6 | **Sites oficiais das instituições** (opcional, campo já existe) | Painel → Instituições | Opcional |
+| 7 | **Revisão no Windows:** `npm run dev`, `npm run admin`, `npm run build` e `npm test` já foram executados por você com sucesso. Falta só `npm run dados` | — | Baixo |
+| 8 | **Fase 2 do painel** (on-line, com login): depende da sua autorização e da criação de contas | `docs/PAINEL.md` | Futuro |
 
-Os itens 2, 3 e 4 aparecem no próprio site, na seção "Código e materiais" de cada estudo de caso, como "Informações pendentes". Quando resolver uma, apague o item em `pendencias`.
+Os itens 2 e 3 aparecem no próprio site, na seção "Código e materiais" de cada estudo de caso, como "Informações pendentes". Quando resolver uma, apague o item em `pendencias`.
 
 ## Resolvidas
 
 - **Atividade Flask:** link do repositório público (`github.com/vitorassis-tech/atividade_flask`) e quatro telas reais, capturadas com o próprio código do repositório rodando localmente e com os dados de exemplo do `database.sql`.
+- **Banco de dados (SENAI Firjan):** tema (escola de música), SGBD (MySQL, informado no próprio script) e scripts enviados. Os scripts **não** foram copiados para o repositório; o site mostra descrição, diagrama gerado a partir do script e saídas reais das consultas. Para publicar os scripts, crie um repositório e adicione o link no projeto.
 
 ## Decisões aplicadas que alteraram textos do currículo
 

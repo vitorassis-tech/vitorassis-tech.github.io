@@ -408,10 +408,10 @@
     "status": "publicado"
   },
   {
-    "titulo": "Banco de dados relacional",
+    "titulo": "Banco de dados de uma escola de música",
     "slug": "banco-dados-relacional",
-    "subtitulo": "Modelagem MER/DER, dicionário de dados e implementação em SQL",
-    "resumo": "Projeto do curso de Administrador de Banco de Dados: modelagem MER/DER, dicionário de dados, criação de tabelas e inserção de dados em SQL.",
+    "subtitulo": "Modelagem e implementação em MySQL: tabelas, restrições, consultas, views e procedures",
+    "resumo": "Atividade do curso Administrador de Banco de Dados (SENAI Firjan): banco relacional de uma escola de música, com seis tabelas, restrições de integridade, consultas com JOIN e agregações, índices, views e procedures que validam matrículas e definem aprovação.",
     "natureza": "academico",
     "instituicao": "SENAI Firjan",
     "periodo": "2026",
@@ -420,37 +420,85 @@
     ],
     "tecnologias": [
       "SQL",
-      "MER/DER"
+      "MySQL",
+      "Modelagem relacional"
     ],
-    "contexto": "Projeto prático do curso Administrador de Banco de Dados (180h), concluído em agosto de 2026.",
-    "problema": "Estruturar um banco de dados relacional, da modelagem à criação das tabelas.",
-    "objetivo": "Aplicar as etapas de modelagem MER/DER, documentação em dicionário de dados e implementação em SQL.",
+    "contexto": "Atividade prática do curso Administrador de Banco de Dados (180h) do SENAI Firjan, concluído em agosto de 2026. O tema foi o banco de dados de uma escola de música.",
+    "problema": "Organizar os dados de uma escola de música (alunos, professores, instrumentos, cursos, turmas e matrículas) sem duplicidades e sem registros ligados a dados que não existem.",
+    "objetivo": "Implementar o banco em MySQL, da criação das tabelas às consultas, views e procedures, e documentar a finalidade de cada restrição usada.",
     "dados": {
-      "descricao": "Tema e dados do projeto ainda não publicados neste portfólio.",
-      "origem": "Material acadêmico do curso, pendente de envio e autorização para publicação."
+      "descricao": "Seis tabelas: ALUNO, PROFESSOR, INSTRUMENTO, CURSO, TURMA e MATRICULA. Carga de teste com 8 instrumentos, 8 cursos, 5 professores, 10 alunos, 9 turmas e 18 matrículas.",
+      "origem": "Dados de exemplo escritos para a atividade. Nomes, documentos e contatos são fictícios, e as imagens desta página não mostram CPF, RG nem telefone."
     },
     "solucao": [
-      "Modelo Entidade-Relacionamento (MER) e Diagrama Entidade-Relacionamento (DER).",
-      "Dicionário de dados.",
-      "Criação de tabelas e inserção de dados em SQL."
+      "Seis tabelas com chave primária autoincremental e cinco chaves estrangeiras: CURSO → INSTRUMENTO, TURMA → CURSO e PROFESSOR, MATRICULA → ALUNO e TURMA.",
+      "Restrições de integridade: NOT NULL, UNIQUE (CPF, e-mail, aluno por turma e curso por ano e semestre), DEFAULT, CHECK (semestre 1 ou 2) e ENUM para o nível do curso e a situação da matrícula.",
+      "Consultas com COUNT, SUM, AVG, LIKE, BETWEEN e JOIN entre até cinco tabelas.",
+      "Índices para buscas por período da turma, situação da matrícula e nome do aluno.",
+      "Três views: alunos ativos cursando, média de notas por curso e quantidade de turmas por professor.",
+      "Duas procedures: matrícula com bloqueio de duplicidade e controle de vagas, e lançamento de nota que define aprovado ou reprovado (nota a partir de 6 e frequência a partir de 75%).",
+      "Relatório explicando a finalidade de cada restrição, a escolha de ON DELETE RESTRICT e as vantagens de views e procedures."
     ],
-    "decisoes": [],
-    "resultados": [
+    "decisoes": [
       {
-        "tipo": "pendente",
-        "texto": "Material do projeto (diagrama e scripts) ainda não publicado."
+        "decisao": "ON DELETE RESTRICT em vez de CASCADE",
+        "motivo": "Impede excluir um registro que tem dependentes, como um professor com turmas. Com CASCADE, excluir um aluno apagaria todas as matrículas dele sem aviso."
+      },
+      {
+        "decisao": "Regras de matrícula dentro de procedures",
+        "motivo": "As validações de duplicidade e de vagas ficam centralizadas no banco, o que reduz erros de execução manual."
+      },
+      {
+        "decisao": "UNIQUE composto",
+        "motivo": "Um aluno não pode ser matriculado duas vezes na mesma turma, e um curso não pode ter duas turmas no mesmo ano e semestre."
       }
     ],
-    "limitacoes": [],
+    "resultados": [
+      {
+        "tipo": "funcional",
+        "texto": "Os scripts rodam do início ao fim, na ordem da atividade: criação, carga, consultas, índices, views e procedures. Os testes previstos no próprio script tiveram o resultado esperado, inclusive o erro na tentativa de matrícula duplicada."
+      }
+    ],
+    "limitacoes": [
+      "Projeto acadêmico, com dados fictícios e poucos registros.",
+      "A atividade foi escrita para MySQL. Para este portfólio, os scripts foram executados no MariaDB 10.11, que é compatível com MySQL.",
+      "O diagrama desta página foi gerado a partir do script de criação. O diagrama original do curso não foi publicado."
+    ],
     "proximosPassos": [
-      "Publicar o DER e os scripts SQL, se o material puder ser divulgado."
+      "Publicar os scripts em um repositório no GitHub, com instruções de execução."
+    ],
+    "galeria": [
+      {
+        "legenda": "Diagrama das seis tabelas e das cinco chaves estrangeiras, gerado a partir do script de criação.",
+        "imagem": {
+          "arquivo": "/img/projetos/banco-escola-musica-diagrama.webp",
+          "alt": "Diagrama com as tabelas INSTRUMENTO, CURSO, TURMA, PROFESSOR, ALUNO e MATRICULA, suas colunas e tipos, e as ligações 1 para N entre elas."
+        }
+      },
+      {
+        "legenda": "Views de média de notas por curso e de turmas por professor, com a saída real.",
+        "imagem": {
+          "arquivo": "/img/projetos/banco-escola-musica-views.webp",
+          "alt": "Consultas às views vw_media_notas_curso e vw_professores_turmas, com médias de 5,50 a 7,75 por curso e de 1 a 2 turmas por professor."
+        }
+      },
+      {
+        "legenda": "JOIN entre cinco tabelas: matrículas com aluno, curso, professor, situação e nota.",
+        "imagem": {
+          "arquivo": "/img/projetos/banco-escola-musica-join.webp",
+          "alt": "Consulta SQL com quatro INNER JOIN e a tabela de resultado com dez matrículas, mostrando aluno, curso, professor, situação e nota final."
+        }
+      },
+      {
+        "legenda": "Testes das procedures: nova matrícula, bloqueio de duplicidade e aprovação automática.",
+        "imagem": {
+          "arquivo": "/img/projetos/banco-escola-musica-procedures.webp",
+          "alt": "Chamadas das procedures sp_matricular_aluno e sp_atualizar_nota, com a mensagem de erro para matrícula duplicada e o resultado aprovado e reprovado."
+        }
+      }
     ],
     "links": [],
-    "pendencias": [
-      "Tema do banco (qual negócio foi modelado).",
-      "Imagem do DER e scripts SQL, se puderem ser publicados.",
-      "Confirmação do sistema gerenciador de banco de dados utilizado."
-    ],
+    "pendencias": [],
     "status": "publicado"
   }
 ]

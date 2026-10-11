@@ -121,11 +121,19 @@ describe('correções factuais (E1–E7, E13, E14)', () => {
     for (const g of competencias) for (const c of g.itens) expect(c.evidencia).not.toMatch(/publicada no GitHub/i);
   });
 
-  it('E14: banco de dados sem MySQL nem material não comprovado', () => {
+  it('E14: banco de dados mostra só o que está no material enviado (scripts MySQL da escola de música)', () => {
     const bd = projetos.find((p) => p.slug === 'banco-dados-relacional')!;
-    expect(JSON.stringify(bd)).not.toMatch(/MySQL/);
-    expect(bd.tecnologias).toEqual(['SQL', 'MER/DER']);
-    expect(bd.resultados.every((r) => r.tipo === 'pendente')).toBe(true);
+    expect(bd.natureza).toBe('academico');
+    expect(bd.instituicao).toBe('SENAI Firjan');
+    // nenhum resultado "medido": é atividade acadêmica com dados fictícios
+    expect(bd.resultados.some((r) => r.tipo === 'medido')).toBe(false);
+    expect(bd.dados.origem).toMatch(/fictícios/);
+    // a verificação foi feita no MariaDB, e o texto diz isso
+    expect(bd.limitacoes.join(' ')).toMatch(/MariaDB/);
+    // o diagrama é gerado a partir do script, não é o original do curso
+    expect(bd.galeria[0].legenda).toMatch(/gerado a partir do script/);
+    // não associa este projeto ao trabalho
+    expect(JSON.stringify(bd)).not.toMatch(/Profarma/);
   });
 });
 

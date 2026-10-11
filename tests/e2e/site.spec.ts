@@ -203,6 +203,19 @@ test.describe('conteúdo profissional (E1–E8)', () => {
     await expect(page.getByText('Informações pendentes')).toHaveCount(0);
     await expect(page.locator('.sumario a[href="#telas"]')).toHaveText('Telas');
   });
+
+  test('banco de dados: imagens carregam, dados fictícios e verificação no MariaDB declarados', async ({ page }) => {
+    await page.goto('/projetos/banco-dados-relacional/');
+    await expect(page.locator('h1')).toHaveText('Banco de dados de uma escola de música');
+    await expect(page.locator('#telas figure')).toHaveCount(4);
+    for (const img of await page.locator('#telas img').all()) {
+      await img.scrollIntoViewIfNeeded();
+      await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+    }
+    await expect(page.locator('#dados')).toContainText('fictícios');
+    await expect(page.locator('#limitacoes')).toContainText('MariaDB');
+    await expect(page.getByText('Informações pendentes')).toHaveCount(0);
+  });
 });
 
 test.describe('movimento reduzido', () => {

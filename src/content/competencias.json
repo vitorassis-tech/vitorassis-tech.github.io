@@ -36,12 +36,13 @@
       {
         "nome": "MySQL",
         "contexto": "formacao",
-        "evidencia": "Listado no currículo como competência em desenvolvimento"
+        "evidencia": "Banco de dados de uma escola de música (SENAI Firjan): tabelas, views e procedures",
+        "href": "/projetos/banco-dados-relacional/"
       },
       {
         "nome": "Modelagem MER/DER",
         "contexto": "formacao",
-        "evidencia": "Projeto de banco relacional no SENAI Firjan",
+        "evidencia": "Administrador de Banco de Dados (SENAI Firjan); modelo relacional da escola de música",
         "href": "/projetos/banco-dados-relacional/"
       },
       {
