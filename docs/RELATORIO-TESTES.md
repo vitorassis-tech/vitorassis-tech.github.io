@@ -1,6 +1,6 @@
 # Relatório de testes
 
-**Última execução:** 11/10/2026, após o estudo de caso do banco de dados (SENAI Firjan)
+**Última execução:** 11/10/2026, após o estudo de caso do banco de dados (Firjan SENAI)
 **Ambiente:** container Linux na nuvem, Node 22.22, npm 10.9, Python 3.13, Chromium 141 (Playwright 1.56.1)
 **Base:** versão E1–E16 (sobre o commit `6369885`), com as alterações ainda **não commitadas**
 
@@ -20,7 +20,7 @@ Neste relatório, "passou" significa que o teste **foi executado** e passou. O q
 | Vulnerabilidades | `npm audit` | **0** (nenhuma dependência nova) |
 | Lighthouse (celular, local) | Início e Sobre | **99 / 100 / 100 / 100** (desempenho, acessibilidade, boas práticas, SEO) |
 
-## Banco de dados (SENAI Firjan): scripts executados
+## Banco de dados (Firjan SENAI): scripts executados
 
 - **Execução:** os 6 scripts enviados (criação, carga de cadastros, carga de turmas e matrículas, consultas, índices e views, procedures) foram executados em ordem num MariaDB 10.11 temporário, fora do projeto. Tudo rodou sem erro, exceto o **erro esperado** do teste 2 das procedures (matrícula duplicada), que o próprio script anuncia.
 - **Conferências extras:** `CHECK` recusou semestre 3; `ON DELETE RESTRICT` impediu excluir professor com turmas; os testes 1, 3 e 4 das procedures deram o resultado descrito no script.

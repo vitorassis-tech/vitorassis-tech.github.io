@@ -411,9 +411,9 @@
     "titulo": "Banco de dados de uma escola de música",
     "slug": "banco-dados-relacional",
     "subtitulo": "Modelagem e implementação em MySQL: tabelas, restrições, consultas, views e procedures",
-    "resumo": "Atividade do curso Administrador de Banco de Dados (SENAI Firjan): banco relacional de uma escola de música, com seis tabelas, restrições de integridade, consultas com JOIN e agregações, índices, views e procedures que validam matrículas e definem aprovação.",
+    "resumo": "Atividade do curso Administrador de Banco de Dados (Firjan SENAI): banco relacional de uma escola de música, com seis tabelas, restrições de integridade, consultas com JOIN e agregações, índices, views e procedures que validam matrículas e definem aprovação.",
     "natureza": "academico",
-    "instituicao": "SENAI Firjan",
+    "instituicao": "Firjan SENAI",
     "periodo": "2026",
     "categorias": [
       "sql"
@@ -423,7 +423,7 @@
       "MySQL",
       "Modelagem relacional"
     ],
-    "contexto": "Atividade prática do curso Administrador de Banco de Dados (180h) do SENAI Firjan, concluído em agosto de 2026. O tema foi o banco de dados de uma escola de música.",
+    "contexto": "Atividade prática do curso Administrador de Banco de Dados (180h) do Firjan SENAI, concluído em agosto de 2026. O tema foi o banco de dados de uma escola de música.",
     "problema": "Organizar os dados de uma escola de música (alunos, professores, instrumentos, cursos, turmas e matrículas) sem duplicidades e sem registros ligados a dados que não existem.",
     "objetivo": "Implementar o banco em MySQL, da criação das tabelas às consultas, views e procedures, e documentar a finalidade de cada restrição usada.",
     "dados": {

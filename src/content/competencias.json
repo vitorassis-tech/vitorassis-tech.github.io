@@ -25,7 +25,7 @@
       {
         "nome": "SQL",
         "contexto": "formacao",
-        "evidencia": "Administrador de Banco de Dados (SENAI Firjan) e projetos de estudo",
+        "evidencia": "Administrador de Banco de Dados (Firjan SENAI) e projetos de estudo",
         "href": "/projetos/banco-dados-relacional/"
       },
       {
@@ -36,13 +36,13 @@
       {
         "nome": "MySQL",
         "contexto": "formacao",
-        "evidencia": "Banco de dados de uma escola de música (SENAI Firjan): tabelas, views e procedures",
+        "evidencia": "Banco de dados de uma escola de música (Firjan SENAI): tabelas, views e procedures",
         "href": "/projetos/banco-dados-relacional/"
       },
       {
         "nome": "Modelagem MER/DER",
         "contexto": "formacao",
-        "evidencia": "Administrador de Banco de Dados (SENAI Firjan); modelo relacional da escola de música",
+        "evidencia": "Administrador de Banco de Dados (Firjan SENAI); modelo relacional da escola de música",
         "href": "/projetos/banco-dados-relacional/"
       },
       {

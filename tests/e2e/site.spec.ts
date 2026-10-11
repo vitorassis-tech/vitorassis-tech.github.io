@@ -204,6 +204,17 @@ test.describe('conteúdo profissional (E1–E8)', () => {
     await expect(page.locator('.sumario a[href="#telas"]')).toHaveText('Telas');
   });
 
+  test('cada projeto tem imagem de compartilhamento própria, e as demais páginas usam a do site', async ({ page, request }) => {
+    for (const slug of ['atividade-flask', 'banco-dados-relacional', 'torre-controle-expedicao']) {
+      await page.goto(`/projetos/${slug}/`);
+      const og = await page.locator('meta[property="og:image"]').getAttribute('content');
+      expect(og).toMatch(new RegExp(`/og/${slug}\\.png$`));
+      expect((await request.get(`/og/${slug}.png`)).status()).toBe(200);
+    }
+    await page.goto('/sobre/');
+    expect(await page.locator('meta[property="og:image"]').getAttribute('content')).toMatch(/\/og-image\.png$/);
+  });
+
   test('banco de dados: imagens carregam, dados fictícios e verificação no MariaDB declarados', async ({ page }) => {
     await page.goto('/projetos/banco-dados-relacional/');
     await expect(page.locator('h1')).toHaveText('Banco de dados de uma escola de música');

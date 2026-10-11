@@ -8,6 +8,8 @@ import LaboratorioRotas from '../../components/demos/LaboratorioRotas.astro';
 import SimulacaoTorre from '../../components/demos/SimulacaoTorre.astro';
 import { projetos, categorias, naturezas, rotulosStatus, type Projeto } from '../../data/projetos';
 import { url } from '../../lib/formato';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 export function getStaticPaths() {
   return projetos.map((p) => ({ params: { slug: p.slug }, props: { projeto: p } }));
@@ -33,10 +35,21 @@ const secoes = [
   ...(p.links.length || p.pendencias.length ? [{ id: 'materiais', titulo: 'Código e materiais' }] : []),
 ];
 
+// Imagem de compartilhamento própria do projeto (gerada por "npm run og"); sem ela, usa a do site.
+const ogProjeto = `/og/${p.slug}.png`;
+const ogImage = existsSync(join(process.cwd(), 'public', 'og', `${p.slug}.png`)) ? ogProjeto : undefined;
+
 const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 'Demonstração funcional', pendente: 'Pendente' } as const;
 ---
 
-<BaseLayout title={p.titulo} description={`${p.subtitulo}. ${p.resumo}`} type="article" noindex={p.status !== 'publicado'}>
+<BaseLayout
+  title={p.titulo}
+  description={`${p.subtitulo}. ${p.resumo}`}
+  type="article"
+  noindex={p.status !== 'publicado'}
+  ogImage={ogImage}
+  ogImageAlt={`${p.titulo}: estudo de caso no portfólio de Vitor Assis`}
+>
   <CabecalhoPagina titulo={p.titulo} introducao={p.subtitulo} trilha={{ href: url('/projetos/'), rotulo: 'Todos os projetos' }}>
     <div class="ficha">
       <SeloNatureza natureza={p.natureza} detalhe={p.instituicao} />

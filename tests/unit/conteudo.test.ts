@@ -124,7 +124,7 @@ describe('correções factuais (E1–E7, E13, E14)', () => {
   it('E14: banco de dados mostra só o que está no material enviado (scripts MySQL da escola de música)', () => {
     const bd = projetos.find((p) => p.slug === 'banco-dados-relacional')!;
     expect(bd.natureza).toBe('academico');
-    expect(bd.instituicao).toBe('SENAI Firjan');
+    expect(bd.instituicao).toBe('Firjan SENAI');
     // nenhum resultado "medido": é atividade acadêmica com dados fictícios
     expect(bd.resultados.some((r) => r.tipo === 'medido')).toBe(false);
     expect(bd.dados.origem).toMatch(/fictícios/);

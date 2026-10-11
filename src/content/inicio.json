@@ -15,7 +15,7 @@
     {
       "rotulo": "Módulo em formação",
       "titulo": "Em formação",
-      "texto": "SQL e modelagem de dados (Administrador de Banco de Dados, SENAI Firjan, concluído), Python e Flask (Senac) e Inteligência Artificial (FAETEC).",
+      "texto": "SQL e modelagem de dados (Administrador de Banco de Dados, Firjan SENAI, concluído), Python e Flask (Senac) e Inteligência Artificial (FAETEC).",
       "formacao": true
     }
   ],
@@ -30,7 +30,7 @@
     },
     {
       "destaque": "Banco de dados",
-      "complemento": "SENAI Firjan, 180h"
+      "complemento": "Firjan SENAI, 180h"
     },
     {
       "destaque": "Python",

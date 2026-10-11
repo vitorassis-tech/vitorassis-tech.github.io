@@ -95,6 +95,6 @@ npm run dados
 npm run test:dados
 ```
 
-## Imagem de compartilhamento (LinkedIn, WhatsApp)
+## Imagens de compartilhamento (LinkedIn, WhatsApp)
 
-O texto fica em `scripts/gerar-og.mjs`. Depois de editar, rode `npm run og`.
+`npm run og` gera a imagem geral do site (`public/og-image.png`) e **uma imagem por projeto publicado** (`public/og/<endereço>.png`), com título, natureza, tecnologias e a primeira tela da galeria. Rode de novo sempre que criar um projeto, mudar o título ou trocar a primeira tela. Se a imagem de um projeto não existir, a página usa a imagem geral do site.

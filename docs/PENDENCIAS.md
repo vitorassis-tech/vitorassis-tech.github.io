@@ -1,6 +1,6 @@
 # Pendências e limitações conhecidas
 
-Atualizado em 11/10/2026, após o estudo de caso do banco de dados (SENAI Firjan).
+Atualizado em 11/10/2026, após o estudo de caso do banco de dados (Firjan SENAI).
 
 ## Informações e materiais que dependem de você
 
@@ -20,7 +20,7 @@ Os itens 2 e 3 aparecem no próprio site, na seção "Código e materiais" de ca
 ## Resolvidas
 
 - **Atividade Flask:** link do repositório público (`github.com/vitorassis-tech/atividade_flask`) e quatro telas reais, capturadas com o próprio código do repositório rodando localmente e com os dados de exemplo do `database.sql`.
-- **Banco de dados (SENAI Firjan):** tema (escola de música), SGBD (MySQL, informado no próprio script) e scripts enviados. Os scripts **não** foram copiados para o repositório; o site mostra descrição, diagrama gerado a partir do script e saídas reais das consultas. Para publicar os scripts, crie um repositório e adicione o link no projeto.
+- **Banco de dados (Firjan SENAI):** tema (escola de música), SGBD (MySQL, informado no próprio script) e scripts enviados. Os scripts **não** foram copiados para o repositório; o site mostra descrição, diagrama gerado a partir do script e saídas reais das consultas. Para publicar os scripts, crie um repositório e adicione o link no projeto.
 
 ## Decisões aplicadas que alteraram textos do currículo
 
