@@ -1,7 +1,11 @@
 [
   {
     "id": "unisuam",
-    "nome": "UNISUAM"
+    "nome": "UNISUAM",
+    "logo": {
+      "arquivo": "/img/instituicoes/unisuam-logo-png-seeklogo-173327-334eb671.png",
+      "alt": "unisuam-logo"
+    }
   },
   {
     "id": "senac",
@@ -13,26 +17,50 @@
   },
   {
     "id": "seeduc-rj",
-    "nome": "SEEDUC-RJ"
+    "nome": "SEEDUC-RJ",
+    "logo": {
+      "arquivo": "/img/instituicoes/unnamed-018b09b0.png",
+      "alt": "seeduc-rj-logo"
+    }
   },
   {
     "id": "faetec",
-    "nome": "FAETEC"
+    "nome": "FAETEC",
+    "logo": {
+      "arquivo": "/img/instituicoes/faetec-universal-383bbc0d.png",
+      "alt": "faetec-logo"
+    }
   },
   {
     "id": "senai-firjan",
-    "nome": "SENAI Firjan"
+    "nome": "SENAI Firjan",
+    "logo": {
+      "arquivo": "/img/instituicoes/firjan-senai-logo-25d636db.png",
+      "alt": "firjan-logo"
+    }
   },
   {
     "id": "xperium",
-    "nome": "Xperium"
+    "nome": "Xperium",
+    "logo": {
+      "arquivo": "/img/instituicoes/channels4-profile-09f7c66f.jpg",
+      "alt": "xperiun-logo"
+    }
   },
   {
     "id": "senai",
-    "nome": "SENAI"
+    "nome": "SENAI",
+    "logo": {
+      "arquivo": "/img/instituicoes/firjan-senai-logo-25d636db.png",
+      "alt": "firjan-logo"
+    }
   },
   {
     "id": "ctest",
-    "nome": "CTEST"
+    "nome": "CTEST",
+    "logo": {
+      "arquivo": "/img/instituicoes/logo-ctest-c58ff42e.png",
+      "alt": "ctest-logo"
+    }
   }
 ]
