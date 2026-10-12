@@ -8,14 +8,14 @@
   {
     "id": "2019-08-armazem",
     "data": "2019-08",
-    "titulo": "Armazém",
-    "detalhe": "Auxiliar de Depósito na Profarma, com WMS e inventários"
+    "titulo": "Expedição",
+    "detalhe": "Auxiliar de Depósito: expedição, conferência e faturamento"
   },
   {
     "id": "2025-03-transportes",
     "data": "2025-03",
     "titulo": "Transportes",
-    "detalhe": "Assistente de Logística I: rotas, fretes e KPIs em Excel"
+    "detalhe": "Assistente de Logística I: roteirização, documentos e fretes"
   },
   {
     "id": "2025-10-power-bi",
@@ -27,7 +27,7 @@
     "id": "2026-05-assistente-de-logistica-ii",
     "data": "2026-05",
     "titulo": "Assistente de Logística II",
-    "detalhe": "Dashboards gerenciais em Power BI"
+    "detalhe": "Análise de rotas e dashboards em Power BI"
   },
   {
     "id": "2026-07-power-bi-faetec",

@@ -1,7 +1,7 @@
 [
   {
     "id": "profarma",
-    "nome": "Profarma Distribuidora de Produtos Farmacêuticos",
+    "nome": "Grupo Profarma",
     "nomeCurto": "Profarma",
     "inicio": "2019-08",
     "fim": null,
@@ -11,10 +11,15 @@
         "inicio": "2026-05",
         "fim": null,
         "atividades": [
-          "Desenvolvimento e manutenção de dashboards gerenciais em Power BI, a partir de relatórios e arquivos operacionais exportados, com tratamento no Power Query e indicadores em DAX, com foco em KPIs operacionais e financeiros para apoio à decisão da gerência.",
-          "Concepção do dashboard “Torre de Controle Gerencial de Expedição” (frota, expedição e pendências), em uso diário pela gerência, com atualização diária, acompanhamento por transportadora e indicadores de status.",
-          "Roteirização e planejamento de cargas (Roadnet), gestão de ocorrências e controle de fretes spot, com foco na redução de custos operacionais.",
-          "Faturamento de transportes (SAP e COBOL), conferência de XML para liberação de CT-e e interface com transportadoras e clientes para garantia do nível de serviço (SLA)."
+          "Planejamento e roteirização diária das entregas para a capital e o interior no Roadnet, a partir dos arquivos de vendas extraídos do sistema interno (COBOL), com emissão das prévias de bipagem e dos itinerários que acompanham as notas fiscais.",
+          "Análise operacional das rotas para dimensionar o perfil de veículo de cada carga e região, apontar as regiões que exigem mais atenção e propor ajustes de rota; replanejamento de itinerários em casos de divergência de carga ou troca de placa.",
+          "Desenvolvimento e manutenção de dashboards gerenciais em Power BI a partir de relatórios e arquivos operacionais exportados, com tratamento e padronização dos dados no Power Query e indicadores em DAX.",
+          "Criação da Torre de Controle Gerencial de Expedição, dashboard em uso diário pela gerência que consolida frota, expedição e pendências por transportadora, com indicadores de status.",
+          "Dashboard de distribuição e cubagem alimentado pelas rotas planejadas, para monitorar a divisão das vendas entre os veículos e sinalizar cargas acima da capacidade prevista.",
+          "Reporte gerencial da expedição: relatórios diários de volumes, clientes e notas fiscais expedidos, pendências com motivo e transportadora responsável e percentual expedido, além de boletins de hora em hora sobre a saída dos veículos.",
+          "Documentação fiscal e de transporte: emissão de XML (e-Cold Web), CT-e (Emite) e, quando necessário, notas fiscais e boletos no SAP; planilhas de gerenciamento de riscos (GR) por veículo, com valor da carga, motorista, placa e geolocalização dos clientes.",
+          "Gestão de transportadoras e fretes: controle com dados do TMS, acompanhamento de faltas e excedentes de veículos por transportadora e relatórios para a equipe do GKO; agendamento de cargas e entregas com os clientes.",
+          "Gestão de cadastros e parâmetros (motoristas, placas, transportadoras, rotas e CNPJs) no sistema interno e no SAP, direcionamento das mercadorias nas esteiras, extração de relatórios operacionais e rastreamento das entregas em tempo real no Comprovei."
         ]
       },
       {
@@ -22,8 +27,9 @@
         "inicio": "2025-03",
         "fim": "2026-04",
         "atividades": [
-          "Apoio à operação de transportes: agendamento de coletas, controle de rotas e acompanhamento de pendências com motoristas e transportadoras.",
-          "Monitoramento de KPIs, controle de custos de frete e cubagem em Excel Avançado e tratamento de devoluções, sinistros e pendências da logística reversa."
+          "Roteirização das entregas no Roadnet a partir dos arquivos de vendas extraídos do sistema interno (COBOL), com emissão das prévias de bipagem e dos itinerários dos motoristas.",
+          "Documentação de transporte (XML no e-Cold Web, CT-e no Emite e planilhas de GR) e agendamento de cargas e entregas com os clientes.",
+          "Controle de fretes e da disponibilidade de veículos por transportadora, relatórios diários da expedição, cadastros no sistema interno e rastreamento das entregas no Comprovei."
         ]
       },
       {
@@ -31,7 +37,10 @@
         "inicio": "2019-08",
         "fim": "2025-02",
         "atividades": [
-          "Recebimento, armazenagem, separação e expedição com WMS e coletores RF, com participação em inventários cíclicos e rotativos e garantia da acuracidade do estoque."
+          "Operação de expedição: separação das mercadorias nas esteiras, paletização por prioridade e rota, conferência das cargas com coletores de dados e carregamento dos veículos, com organização do pátio pelo 5S.",
+          "Liberação dos veículos: registro de placa, motorista e romaneio no coletor de dados e emissão das minutas de saída no sistema interno (COBOL).",
+          "Gestão de retornos: conferência dos volumes devolvidos, triagem entre reentrega e devolução, registro de avarias e planilhas de desconto.",
+          "Faturamento e atendimento: protocolos de coleta no SAP, controle diário das pendências por transportadora em tabelas dinâmicas, tratamento de chamados de clientes no Cervello e conferência de DANFE."
         ]
       }
     ]
@@ -48,7 +57,9 @@
         "inicio": "2017-09",
         "fim": "2018-04",
         "atividades": [
-          "Manutenção de extintores e testes hidrostáticos em mangueiras de incêndio; instalação de abrigos de incêndio e entrega de extintores a clientes; abastecimento das linhas de produção e movimentação interna de materiais."
+          "Manutenção e recarga de extintores (AP, PQS ABC, PQS BC, CO₂ e Espuma Mecânica) e de cilindros de CO₂: troca de válvulas, pressurização, lacres, pintura, selo do Inmetro e etiqueta de validade.",
+          "Inspeção e testes de mangueiras de incêndio conforme as normas, com reprovação das que estavam fora da medida, e manutenção de casas de bombas (pressostatos, testes e troca de válvulas).",
+          "Instalação de sistemas de combate a incêndio (sprinklers, para-raios, tubulações, abrigos de mangueiras, portas corta-fogo e sinalização de segurança) e entrega de equipamentos aos clientes."
         ]
       }
     ]

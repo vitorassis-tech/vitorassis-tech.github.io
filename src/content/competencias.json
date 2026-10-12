@@ -31,7 +31,7 @@
       {
         "nome": "Excel Avançado",
         "contexto": "trabalho",
-        "evidencia": "Controle de fretes, cubagem e KPIs; organização dos relatórios da Torre de Controle; curso Senac (36h)"
+        "evidencia": "Planilhas dinâmicas de pendências, controle de fretes, agendamentos, GR e relatórios gerenciais; curso Senac (36h)"
       },
       {
         "nome": "MySQL",
@@ -48,7 +48,7 @@
       {
         "nome": "KPIs e indicadores",
         "contexto": "trabalho",
-        "evidencia": "Indicadores operacionais e financeiros na Profarma"
+        "evidencia": "Relatórios diários de expedição: volumes, notas fiscais, pendências e percentual expedido"
       }
     ]
   },
@@ -96,17 +96,17 @@
       {
         "nome": "SAP",
         "contexto": "trabalho",
-        "evidencia": "Faturamento de transportes"
+        "evidencia": "Protocolos de coleta, cadastros de rotas e, quando necessário, notas fiscais e boletos"
       },
       {
-        "nome": "WMS e coletores RF",
+        "nome": "Coletores de dados",
         "contexto": "trabalho",
-        "evidencia": "Operação de armazém como Auxiliar de Depósito"
+        "evidencia": "Conferência de cargas e minutas de saída na expedição"
       },
       {
-        "nome": "COBOL (sistema legado)",
+        "nome": "Sistema interno (COBOL)",
         "contexto": "trabalho",
-        "evidencia": "Faturamento de transportes"
+        "evidencia": "Extração dos arquivos de vendas, cadastros, minutas de saída e relatórios"
       },
       {
         "nome": "Roadnet",
@@ -116,7 +116,17 @@
       {
         "nome": "Comprovei",
         "contexto": "trabalho",
-        "evidencia": "Listado no currículo como sistema utilizado"
+        "evidencia": "Rastreamento de entregas e motoristas em tempo real"
+      },
+      {
+        "nome": "e-Cold Web e Emite",
+        "contexto": "trabalho",
+        "evidencia": "Emissão de XML e CT-e"
+      },
+      {
+        "nome": "Cervello",
+        "contexto": "trabalho",
+        "evidencia": "Atendimento de chamados de clientes"
       },
       {
         "nome": "Pacote Office",
@@ -133,27 +143,37 @@
       {
         "nome": "Roteirização e planejamento de transportes",
         "contexto": "trabalho",
-        "evidencia": "Assistente de Logística II, Profarma"
+        "evidencia": "Roteirização diária no Roadnet e análise do perfil de veículo por carga e região"
       },
       {
-        "nome": "Gestão de fretes (inclusive spot)",
+        "nome": "Gestão de fretes e transportadoras",
         "contexto": "trabalho",
-        "evidencia": "Controle de fretes spot e custos"
+        "evidencia": "Controle de fretes e da disponibilidade de veículos por transportadora"
       },
       {
-        "nome": "Faturamento e CT-e",
+        "nome": "Documentos de transporte (XML e CT-e)",
         "contexto": "trabalho",
-        "evidencia": "Conferência de XML para liberação de CT-e"
+        "evidencia": "Emissão no e-Cold Web e no Emite"
+      },
+      {
+        "nome": "Agendamento de entregas",
+        "contexto": "trabalho",
+        "evidencia": "Planilhas com as notas fiscais enviadas aos clientes para definir o recebimento"
+      },
+      {
+        "nome": "Gerenciamento de riscos (GR)",
+        "contexto": "trabalho",
+        "evidencia": "Planilhas de GR por veículo"
       },
       {
         "nome": "Logística reversa",
         "contexto": "trabalho",
-        "evidencia": "Devoluções, sinistros e pendências"
+        "evidencia": "Mercadorias retornadas: conferência, reenvio ou devolução e registro de avarias"
       },
       {
-        "nome": "Gestão de estoque e inventário",
+        "nome": "Expedição e carregamento",
         "contexto": "trabalho",
-        "evidencia": "Inventários cíclicos e rotativos"
+        "evidencia": "Paletização por rota, conferência com coletores e organização do pátio pelo 5S"
       },
       {
         "nome": "Melhoria contínua e qualidade",

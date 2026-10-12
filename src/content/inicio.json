@@ -1,16 +1,16 @@
 {
   "titulo": "Da operação logística às decisões guiadas por dados.",
-  "apresentacao": "Assistente de Logística II na Profarma. Roteirizo cargas no Roadnet, acompanho fretes e construo dashboards em Power BI para a gerência, a partir de relatórios exportados da operação. Em formação: SQL, Python e inteligência artificial.",
+  "apresentacao": "Assistente de Logística II no Grupo Profarma. Planejo e roteirizo a distribuição para a capital e o interior e transformo os dados da operação em dashboards gerenciais em Power BI. Agora aprofundo SQL, Python e inteligência artificial para levar mais análise e automação à logística.",
   "frentes": [
     {
       "rotulo": "Módulo operação",
       "titulo": "Na operação",
-      "texto": "Roteirização e planejamento de cargas no Roadnet, controle de fretes spot, gestão de ocorrências e faturamento de transportes com conferência de XML para liberação de CT-e."
+      "texto": "Roteirização no Roadnet, análise de rotas e do perfil de frota, documentação de transporte (XML, CT-e e GR), agendamento de entregas e gestão de fretes por transportadora."
     },
     {
       "rotulo": "Módulo dados",
       "titulo": "Nos dados",
-      "texto": "Dashboards gerenciais em Power BI a partir de relatórios e arquivos operacionais exportados, tratados no Power Query e calculados em DAX, para acompanhar KPIs operacionais e financeiros."
+      "texto": "Dashboards em Power BI com tratamento no Power Query e indicadores em DAX: a Torre de Controle usada diariamente pela gerência e o monitoramento de distribuição e cubagem por veículo, além do reporte diário e de hora em hora da expedição."
     },
     {
       "rotulo": "Módulo em formação",
