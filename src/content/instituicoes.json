@@ -73,6 +73,10 @@
   },
   {
     "id": "sest-senat",
-    "nome": "SEST SENAT"
+    "nome": "SEST SENAT",
+    "logo": {
+      "arquivo": "/img/instituicoes/logo-login-40a6646d.webp",
+      "alt": "logo-sest senat"
+    }
   }
 ]
