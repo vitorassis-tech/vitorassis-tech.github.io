@@ -104,7 +104,7 @@
         "evidencia": "Conferência de cargas e minutas de saída na expedição"
       },
       {
-        "nome": "Sistema interno (COBOL)",
+        "nome": "Sistema interno de gestão logística (acesso via PuTTY)",
         "contexto": "trabalho",
         "evidencia": "Extração dos arquivos de vendas, cadastros, minutas de saída e relatórios"
       },
@@ -119,9 +119,9 @@
         "evidencia": "Rastreamento de entregas e motoristas em tempo real"
       },
       {
-        "nome": "e-Cold Web e Emite",
+        "nome": "e-ColdWeb e Emite",
         "contexto": "trabalho",
-        "evidencia": "Emissão de XML e CT-e"
+        "evidencia": "Extração do XML no e-ColdWeb e emissão do CT-e no Emite"
       },
       {
         "nome": "Cervello",
@@ -153,7 +153,7 @@
       {
         "nome": "Documentos de transporte (XML e CT-e)",
         "contexto": "trabalho",
-        "evidencia": "Emissão no e-Cold Web e no Emite"
+        "evidencia": "Extração do XML no e-ColdWeb e emissão do CT-e no Emite"
       },
       {
         "nome": "Agendamento de entregas",

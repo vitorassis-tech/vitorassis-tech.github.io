@@ -4,7 +4,8 @@
     "curso": "Inteligência Artificial",
     "instituicao": "faetec",
     "status": "andamento",
-    "data": "2026-12"
+    "data": "2026-12",
+    "cargaHoraria": 168
   },
   {
     "id": "programacao-em-python-senac",
