@@ -96,6 +96,26 @@ describe('correções factuais (E1–E7, E13, E14)', () => {
     expect(torre.resultados).toContainEqual({ tipo: 'uso', texto: 'Em uso diário pela gerência.' });
   });
 
+  it('Painel de Logística Varejo: trabalho, sem SQL, sem regras de contrato e sem números reais', () => {
+    const varejo = projetos.find((p) => p.slug === 'painel-logistica-varejo')!;
+    expect(varejo.natureza).toBe('trabalho');
+    expect(varejo.dados.origem).toMatch(/Roadnet/);
+    const texto = JSON.stringify(varejo);
+    expect(texto).not.toMatch(/\bSQL\b/);
+    expect(texto).not.toMatch(TERMOS_REGRAS_REAIS);
+    // nenhum número de volume, rota ou percentual real da operação
+    expect(texto).not.toMatch(/\d\s?%/);
+    expect(texto).not.toMatch(/\b(?!20\d\d\b)\d{3,}\b/);
+    expect(varejo.galeria).toEqual([]);
+  });
+
+  it('formações atualizadas: Python e Técnico em Qualidade concluídos', () => {
+    expect(cursos.find((c) => c.id === 'programacao-em-python-senac')).toMatchObject({ status: 'concluido', data: '2026-10' });
+    expect(formacaoAcademica.find((f) => f.id === 'tecnico-em-qualidade-senac')).toMatchObject({ status: 'concluido', data: '2026-11' });
+    const itens = competencias.flatMap((g) => g.itens);
+    for (const c of itens) expect(`${c.nome} ${c.evidencia}`).not.toMatch(/(Python|Qualidade).*em andamento/);
+  });
+
   it('E5: "Torre de Controle" não aparece como cargo ou etapa da carreira', () => {
     for (const m of marcos) expect(m.titulo).not.toMatch(/Torre de Controle/);
     for (const e of experiencias) for (const c of e.cargos) expect(c.titulo).not.toMatch(/Torre/);

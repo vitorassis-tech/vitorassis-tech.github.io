@@ -47,6 +47,8 @@ export const DEMOS = {
   'painel-fretes': 'Painel de frota e entregas',
   roteirizacao: 'Laboratório de roteirização',
   'torre-simulacao': 'Simulação da Torre de Controle',
+  'replica-expedicao': 'Réplica do Painel de Expedição',
+  'replica-varejo': 'Réplica do Painel de Logística Varejo',
 };
 
 export const SITUACOES_CURSO = { concluido: 'Concluído', andamento: 'Em andamento' };

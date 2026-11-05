@@ -65,7 +65,7 @@ export interface Projeto {
   links: { rotulo: string; href: string; externo?: boolean }[];
   /** Capturas reais do sistema, exibidas na seção "Telas" do estudo de caso */
   galeria: { legenda: string; imagem: { arquivo: string; alt: string } }[];
-  demo?: 'painel-fretes' | 'roteirizacao' | 'torre-simulacao';
+  demo?: 'painel-fretes' | 'roteirizacao' | 'torre-simulacao' | 'replica-expedicao' | 'replica-varejo';
   pendencias: string[];
   /** Transparência sobre uso de IA generativa na construção */
   notaAutoria?: string;

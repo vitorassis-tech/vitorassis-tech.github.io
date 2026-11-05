@@ -6,6 +6,8 @@ import FaixaContato from '../../components/FaixaContato.astro';
 import PainelFretes from '../../components/demos/PainelFretes.astro';
 import LaboratorioRotas from '../../components/demos/LaboratorioRotas.astro';
 import SimulacaoTorre from '../../components/demos/SimulacaoTorre.astro';
+import ReplicaExpedicao from '../../components/demos/ReplicaExpedicao.astro';
+import ReplicaVarejo from '../../components/demos/ReplicaVarejo.astro';
 import { projetos, categorias, naturezas, rotulosStatus, type Projeto } from '../../data/projetos';
 import { url } from '../../lib/formato';
 import { existsSync } from 'node:fs';
@@ -123,6 +125,8 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
             {p.demo === 'painel-fretes' && <PainelFretes />}
             {p.demo === 'roteirizacao' && <LaboratorioRotas />}
             {p.demo === 'torre-simulacao' && <SimulacaoTorre />}
+            {p.demo === 'replica-expedicao' && <ReplicaExpedicao />}
+            {p.demo === 'replica-varejo' && <ReplicaVarejo />}
           </section>
         )
       }

@@ -42,7 +42,7 @@ const frentes = inicio.frentes;
         </div>
         <div>
           <dt class="mono">Próximas paradas</dt>
-          <dd>{proximas.map((m) => `${m.titulo} (${mesAno(m.data)})`).join(' e ')}, previstas</dd>
+          <dd>{proximas.map((m) => `${m.titulo} (${mesAno(m.data)})`).join(' e ')}, {proximas.length > 1 ? 'previstas' : 'prevista'}</dd>
         </div>
       </dl>
     </section>
@@ -86,7 +86,7 @@ const frentes = inicio.frentes;
     <div class="container">
       <div class="section-head">
         <h2 id="demos-titulo">Experimente, não só leia</h2>
-        <p>Três demonstrações que funcionam no navegador. Todos os dados e parâmetros são fictícios e independentes da Profarma.</p>
+        <p>Os dois painéis de Power BI que desenvolvi no trabalho, reconstruídos em código, e três demonstrações criadas para o portfólio. Tudo funciona no navegador, com dados fictícios e independentes da Profarma.</p>
       </div>
       <VitrineDemos />
     </div>

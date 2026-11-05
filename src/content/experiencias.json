@@ -14,8 +14,8 @@
           "Planejamento e roteirização diária das entregas para a capital e o interior no Roadnet, a partir dos arquivos de vendas extraídos do sistema interno, com emissão das prévias de bipagem e dos itinerários que acompanham as notas fiscais.",
           "Análise operacional das rotas para dimensionar o perfil de veículo de cada carga e região, apontar as regiões que exigem mais atenção e propor ajustes de rota; replanejamento de itinerários em casos de divergência de carga ou troca de placa.",
           "Desenvolvimento e manutenção de dashboards gerenciais em Power BI a partir de relatórios e arquivos operacionais exportados, com tratamento e padronização dos dados no Power Query e indicadores em DAX.",
-          "Criação da Torre de Controle Gerencial de Expedição, dashboard em uso diário pela gerência que consolida frota, expedição e pendências por transportadora, com indicadores de status.",
-          "Atualização diária do dashboard de distribuição e cubagem, criado como Assistente de Logística I, para monitorar a divisão das vendas entre os veículos e sinalizar cargas acima da capacidade prevista.",
+          "Criação do Painel de Expedição, dashboard em uso diário pela gerência que consolida frota, expedição e pendências por transportadora, com faróis de status e resumo do dia.",
+          "Atualização diária do dashboard de volumetria e ocupação do varejo, criado como Assistente de Logística I, que mostra o volume por região e rota e sinaliza veículos acima da capacidade.",
           "Reporte gerencial da expedição: relatórios diários de volumes, clientes e notas fiscais expedidos, pendências com motivo e transportadora responsável e percentual expedido, além de boletins de hora em hora sobre a saída dos veículos.",
           "Documentação fiscal e de transporte: extração do XML das notas fiscais no e-ColdWeb e emissão do CT-e no Emite e, quando necessário, emissão de notas fiscais e boletos no SAP; planilhas de gerenciamento de riscos (GR) por veículo, com valor da carga, motorista, placa e geolocalização dos clientes.",
           "Gestão de transportadoras e fretes: controle com dados do TMS, acompanhamento de faltas e excedentes de veículos por transportadora e relatórios para a equipe do GKO; agendamento de cargas e entregas com os clientes.",
@@ -38,7 +38,7 @@
         "inicio": "2019-08",
         "fim": "2025-02",
         "atividades": [
-          "Operação de expedição: separação das mercadorias nas esteiras, paletização por prioridade e rota, conferência das cargas com coletores de dados e carregamento dos veículos, com organização do pátio pelo 5S.",
+          "Operação de expedição: separação das mercadorias nas esteiras, paletização por prioridade e rota, conferência das cargas com coletores de dados e carregamento dos veículos, participação em inventários e organização do pátio pelo 5S.",
           "Liberação dos veículos: registro de placa, motorista e romaneio no coletor de dados e emissão das minutas de saída no sistema interno.",
           "Gestão de retornos: conferência dos volumes devolvidos, triagem entre reentrega e devolução, registro de avarias e planilhas de desconto.",
           "Faturamento e atendimento: protocolos de coleta no SAP, controle diário das pendências por transportadora em tabelas dinâmicas, tratamento de chamados de clientes no Cervello e conferência de DANFE."

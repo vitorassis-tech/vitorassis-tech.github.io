@@ -1,6 +1,6 @@
 {
   "titulo": "Da operação logística às decisões guiadas por dados.",
-  "apresentacao": "Assistente de Logística II no Grupo Profarma. Planejo e roteirizo a distribuição para a capital e o interior e transformo os dados da operação em dashboards gerenciais em Power BI. Agora aprofundo SQL, Python e inteligência artificial para levar mais análise e automação à logística.",
+  "apresentacao": "Assistente de Logística II no Grupo Profarma. Planejo e roteirizo a distribuição para a capital e o interior e transformo os dados da operação em dashboards gerenciais em Power BI. Com Python e SQL concluídos, levo cada vez mais análise e automação para a logística.",
   "frentes": [
     {
       "rotulo": "Módulo operação",
@@ -10,12 +10,12 @@
     {
       "rotulo": "Módulo dados",
       "titulo": "Nos dados",
-      "texto": "Dashboards em Power BI com tratamento no Power Query e indicadores em DAX: a Torre de Controle usada diariamente pela gerência e o monitoramento de distribuição e cubagem por veículo, além do reporte diário e de hora em hora da expedição."
+      "texto": "Dashboards em Power BI com tratamento no Power Query e indicadores em DAX: o Painel de Expedição usado diariamente pela gerência e o Painel de Logística Varejo, de volume e ocupação por região e rota, além do reporte diário e de hora em hora da expedição."
     },
     {
       "rotulo": "Módulo em formação",
       "titulo": "Em formação",
-      "texto": "SQL e modelagem de dados (Administrador de Banco de Dados, Firjan SENAI, concluído), Python e Flask (Senac) e Inteligência Artificial (FAETEC).",
+      "texto": "Concluídos: Programação em Python (Senac RJ), SQL e modelagem de dados (Administrador de Banco de Dados, Firjan SENAI) e Técnico em Qualidade (Senac). Em andamento: Inteligência Artificial (FAETEC) e Graduação em Logística (UNISUAM).",
       "formacao": true
     }
   ],
@@ -34,12 +34,12 @@
     },
     {
       "destaque": "Python",
-      "complemento": "Senac, em andamento"
+      "complemento": "Senac RJ, 168h, concluído"
     }
   ],
   "projetosDestaque": [
     "torre-controle-expedicao",
-    "simulacao-torre-controle",
+    "painel-logistica-varejo",
     "painel-fretes-simulado",
     "atividade-flask"
   ]

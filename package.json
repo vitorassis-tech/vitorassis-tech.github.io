@@ -11,7 +11,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "dados": "node scripts/python.mjs dados-demo/gerar_dados.py",
+    "dados": "node scripts/python.mjs dados-demo/gerar_dados.py && node scripts/python.mjs dados-demo/gerar_paineis_bi.py",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:dados": "node scripts/python.mjs -m unittest discover -s dados-demo/tests -v",

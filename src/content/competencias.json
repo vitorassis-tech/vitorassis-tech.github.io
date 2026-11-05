@@ -7,7 +7,7 @@
       {
         "nome": "Power BI",
         "contexto": "trabalho",
-        "evidencia": "Dashboards gerenciais na Profarma, em uso diário pela gerência; cursos FAETEC (160h), Xperiun (64h) e Senac (60h)",
+        "evidencia": "Painel de Expedição (em uso diário pela gerência) e Painel de Logística Varejo, na Profarma; cursos FAETEC (160h), Xperiun (64h) e Senac (60h)",
         "href": "/projetos/torre-controle-expedicao/"
       },
       {
@@ -55,12 +55,12 @@
   {
     "id": "programacao",
     "grupo": "Programação",
-    "descricao": "Em desenvolvimento, com projetos práticos de curso.",
+    "descricao": "Base concluída em Python, aplicada em projetos práticos de curso.",
     "itens": [
       {
         "nome": "Python",
         "contexto": "formacao",
-        "evidencia": "Programação em Python, Senac (168h, em andamento)",
+        "evidencia": "Programação em Python, Senac RJ (168h, concluído em out/2026)",
         "href": "/projetos/atividade-flask/"
       },
       {
@@ -111,7 +111,7 @@
       {
         "nome": "Roadnet",
         "contexto": "trabalho",
-        "evidencia": "Roteirização e planejamento de cargas; origem dos relatórios da Torre de Controle"
+        "evidencia": "Roteirização e planejamento de cargas; origem dos relatórios do Painel de Expedição e do Painel de Logística Varejo"
       },
       {
         "nome": "Comprovei",
@@ -171,14 +171,14 @@
         "evidencia": "Mercadorias retornadas: conferência, reenvio ou devolução e registro de avarias"
       },
       {
-        "nome": "Expedição e carregamento",
+        "nome": "Expedição, carregamento e inventário",
         "contexto": "trabalho",
-        "evidencia": "Paletização por rota, conferência com coletores e organização do pátio pelo 5S"
+        "evidencia": "Paletização por rota, conferência com coletores, participação em inventários e organização do pátio pelo 5S"
       },
       {
         "nome": "Melhoria contínua e qualidade",
         "contexto": "formacao",
-        "evidencia": "Técnico em Qualidade, Senac RS (em andamento)"
+        "evidencia": "Técnico em Qualidade, Senac RS (concluído em nov/2026)"
       }
     ]
   }

@@ -1,9 +1,9 @@
 [
   {
-    "titulo": "Torre de Controle Gerencial de Expedição",
+    "titulo": "Painel de Expedição",
     "slug": "torre-controle-expedicao",
-    "subtitulo": "Dashboard diário de frota, expedição e pendências para a gerência",
-    "resumo": "Dashboard em Power BI, em uso diário pela gerência, que reúne frota, expedição e pendências por transportadora, com indicadores de status para sinalizar o que precisa de atenção.",
+    "subtitulo": "Frota, expedição e pendências do dia por transportadora, para a gerência",
+    "resumo": "Dashboard em Power BI, em uso diário pela gerência, que mostra em uma tela o que foi expedido, o que ficou pendente e como a frota de cada transportadora se comportou no dia, com faróis de status e comparação com a semana anterior.",
     "natureza": "trabalho",
     "instituicao": "Profarma",
     "periodo": "2026",
@@ -30,7 +30,10 @@
       "Organização dos arquivos em Excel antes da carga no Power BI.",
       "Tratamento e padronização no Power Query, com atualização diária.",
       "Modelagem relacionando cargas, frota e transportadoras.",
-      "Medidas DAX para os indicadores de frota, expedição e pendências por transportadora.",
+      "Medidas DAX para volume e valor expedidos e pendentes, percentual expedido e frota prevista e realizada por transportadora.",
+      "Comparação de cada indicador com o mesmo dia da semana anterior e seletor de data para consultar outros dias.",
+      "Resumo do dia em texto no topo do painel, com os números atualizados automaticamente e o principal ponto de atenção.",
+      "Valor pendente separado por operação e por motivo, para mostrar onde está o maior impacto.",
       "Indicadores de status (faróis) calculados em DAX, separando situação normal, atenção e crítica."
     ],
     "decisoes": [
@@ -54,12 +57,13 @@
       }
     ],
     "limitacoes": [
-      "Por confidencialidade, o dashboard real não pode ser exibido.",
-      "A “Simulação da Torre de Controle” deste portfólio usa dados, indicadores e parâmetros fictícios, independentes deste dashboard."
+      "Por confidencialidade, o painel real não é exibido: nenhuma tela, cliente, transportadora, valor ou regra da empresa é publicado.",
+      "A demonstração desta página é uma réplica em código do painel feito no Power BI, com o mesmo layout e os mesmos cálculos, alimentada por dados fictícios.",
+      "A “Simulação da Torre de Controle” deste portfólio é outra demonstração, também com dados fictícios e independente deste painel."
     ],
     "proximosPassos": [
       "Automatizar a atualização diária das bases.",
-      "Publicar capturas de tela anonimizadas, se houver autorização da empresa."
+      "Publicar capturas do painel no Power BI com dados fictícios."
     ],
     "links": [
       {
@@ -67,11 +71,77 @@
         "href": "/projetos/simulacao-torre-controle/"
       }
     ],
-    "pendencias": [
-      "Capturas de tela anonimizadas (somente com autorização da empresa).",
-      "Resultados medidos, caso existam e possam ser divulgados."
+    "pendencias": [],
+    "status": "publicado",
+    "demo": "replica-expedicao"
+  },
+  {
+    "titulo": "Painel de Logística Varejo",
+    "slug": "painel-logistica-varejo",
+    "subtitulo": "Volume e ocupação dos veículos por região e rota",
+    "resumo": "Dashboard em Power BI que mostra, para cada dia, o volume roteirizado do varejo por região e rota e a ocupação dos veículos, sinalizando com cores as regiões perto ou acima da capacidade.",
+    "natureza": "trabalho",
+    "instituicao": "Profarma",
+    "periodo": "2025–2026",
+    "categorias": [
+      "bi",
+      "logistica"
     ],
-    "status": "publicado"
+    "tecnologias": [
+      "Power BI",
+      "Power Query",
+      "DAX",
+      "Roadnet"
+    ],
+    "contexto": "No varejo, as entregas são roteirizadas todos os dias por região, e cada região sai com um veículo de capacidade definida.",
+    "problema": "Depois da roteirização, é preciso saber rapidamente quais regiões concentram mais volume e quais veículos vão sair perto ou acima da capacidade, antes que isso vire problema no carregamento.",
+    "objetivo": "Mostrar em uma tela o volume do dia, a ocupação de cada região e as rotas que mais pesam, com um alerta visual para as regiões acima do limite.",
+    "dados": {
+      "descricao": "Rotas planejadas do dia, com volume por rota e região, e a capacidade do veículo de cada região.",
+      "origem": "Rotas planejadas exportadas do Roadnet e um cadastro de rotas com região e perfil de veículo, tratados no Power Query. São dados internos: nenhuma tabela, captura de tela, cliente, transportadora, rota ou quantidade real é publicada aqui."
+    },
+    "solucao": [
+      "Carga das rotas planejadas exportadas do Roadnet e do cadastro de rotas, com tratamento no Power Query.",
+      "Modelagem relacionando rotas, regiões e perfil de veículo.",
+      "Medidas DAX de volume, ocupação (volume dividido pela capacidade do veículo) e maior rota por região.",
+      "Cartões com volume da operação, ocupação geral, maior ocupação, região com mais volume e maior rota.",
+      "Ocupação por região em faixas de cor: dentro do limite, atenção e acima da capacidade.",
+      "Ranking das 10 maiores rotas do dia.",
+      "Um quadro por região com as rotas ordenadas por volume, todos na mesma escala para comparação direta.",
+      "Filtros por data e por transportadora."
+    ],
+    "decisoes": [
+      {
+        "decisao": "Usar a mesma escala em todos os quadros de região",
+        "motivo": "Com escalas diferentes, uma rota pequena pareceria grande. Na mesma escala, a comparação entre regiões é imediata."
+      },
+      {
+        "decisao": "Ordenar as regiões pela ocupação, e não pelo nome",
+        "motivo": "As regiões que precisam de atenção aparecem primeiro."
+      }
+    ],
+    "resultados": [
+      {
+        "tipo": "uso",
+        "texto": "Criado como Assistente de Logística I e atualizado diariamente desde então."
+      },
+      {
+        "tipo": "pendente",
+        "texto": "Ganhos quantitativos não são informados: não há medição autorizada para publicação."
+      }
+    ],
+    "limitacoes": [
+      "Por confidencialidade, o painel real não é exibido nesta página.",
+      "A demonstração desta página é uma réplica em código do painel feito no Power BI, com o mesmo layout e os mesmos cálculos, alimentada por dados fictícios."
+    ],
+    "proximosPassos": [
+      "Publicar capturas do painel no Power BI com dados fictícios."
+    ],
+    "links": [],
+    "galeria": [],
+    "pendencias": [],
+    "status": "publicado",
+    "demo": "replica-varejo"
   },
   {
     "titulo": "Simulação da Torre de Controle",
@@ -93,7 +163,7 @@
       "TypeScript",
       "SVG"
     ],
-    "contexto": "O dashboard real da Torre de Controle usa dados internos e não pode ser mostrado. Esta simulação permite experimentar, com dados inteiramente fictícios, como um painel de expedição sinaliza frota, expedição e pendências.",
+    "contexto": "O dashboard real, o Painel de Expedição, usa dados internos e não pode ser mostrado. Esta simulação permite experimentar, com dados inteiramente fictícios, como um painel de expedição sinaliza frota, expedição e pendências.",
     "problema": "Como demonstrar o funcionamento de um painel de status sem usar nenhum dado, quantidade, indicador ou regra real?",
     "objetivo": "Oferecer uma simulação navegável, com indicadores didáticos e parâmetros fictícios ajustáveis.",
     "dados": {

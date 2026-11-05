@@ -8,6 +8,7 @@ const ROTAS = [
   '/projetos/',
   '/contato/',
   '/projetos/torre-controle-expedicao/',
+  '/projetos/painel-logistica-varejo/',
   '/projetos/simulacao-torre-controle/',
   '/projetos/painel-fretes-simulado/',
   '/projetos/laboratorio-roteirizacao/',
@@ -205,7 +206,7 @@ test.describe('conteúdo profissional (E1–E8)', () => {
   });
 
   test('cada projeto tem imagem de compartilhamento própria, e as demais páginas usam a do site', async ({ page, request }) => {
-    for (const slug of ['atividade-flask', 'banco-dados-relacional', 'torre-controle-expedicao']) {
+    for (const slug of ['atividade-flask', 'banco-dados-relacional', 'torre-controle-expedicao', 'painel-logistica-varejo']) {
       await page.goto(`/projetos/${slug}/`);
       const og = await page.locator('meta[property="og:image"]').getAttribute('content');
       expect(og).toMatch(new RegExp(`/og/${slug}\\.png$`));
@@ -247,7 +248,7 @@ test.describe('filtros de projetos', () => {
   test('filtra por categoria, anuncia o resultado e mantém a URL', async ({ page }) => {
     await page.goto('/projetos/');
     const itens = page.locator('.lista-projetos .item');
-    await expect(itens).toHaveCount(6);
+    await expect(itens).toHaveCount(7);
     await page.getByRole('button', { name: /Desenvolvimento web/ }).click();
     await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(2);
     await expect(page.getByRole('button', { name: /Desenvolvimento web/ })).toHaveAttribute('aria-pressed', 'true');
@@ -257,14 +258,14 @@ test.describe('filtros de projetos', () => {
     await page.reload();
     await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(2);
     await page.getByRole('button', { name: /^Todos/ }).click();
-    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(6);
+    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(7);
   });
 
   test('sem JavaScript, todos os projetos continuam visíveis', async ({ browser }) => {
     const contexto = await browser.newContext({ javaScriptEnabled: false });
     const page = await contexto.newPage();
     await page.goto('/projetos/');
-    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(6);
+    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(7);
     await expect(page.locator('.filtros')).toBeHidden();
     await contexto.close();
   });
@@ -461,5 +462,42 @@ test.describe('contato', () => {
     await page.getByRole('button', { name: 'Copiar e-mail' }).click();
     await expect(page.locator('.status-copia')).toContainText('copiado');
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('vitorazziz@gmail.com');
+  });
+});
+
+test.describe('réplicas interativas dos painéis de Power BI (dados fictícios)', () => {
+  test('Painel de Expedição: carrega, avisa que é fictício e reage aos filtros', async ({ page }) => {
+    const erros = vigiarErros(page);
+    await page.goto('/projetos/torre-controle-expedicao/');
+    const painel = page.locator('[data-replica-expedicao]');
+    await expect(painel.locator('.aviso-simulado')).toContainText('dados fictícios');
+    await expect(painel.locator('.aviso-simulado')).toContainText('Power BI');
+    await expect(painel.locator('.conteudo')).toBeVisible();
+    await expect(painel.locator('.tabela-transp tbody tr')).toHaveCount(5);
+    const antes = await painel.locator('.resumo-texto').innerText();
+    const dias = painel.locator('select[name="dia"] option');
+    await painel.locator('select[name="dia"]').selectOption(await dias.nth(3).getAttribute('value'));
+    await expect(painel.locator('.resumo-texto')).not.toHaveText(antes);
+    await painel.locator('select[name="transportadora"]').selectOption('Transportadora Gama');
+    await expect(painel.locator('.tabela-transp tbody tr')).toHaveCount(1);
+    await expect(painel.locator('.dia-exibido')).toContainText('Transportadora Gama');
+    expect(erros).toEqual([]);
+  });
+
+  test('Painel de Logística Varejo: carrega, filtra por transportadora e mantém a mesma escala', async ({ page }) => {
+    const erros = vigiarErros(page);
+    await page.goto('/projetos/painel-logistica-varejo/');
+    const painel = page.locator('[data-replica-varejo]');
+    await expect(painel.locator('.aviso-simulado')).toContainText('dados fictícios');
+    await expect(painel.locator('.ocupacao tbody tr')).toHaveCount(10);
+    await expect(painel.locator('.top-rotas li')).toHaveCount(10);
+    await expect(painel.getByRole('button', { name: 'Todas' })).toHaveAttribute('aria-pressed', 'true');
+    await painel.getByRole('button', { name: 'Beta' }).click();
+    await expect(painel.getByRole('button', { name: 'Beta' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(painel.locator('.dia-exibido')).toContainText('Transportadora Beta');
+    expect(await painel.locator('.ocupacao tbody tr').count()).toBeLessThan(10);
+    await painel.locator('select[name="dia"]').selectOption({ index: 5 });
+    await expect(painel.locator('.quadros > li').first()).toBeVisible();
+    expect(erros).toEqual([]);
   });
 });

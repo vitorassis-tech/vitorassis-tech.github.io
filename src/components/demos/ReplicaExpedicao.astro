@@ -1,0 +1,195 @@
+---
+/**
+ * Réplica interativa do Painel de Expedição — DADOS FICTÍCIOS.
+ * Reconstrução em código do painel feito no Power BI. Não usa dados da empresa.
+ * Dados: public/dados/painel-expedicao-ficticio.json · Lógica: src/scripts/replica-expedicao.ts
+ */
+import { url } from '../../lib/formato';
+---
+
+<div class="replica console" data-replica-expedicao data-fonte={url('/dados/painel-expedicao-ficticio.json')}>
+  <div class="aviso-simulado" role="note">
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 1 21h22L12 2zm0 4.5L19.5 19h-15L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/></svg>
+    <span>
+      <strong>Réplica interativa com dados fictícios.</strong> O painel original foi feito no Power BI. Esta versão
+      reproduz em código o mesmo layout e os mesmos cálculos, mas transportadoras, volumes, valores e datas são
+      inventados e não representam dados da Profarma.
+    </span>
+  </div>
+
+  <header class="topo">
+    <div>
+      <p class="titulo-painel">Painel de Expedição</p>
+      <p class="sub">Frota · Expedição · Pendências · visão do dia</p>
+    </div>
+    <form class="filtros" aria-label="Filtros do painel">
+      <label><span>Dia</span><select name="dia" disabled></select></label>
+      <label><span>Transportadora</span><select name="transportadora" disabled><option value="">Todas</option></select></label>
+    </form>
+  </header>
+
+  <p class="estado" role="status" aria-live="polite">Carregando painel…</p>
+
+  <div class="conteudo" hidden>
+    <p class="dia-exibido mono" aria-live="polite"></p>
+
+    <div class="cartoes">
+      <section class="kpi" data-kpi="pct" aria-label="Percentual expedido do volume">
+        <h3>% expedido (volume)</h3><p class="selo"></p><p class="valor"></p>
+        <div class="medidor" aria-hidden="true"><span></span></div><p class="det"></p>
+      </section>
+      <section class="kpi" data-kpi="volume" aria-label="Volume expedido"><h3>Volume expedido</h3><p class="valor"></p><p class="det"></p></section>
+      <section class="kpi" data-kpi="valor" aria-label="Valor expedido"><h3>Valor expedido</h3><p class="valor"></p><p class="det"></p></section>
+      <section class="kpi" data-kpi="vol-pend" aria-label="Volume pendente"><h3>Volume pendente</h3><p class="valor"></p><p class="det"></p></section>
+      <section class="kpi" data-kpi="val-pend" aria-label="Valor pendente"><h3>Valor pendente</h3><p class="valor"></p><p class="det"></p></section>
+      <section class="kpi" data-kpi="frota" aria-label="Saídas e veículos previstos"><h3>Saídas × previstos</h3><p class="selo"></p><p class="valor"></p><p class="det"></p></section>
+    </div>
+
+    <div class="resumo" aria-live="polite">
+      <p><strong>Resumo</strong><span class="resumo-texto"></span></p>
+      <p><strong>Destaque</strong><span class="destaque-texto"></span></p>
+    </div>
+
+    <div class="grade">
+      <section class="bloco" aria-labelledby="h-exp-pend">
+        <h3 id="h-exp-pend">Expedido × pendente por transportadora <span>volume · % expedido com farol</span></h3>
+        <p class="legenda"><span class="lg exp"></span>Expedido <span class="lg pend"></span>Pendente</p>
+        <ul class="exp-pend barras"></ul>
+      </section>
+      <section class="bloco" aria-labelledby="h-op">
+        <h3 id="h-op">Valor pendente por operação</h3>
+        <ul class="por-operacao barras simples"></ul>
+        <h3 id="h-motivo" class="segundo">Valor pendente por motivo</h3>
+        <ul class="por-motivo barras simples" aria-labelledby="h-motivo"></ul>
+      </section>
+    </div>
+
+    <section class="bloco" aria-labelledby="h-tabela">
+      <h3 id="h-tabela">Resultado por transportadora</h3>
+      <div class="tabela-rolagem" role="region" aria-labelledby="h-tabela" tabindex="0">
+        <table class="tabela-transp">
+          <thead>
+            <tr>
+              <th scope="col">Transportadora</th>
+              <th scope="col" class="num">Previstos</th>
+              <th scope="col" class="num">Saídas</th>
+              <th scope="col" class="num">Cumpridos</th>
+              <th scope="col" class="num">Extras</th>
+              <th scope="col" class="num">Faltas</th>
+              <th scope="col" class="num">Vol. exp.</th>
+              <th scope="col" class="num">Vol. pend.</th>
+              <th scope="col" class="num">% exp.</th>
+              <th scope="col" class="num">Valor pend.</th>
+              <th scope="col" class="num">% do pend.</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot></tfoot>
+        </table>
+      </div>
+    </section>
+
+    <details class="regras">
+      <summary>Como os indicadores e os faróis são calculados</summary>
+      <dl>
+        <dt>% expedido</dt><dd>Volume expedido ÷ (volume expedido + volume pendente). Farol: OK a partir de 80%, Atenção de 60% a 80%, Crítico abaixo de 60%.</dd>
+        <dt>Saídas × previstos</dt><dd>Cumpridos = menor valor entre saídas e previstos. Extras = saídas acima do previsto. Faltas = veículos previstos que não saíram.</dd>
+        <dt>% do pendente</dt><dd>Participação da transportadora no valor pendente do dia. Atenção a partir de 10%, Crítico a partir de 25%.</dd>
+        <dt>Comparação</dt><dd>Com o mesmo dia da semana anterior, porque o volume varia conforme o dia da semana.</dd>
+        <dt>Resumo</dt><dd>Montado automaticamente a partir dos mesmos cálculos dos cartões.</dd>
+      </dl>
+    </details>
+  </div>
+</div>
+
+<script>
+  import { iniciarReplicaExpedicao } from '../../scripts/replica-expedicao';
+  document.querySelectorAll<HTMLElement>('[data-replica-expedicao]').forEach((el) => iniciarReplicaExpedicao(el));
+</script>
+
+<style>
+  .replica { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.1rem; padding: clamp(1rem, 3vw, 1.75rem); --exp: #5fd08a; --pend: #6aa9e9; }
+  .topo { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: end; border-bottom: 1px solid var(--cmd-line-2); padding-bottom: 1rem; }
+  .titulo-painel { margin: 0; font-family: var(--font-display); font-size: clamp(1.4rem, 1.1rem + 1.2vw, 1.9rem); color: #fff; line-height: 1.1; }
+  .sub { margin: 0.2rem 0 0; color: var(--cmd-muted); font-size: 0.9rem; }
+  .filtros { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  label { display: grid; gap: 0.3rem; font-size: 0.85rem; font-weight: 500; color: var(--cmd-muted); min-width: 11rem; flex: 1 1 11rem; }
+  select {
+    min-height: 44px; padding: 0.4rem 2rem 0.4rem 0.75rem; border: 1px solid var(--cmd-line-2); border-radius: var(--radius-m);
+    font: 400 1rem var(--font-body); color: var(--cmd-text); width: 100%; appearance: none;
+    background: var(--cmd-0) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23E7EEF7' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
+  }
+  select option { background: var(--cmd-0); color: var(--cmd-text); }
+  .estado { margin: 0; color: var(--cmd-muted); }
+  .estado.erro { color: #ffd2cc; }
+  .estado:empty { display: none; }
+  .dia-exibido { margin: 0; color: var(--cmd-muted); font-size: 0.85rem; }
+
+  .cartoes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+  @media (min-width: 560px) { .cartoes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .kpi { background: var(--cmd-2); border: 1px solid var(--cmd-line); border-radius: var(--radius-m); padding: 0.85rem 0.9rem; display: grid; align-content: start; gap: 0.2rem; min-width: 0; position: relative; }
+  .kpi h3 { margin: 0; font: 600 0.72rem var(--font-body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--cmd-muted); }
+  .kpi .selo { margin: 0; min-height: 0; }
+  .kpi .valor { margin: 0.2rem 0 0; font-family: var(--font-display); font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); color: #fff; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .kpi .valor :global(small) { font-size: 0.6em; color: var(--cmd-muted); }
+  .kpi .det { margin: 0.15rem 0 0; display: grid; gap: 0.1rem; font-size: 0.8rem; color: var(--cmd-muted); font-variant-numeric: tabular-nums; }
+  .replica :global(.delta.bom) { color: var(--st-normal); }
+  .replica :global(.delta.ruim) { color: #ff9a92; }
+  .medidor { position: relative; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.12); margin-top: 0.35rem; }
+  .medidor::before { content: ''; position: absolute; inset: 0 auto 0 0; width: var(--v, 0%); border-radius: 3px; background: var(--st-normal); }
+  .medidor[data-status='atencao']::before { background: var(--st-atencao); }
+  .medidor[data-status='critico']::before { background: var(--st-critico); }
+  .medidor span { position: absolute; left: var(--meta, 80%); top: -3px; bottom: -3px; width: 2px; background: #fff; }
+
+  .resumo { border-left: 4px solid var(--st-normal); background: rgba(95, 208, 138, 0.08); border-radius: var(--radius-m); padding: 0.7rem 1rem; display: grid; gap: 0.35rem; font-size: 0.93rem; }
+  .resumo p { margin: 0; display: grid; grid-template-columns: 6.5rem 1fr; gap: 0.75rem; }
+  .resumo strong { font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--st-normal); padding-top: 0.15rem; }
+  @media (max-width: 559px) { .resumo p { grid-template-columns: 1fr; gap: 0.1rem; } }
+
+  .grade { display: grid; gap: 1rem; }
+  @media (min-width: 860px) { .grade { grid-template-columns: 1.4fr 1fr; } }
+  .bloco { background: var(--cmd-1); border: 1px solid var(--cmd-line); border-radius: var(--radius-m); padding: 1rem; min-width: 0; }
+  .bloco h3 { margin: 0 0 0.75rem; font: 600 1rem var(--font-body); color: #fff; }
+  .bloco h3 span { font-weight: 400; color: var(--cmd-muted); font-size: 0.85rem; }
+  .bloco h3.segundo { margin-top: 1.25rem; }
+  .legenda { margin: -0.4rem 0 0.6rem; font-size: 0.8rem; color: var(--cmd-muted); display: flex; gap: 0.4rem; align-items: center; }
+  .lg { width: 10px; height: 10px; display: inline-block; border-radius: 2px; }
+  .lg.exp { background: var(--exp); } .lg.pend { background: var(--pend); margin-left: 0.6rem; }
+
+  .barras { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; }
+  .barras :global(li) { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr) auto; gap: 0.6rem; align-items: center; font-size: 0.88rem; }
+  .barras.simples :global(li) { grid-template-columns: 9.5rem minmax(0, 1fr) auto; }
+  .barras :global(.rot) { color: var(--cmd-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .barras :global(.trilho) { display: flex; height: 14px; }
+  .barras :global(.barra) { display: block; height: 100%; background: var(--pend); min-width: 2px; }
+  .barras :global(.barra.exp) { background: var(--exp); border-radius: 2px 0 0 2px; }
+  .barras :global(.barra.pend) { border-radius: 0 2px 2px 0; }
+  .barras :global(.val) { font-weight: 600; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .barras :global(.vazio) { display: block; color: var(--cmd-muted); }
+
+  .tabela-rolagem { overflow-x: auto; position: relative; }
+  table { width: 100%; min-width: 50rem; border-collapse: collapse; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+  .replica :global(th), .replica :global(td) { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--cmd-line); text-align: left; white-space: nowrap; }
+  thead th { font-size: 0.78rem; color: var(--cmd-muted); font-weight: 500; }
+  .replica :global(tbody th) { font-weight: 500; }
+  .replica :global(tfoot th), .replica :global(tfoot td) { font-weight: 700; color: #fff; border-top: 1px solid var(--cmd-line-2); }
+  .num, .replica :global(td.num) { text-align: right !important; }
+
+  /* Farol: forma + texto + cor (nunca só cor) */
+  .replica :global(.farol) { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; font-size: 0.78rem; }
+  .replica :global(.farol)::before { content: ''; width: 11px; height: 11px; flex: none; }
+  .replica :global(.farol[data-status='normal'])::before { background: var(--st-normal); border-radius: 50%; }
+  .replica :global(.farol[data-status='atencao'])::before { background: var(--st-atencao); clip-path: polygon(50% 0, 100% 100%, 0 100%); width: 13px; }
+  .replica :global(.farol[data-status='critico'])::before { background: var(--st-critico); border-radius: 2px; }
+  .replica :global(.farol.so-icone) { vertical-align: -1px; }
+
+  details { font-size: 0.88rem; }
+  summary { cursor: pointer; font-weight: 500; min-height: 32px; display: flex; align-items: center; }
+  .regras dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; margin: 0.75rem 0 0; }
+  .regras dt { font-weight: 600; }
+  .regras dd { margin: 0; color: var(--cmd-muted); }
+  @media (max-width: 559px) {
+    .regras dl { grid-template-columns: 1fr; }
+    .barras :global(li), .barras.simples :global(li) { grid-template-columns: 5.5rem minmax(0, 1fr) auto; }
+  }
+</style>

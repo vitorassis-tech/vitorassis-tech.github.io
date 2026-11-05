@@ -42,11 +42,16 @@
     "detalhe": "Administrador de Banco de Dados, Firjan SENAI"
   },
   {
-    "id": "2026-11-python",
-    "data": "2026-11",
+    "id": "2026-10-python",
+    "data": "2026-10",
     "titulo": "Python",
-    "detalhe": "Programação em Python, Senac (previsão)",
-    "proxima": true
+    "detalhe": "Programação em Python concluída, Senac RJ (168h)"
+  },
+  {
+    "id": "2026-11-tecnico-em-qualidade",
+    "data": "2026-11",
+    "titulo": "Técnico em Qualidade",
+    "detalhe": "Técnico em Qualidade concluído, Senac"
   },
   {
     "id": "2026-12-inteligencia-artificial",

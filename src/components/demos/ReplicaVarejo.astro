@@ -1,0 +1,190 @@
+---
+/**
+ * Réplica interativa do Painel de Logística Varejo — DADOS FICTÍCIOS.
+ * Reconstrução em código do painel feito no Power BI. Não usa dados da empresa.
+ * Dados: public/dados/painel-varejo-ficticio.json · Lógica: src/scripts/replica-varejo.ts
+ */
+import { url } from '../../lib/formato';
+---
+
+<div class="replica console" data-replica-varejo data-fonte={url('/dados/painel-varejo-ficticio.json')}>
+  <div class="aviso-simulado" role="note">
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 1 21h22L12 2zm0 4.5L19.5 19h-15L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/></svg>
+    <span>
+      <strong>Réplica interativa com dados fictícios.</strong> O painel original foi feito no Power BI. Esta versão
+      reproduz em código o mesmo layout e os mesmos cálculos, mas transportadoras, regiões, rotas, veículos e volumes
+      são inventados e não representam dados da Profarma.
+    </span>
+  </div>
+
+  <header class="topo">
+    <div>
+      <p class="titulo-painel">Detalhe da Operação · Logística Varejo</p>
+      <p class="sub">Volume × capacidade do veículo de cada região</p>
+    </div>
+    <form class="filtros" aria-label="Filtro de data"><label><span>Dia</span><select name="dia" disabled></select></label></form>
+  </header>
+
+  <div class="transp" role="group" aria-label="Filtrar por transportadora"><div class="botoes-transp"></div></div>
+
+  <p class="estado" role="status" aria-live="polite">Carregando painel…</p>
+
+  <div class="conteudo" hidden>
+    <p class="dia-exibido mono" aria-live="polite"></p>
+    <div class="cartoes"></div>
+
+    <div class="grade">
+      <section class="bloco" aria-labelledby="h-ocup">
+        <h3 id="h-ocup">Ocupação por região <span>ordenada pela ocupação</span></h3>
+        <p class="legenda">
+          <span class="lg" data-faixa="normal"></span>Até 89% <span class="lg" data-faixa="atencao"></span>90% a 100%
+          <span class="lg" data-faixa="critico"></span>Acima de 100% <span class="lg marco"></span>Capacidade (100%)
+        </p>
+        <div class="tabela-rolagem" role="region" aria-labelledby="h-ocup" tabindex="0">
+          <table class="ocupacao">
+            <thead>
+              <tr>
+                <th scope="col">Região</th>
+                <th scope="col">Veículo</th>
+                <th scope="col">Ocupação</th>
+                <th scope="col" class="num">Volume / cap.</th>
+                <th scope="col" class="num">%</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot></tfoot>
+          </table>
+        </div>
+      </section>
+
+      <section class="bloco" aria-labelledby="h-top">
+        <h3 id="h-top">10 maiores rotas <span>volume da rota no dia · maior em destaque</span></h3>
+        <ol class="top-rotas"></ol>
+      </section>
+    </div>
+
+    <section class="bloco" aria-labelledby="h-quadros">
+      <h3 id="h-quadros">Rotas por região <span>cada quadro é uma região · mesma escala em todos</span></h3>
+      <ul class="quadros"></ul>
+    </section>
+
+    <details class="regras">
+      <summary>Como os indicadores são calculados</summary>
+      <dl>
+        <dt>Capacidade</dt><dd>Um veículo por região, com capacidade definida pelo perfil (Utilitário 200, VUC 350, Caminhão 3/4 500 volumes, valores fictícios).</dd>
+        <dt>Ocupação</dt><dd>Volume roteirizado da região ÷ capacidade do veículo. Faixas: até 89% dentro do limite, de 90% a 100% atenção, acima de 100% acima da capacidade.</dd>
+        <dt>Ocupação da operação</dt><dd>Soma dos volumes ÷ soma das capacidades das regiões com rota no dia.</dd>
+        <dt>Quadros por região</dt><dd>Todas as barras usam a mesma escala (a maior rota do dia), para comparar regiões diretamente.</dd>
+      </dl>
+    </details>
+  </div>
+</div>
+
+<script>
+  import { iniciarReplicaVarejo } from '../../scripts/replica-varejo';
+  document.querySelectorAll<HTMLElement>('[data-replica-varejo]').forEach((el) => iniciarReplicaVarejo(el));
+</script>
+
+<style>
+  .replica { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.1rem; padding: clamp(1rem, 3vw, 1.75rem); --azul: #6aa9e9; --f-normal: var(--st-normal); --f-atencao: var(--st-atencao); --f-critico: var(--st-critico); }
+  .topo { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: end; }
+  .titulo-painel { margin: 0; font-family: var(--font-display); font-size: clamp(1.4rem, 1.1rem + 1.2vw, 1.9rem); color: #fff; line-height: 1.1; }
+  .sub { margin: 0.2rem 0 0; color: var(--cmd-muted); font-size: 0.9rem; }
+  label { display: grid; gap: 0.3rem; font-size: 0.85rem; font-weight: 500; color: var(--cmd-muted); min-width: 12rem; }
+  select {
+    min-height: 44px; padding: 0.4rem 2rem 0.4rem 0.75rem; border: 1px solid var(--cmd-line-2); border-radius: var(--radius-m);
+    font: 400 1rem var(--font-body); color: var(--cmd-text); width: 100%; appearance: none;
+    background: var(--cmd-0) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23E7EEF7' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
+  }
+  select option { background: var(--cmd-0); color: var(--cmd-text); }
+  .transp { border-top: 1px solid var(--cmd-line-2); border-bottom: 1px solid var(--cmd-line-2); padding: 0.75rem 0; }
+  .botoes-transp { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .replica :global(.bt-transp) {
+    min-height: 40px; padding: 0.35rem 0.9rem; border-radius: var(--radius-m); border: 1px solid var(--cmd-line-2);
+    background: transparent; color: var(--cmd-text); font: 600 0.82rem var(--font-body); letter-spacing: 0.03em; text-transform: uppercase; cursor: pointer;
+  }
+  .replica :global(.bt-transp:hover) { border-color: var(--signal); }
+  .replica :global(.bt-transp[aria-pressed='true']) { background: var(--cmd-text); color: var(--cmd-0); border-color: var(--cmd-text); }
+  .estado { margin: 0; color: var(--cmd-muted); }
+  .estado.erro { color: #ffd2cc; }
+  .estado:empty { display: none; }
+  .dia-exibido { margin: 0; color: var(--cmd-muted); font-size: 0.85rem; }
+
+  .cartoes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+  @media (min-width: 560px) { .cartoes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) { .cartoes { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  .replica :global(.kpi) { background: var(--cmd-2); border: 1px solid var(--cmd-line); border-radius: var(--radius-m); padding: 0.85rem 0.9rem; display: grid; align-content: start; gap: 0.25rem; min-width: 0; }
+  .replica :global(.kpi h3) { margin: 0; font: 600 0.72rem var(--font-body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--cmd-muted); }
+  .replica :global(.kpi .valor) { margin: 0.15rem 0 0; font-family: var(--font-display); font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); color: #fff; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .replica :global(.kpi .det) { margin: 0; display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; font-size: 0.8rem; color: var(--cmd-muted); }
+  .replica :global(.cap) { color: var(--cmd-muted); font-size: 0.8rem; }
+  .replica :global(.destaque) { color: var(--signal-text); }
+  .replica :global(.chip) { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; background: rgba(255, 255, 255, 0.1); color: var(--cmd-text); font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
+  .replica :global(.chip.laranja) { background: var(--signal-soft); color: var(--signal-text); }
+  .replica :global(.faixa[data-faixa='normal']) { color: var(--f-normal); }
+  .replica :global(.faixa[data-faixa='atencao']) { color: var(--f-atencao); }
+  .replica :global(.faixa[data-faixa='critico']) { color: #ff8f86; }
+  .replica :global(.medidor) { display: block; flex-basis: 100%; position: relative; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.12); margin-top: 0.2rem; }
+  .replica :global(.medidor)::before { content: ''; position: absolute; inset: 0 auto 0 0; width: var(--v, 0%); border-radius: 3px; background: var(--f-normal); }
+  .replica :global(.medidor[data-faixa='atencao'])::before { background: var(--f-atencao); }
+  .replica :global(.medidor[data-faixa='critico'])::before { background: var(--f-critico); }
+  .replica :global(.vazio) { color: var(--cmd-muted); }
+
+  .grade { display: grid; gap: 1rem; }
+  .bloco { background: var(--cmd-1); border: 1px solid var(--cmd-line); border-radius: var(--radius-m); padding: 1rem; min-width: 0; }
+  .bloco h3 { margin: 0 0 0.6rem; font: 600 1rem var(--font-body); color: #fff; }
+  .bloco h3 span { font-weight: 400; color: var(--cmd-muted); font-size: 0.82rem; }
+  .legenda { margin: 0 0 0.5rem; font-size: 0.78rem; color: var(--cmd-muted); display: flex; flex-wrap: wrap; gap: 0.35rem 0.5rem; align-items: center; }
+  .lg { width: 10px; height: 10px; display: inline-block; border-radius: 2px; margin-left: 0.35rem; }
+  .lg[data-faixa='normal'] { background: var(--f-normal); }
+  .lg[data-faixa='atencao'] { background: var(--f-atencao); }
+  .lg[data-faixa='critico'] { background: var(--f-critico); }
+  .lg.marco { width: 2px; height: 12px; background: #fff; border-radius: 0; }
+
+  .tabela-rolagem { overflow-x: auto; }
+  table { width: 100%; min-width: 34rem; border-collapse: collapse; font-size: 0.86rem; font-variant-numeric: tabular-nums; }
+  .replica :global(th), .replica :global(td) { padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--cmd-line); text-align: left; white-space: nowrap; }
+  thead th { font-size: 0.76rem; color: var(--cmd-muted); font-weight: 500; }
+  .replica :global(tbody th) { font-weight: 600; max-width: 10rem; overflow: hidden; text-overflow: ellipsis; }
+  .replica :global(tfoot th), .replica :global(tfoot td) { font-weight: 700; color: #fff; border-top: 1px solid var(--cmd-line-2); }
+  .num, .replica :global(td.num) { text-align: right !important; }
+  .replica :global(.col-barra) { width: 40%; min-width: 8rem; }
+  .replica :global(.ocupacao .trilho) { display: block; position: relative; height: 14px; }
+  .replica :global(.ocupacao .trilho)::after { content: ''; position: absolute; left: var(--marco); top: -3px; bottom: -3px; border-left: 2px dashed rgba(255, 255, 255, 0.75); }
+  .replica :global(.ocupacao .barra) { display: block; height: 100%; border-radius: 2px; }
+  .replica :global(.barra[data-faixa='normal']) { background: var(--f-normal); }
+  .replica :global(.barra[data-faixa='atencao']) { background: var(--f-atencao); }
+  .replica :global(.barra[data-faixa='critico']) { background: var(--f-critico); }
+
+  .top-rotas { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; max-width: 46rem; }
+  .replica :global(.top-rotas li) { display: grid; grid-template-columns: 1.4rem 2.6rem minmax(6rem, 9rem) minmax(0, 1fr) 3rem; gap: 0.5rem; align-items: center; font-size: 0.85rem; }
+  .replica :global(.pos) { color: var(--cmd-muted); }
+  .replica :global(.cod) { font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+  .replica :global(.reg) { color: var(--cmd-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.8rem; }
+  .replica :global(.trilho) { display: block; min-width: 0; }
+  .replica :global(.top-rotas .barra), .replica :global(.rotas .barra) { display: block; height: 10px; border-radius: 2px; background: var(--azul); min-width: 3px; }
+  .replica :global(li.lider .barra) { background: var(--signal); }
+  .replica :global(li.lider .cod), .replica :global(li.lider .num) { color: var(--signal-text); }
+  .replica :global(.top-rotas .num), .replica :global(.rotas .num) { text-align: right; font-weight: 600; color: #fff; font-variant-numeric: tabular-nums; }
+
+  .quadros { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr)); gap: 0.75rem; }
+  .replica :global(.quadro) { background: var(--cmd-2); border: 1px solid var(--cmd-line); border-radius: var(--radius-m); padding: 0.75rem; display: grid; gap: 0.4rem; align-content: start; min-width: 0; }
+  .replica :global(.quadro h4) { margin: 0; display: flex; justify-content: space-between; gap: 0.4rem; align-items: center; font: 600 0.85rem var(--font-body); color: #fff; }
+  .replica :global(.quadro .nome) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .replica :global(.linha-vol) { margin: 0; display: flex; align-items: baseline; gap: 0.3rem; flex-wrap: wrap; }
+  .replica :global(.linha-vol strong) { font-family: var(--font-display); font-size: 1.5rem; color: #fff; }
+  .replica :global(.linha-vol .faixa) { margin-left: auto; font-weight: 700; font-size: 0.85rem; }
+  .replica :global(.rotas) { list-style: none; margin: 0.2rem 0 0; padding: 0; display: grid; gap: 0.3rem; }
+  .replica :global(.rotas li) { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) 2.4rem; gap: 0.4rem; align-items: center; font-size: 0.8rem; }
+
+  details { font-size: 0.88rem; }
+  summary { cursor: pointer; font-weight: 500; min-height: 32px; display: flex; align-items: center; }
+  .regras dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; margin: 0.75rem 0 0; }
+  .regras dt { font-weight: 600; }
+  .regras dd { margin: 0; color: var(--cmd-muted); }
+  @media (max-width: 559px) {
+    .regras dl { grid-template-columns: 1fr; }
+    .replica :global(.top-rotas li) { grid-template-columns: 1.2rem 2.4rem minmax(0, 1fr) 2.6rem; }
+    .replica :global(.top-rotas .reg) { display: none; }
+  }
+</style>
