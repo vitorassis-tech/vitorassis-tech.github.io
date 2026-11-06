@@ -31,6 +31,12 @@ const {
   ogImage: ogImagePath = '/og-image.png',
   ogImageAlt = 'Vitor Assis: logística, dados e tecnologia',
 } = Astro.props;
+/**
+ * Estatísticas de visitas (GoatCounter): sem cookies e sem dados pessoais; o painel é privado
+ * (https://vitorassis.goatcounter.com). Só conta no site publicado: em localhost não carrega nada.
+ * Para não contar as próprias visitas: abrir uma vez https://vitorassis-tech.github.io/#toggle-goatcounter
+ */
+const estatisticas = { conta: 'vitorassis', dominio: 'vitorassis-tech.github.io' };
 const fullTitle = title === site.nome ? `${site.nome} | ${site.posicionamento}` : `${title} | ${site.nome}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(url(ogImagePath), Astro.site);
@@ -80,6 +86,15 @@ const personJsonLd = {
     <meta name="twitter:card" content="summary_large_image" />
 
     <script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
+    <script is:inline data-estatisticas define:vars={{ estatisticas }}>
+      if (location.hostname === estatisticas.dominio) {
+        var gc = document.createElement('script');
+        gc.async = true;
+        gc.src = 'https://gc.zgo.at/count.js';
+        gc.setAttribute('data-goatcounter', 'https://' + estatisticas.conta + '.goatcounter.com/count');
+        document.head.appendChild(gc);
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>

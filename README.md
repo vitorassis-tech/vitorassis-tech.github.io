@@ -119,4 +119,5 @@ portfolio-vitor-assis/
 - O telefone está **oculto** (`"exibir": false` em `src/content/contatos.json`).
 - O estudo de caso da Torre de Controle não publica dados internos, capturas, clientes, placas, quantidades, valores, percentuais nem regras da empresa.
 - As demonstrações usam indicadores didáticos e parâmetros fictícios, com testes que bloqueiam termos de regras reais.
-- Links externos abrem com `rel="noopener noreferrer"`. As fontes são servidas pelo próprio site, sem rastreadores.
+- Links externos abrem com `rel="noopener noreferrer"`. As fontes são servidas pelo próprio site.
+- Estatísticas de visitas com o **GoatCounter** (gratuito, sem cookies e sem dados pessoais, dispensa aviso de cookies). Só carrega no site publicado (`vitorassis-tech.github.io`), nunca em `localhost`. O painel é privado: https://vitorassis.goatcounter.com. Para não contar as próprias visitas, abra uma vez em cada navegador `https://vitorassis-tech.github.io/#toggle-goatcounter`. Configuração em `src/layouts/BaseLayout.astro` (`estatisticas`).

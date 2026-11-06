@@ -501,3 +501,15 @@ test.describe('réplicas interativas dos painéis de Power BI (dados fictícios)
     expect(erros).toEqual([]);
   });
 });
+
+test('estatísticas de visitas: configuradas só para o domínio publicado, sem carregar em localhost', async ({ page }) => {
+  const externos: string[] = [];
+  page.on('request', (r) => { if (r.url().includes('goatcounter') || r.url().includes('zgo.at')) externos.push(r.url()); });
+  await page.goto('/');
+  const trecho = await page.locator('script[data-estatisticas]').innerHTML();
+  expect(trecho).toContain('vitorassis-tech.github.io');
+  expect(trecho).toContain('vitorassis');
+  await page.waitForTimeout(500);
+  expect(externos).toEqual([]);
+  expect(await page.context().cookies()).toEqual([]);
+});
