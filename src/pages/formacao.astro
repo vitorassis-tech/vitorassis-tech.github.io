@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CabecalhoPagina from '../components/CabecalhoPagina.astro';
+import FaixaContato from '../components/FaixaContato.astro';
+import SeloInstituicao from '../components/SeloInstituicao.astro';
+import { formacaoAcademica, cursos } from '../data/trajetoria';
+import { mesAno, url } from '../lib/formato';
+
+// Conteúdo em src/content/formacao.json (painel: Formação). Ordem definida no painel.
+const andamento = formacaoAcademica.filter((f) => f.status === 'andamento');
+const concluidas = formacaoAcademica.filter((f) => f.status === 'concluido');
+const cursosConcluidos = cursos.filter((c) => c.status === 'concluido').length;
+---
+
+<BaseLayout
+  title="Formação"
+  description="Formação de Vitor Assis: Graduação Tecnológica em Logística (UNISUAM, em andamento), Técnico em Logística e Técnico em Qualidade (Senac), além dos cursos de dados e programação."
+>
+  <CabecalhoPagina
+    imagem="formacao"
+    foco="70% 40%"
+    kicker="Formação"
+    titulo="Formação acadêmica"
+    introducao="Formação técnica e superior em logística, complementada por cursos de dados, banco de dados e programação."
+  />
+
+  <section class="container secao" aria-labelledby="andamento-titulo">
+    <h2 id="andamento-titulo" class="subtitulo">Em andamento</h2>
+    <ul class="cartoes">
+      {
+        andamento.map((f) => (
+          <li class="cartao card andamento revelar">
+            <span class="estado"><i aria-hidden="true" />Em andamento</span>
+            <h3>{f.curso}</h3>
+            <SeloInstituicao nome={f.instituicao} logo={f.logo} />
+            <p class="data">Previsão de conclusão: <strong>{mesAno(f.data)}</strong></p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="container secao" aria-labelledby="concluida-titulo">
+    <h2 id="concluida-titulo" class="subtitulo">Concluída</h2>
+    <ol class="linha-tempo">
+      {
+        concluidas.map((f) => (
+          <li class="revelar">
+            <span class="quando">{mesAno(f.data)}</span>
+            <div class="cartao card">
+              <span class="estado concluido"><i aria-hidden="true" />Concluído</span>
+              <h3>{f.curso}</h3>
+              <SeloInstituicao nome={f.instituicao} logo={f.logo} />
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="container secao" aria-labelledby="complementar-titulo">
+    <div class="complementar cmd revelar">
+      <div>
+        <p class="kicker kicker-escuro">Formação complementar</p>
+        <h2 id="complementar-titulo">{cursosConcluidos} cursos concluídos em dados, BI e programação</h2>
+        <p class="muted">Power BI, banco de dados, Python, Excel e mais, com instituição, carga horária e data de cada certificado.</p>
+      </div>
+      <a class="btn btn-primary" href={url('/certificados/')}>
+        Ver certificados
+        <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </a>
+    </div>
+  </section>
+
+  <div class="espaco"></div>
+  <FaixaContato />
+</BaseLayout>
+
+<style>
+  .secao { margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+  .subtitulo { font-size: var(--step-2); margin-bottom: 1.25rem; }
+  .cartoes { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .cartao { display: grid; gap: 0.6rem; justify-items: start; padding: 1.35rem 1.5rem 1.45rem; border-top: 3px solid rgba(120, 170, 235, 0.55); }
+  .cartao.andamento { border-top-color: var(--accent); }
+  .cartao h3 { font-size: var(--step-2); margin: 0; }
+  .estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+  .estado i { width: 0.6rem; height: 0.6rem; border-radius: 50%; border: 2px dashed var(--accent); }
+  .estado.concluido { color: var(--navy); }
+  .estado.concluido i { border: 0; background: var(--navy); }
+  .data { margin: 0.2rem 0 0; color: var(--muted); }
+  .data strong { color: var(--ink); }
+
+  .linha-tempo { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .linha-tempo li { display: grid; gap: 0.5rem 1.5rem; align-items: start; }
+  @media (min-width: 760px) {
+    .linha-tempo li { grid-template-columns: 9rem minmax(0, 1fr); }
+    .quando { padding-top: 1.45rem; text-align: right; }
+  }
+  .quando { font-weight: 600; color: var(--navy); font-variant-numeric: tabular-nums; }
+
+  .complementar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    border-radius: var(--radius-l);
+    overflow: hidden;
+  }
+  .complementar h2 { font-size: var(--step-3); max-width: 24ch; margin-bottom: 0.5rem; }
+  .complementar p:last-child { margin: 0; max-width: 56ch; }
+  .kicker-escuro { color: #fff; }
+  .espaco { height: calc(var(--section) * 0.5); }
+</style>

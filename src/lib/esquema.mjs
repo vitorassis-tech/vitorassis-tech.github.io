@@ -252,7 +252,7 @@ export const COLECOES = [
     campoTitulo: 'curso',
     campoResumo: 'instituicao',
     ordenavel: true,
-    url: () => '/sobre/',
+    url: () => '/formacao/',
     secoes: [{ titulo: 'Formação', campos: camposCurso(false) }],
   },
   {
@@ -265,7 +265,7 @@ export const COLECOES = [
     campoTitulo: 'curso',
     campoResumo: 'instituicao',
     ordenavel: true,
-    url: () => '/sobre/',
+    url: () => '/certificados/',
     secoes: [{ titulo: 'Curso', campos: camposCurso(true) }],
   },
   {
@@ -277,7 +277,7 @@ export const COLECOES = [
     chave: 'id',
     campoTitulo: 'nome',
     ordenavel: true,
-    url: () => '/sobre/',
+    url: () => '/certificados/',
     secoes: [
       {
         titulo: 'Instituição',

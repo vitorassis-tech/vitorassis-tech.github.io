@@ -2,11 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CabecalhoPagina from '../components/CabecalhoPagina.astro';
 import FaixaContato from '../components/FaixaContato.astro';
-import SeloInstituicao from '../components/SeloInstituicao.astro';
 import { site } from '../data/site';
 import { formacaoAcademica, cursos } from '../data/trajetoria';
 import { competencias } from '../data/competencias';
-import { mesAno, numero, url } from '../lib/formato';
+import { numero, url } from '../lib/formato';
 
 const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s, c) => s + (c.cargaHoraria ?? 0), 0);
 ---
@@ -16,6 +15,8 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
   description="Trajetória de Vitor Assis: do armazém ao planejamento de transportes e aos dashboards em Power BI, com estudos em SQL, Python e bancos de dados. Formação, cursos e competências."
 >
   <CabecalhoPagina
+    imagem="sobre-armazem"
+    foco="60% 50%"
     kicker="Sobre mim"
     titulo="Logística na prática, dados como ferramenta"
     introducao={`${site.nomeCompleto}, ${site.local}. Construí minha carreira dentro da operação e uso esse conhecimento para criar análises que fazem sentido para quem decide.`}
@@ -57,61 +58,20 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
     </aside>
   </section>
 
-  <section class="section container" id="formacao" aria-labelledby="formacao-titulo">
-    <div class="section-head">
-      <p class="kicker">Trajetória acadêmica</p>
-      <h2 id="formacao-titulo">Formação</h2>
-      <p>Formação técnica e superior em logística, complementada por cursos de dados e programação.</p>
-    </div>
-    <ul class="linhas">
-      {
-        formacaoAcademica.map((f) => (
-          <li>
-            <span class="curso">{f.curso}</span>
-            <span class="inst"><SeloInstituicao nome={f.instituicao} logo={f.logo} /></span>
-            <span class:list={['status', f.status]}>
-              {f.status === 'concluido' ? `Concluído em ${mesAno(f.data)}` : `Em andamento, previsão ${mesAno(f.data)}`}
-            </span>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
-
-  <section class="section container" id="cursos" aria-labelledby="cursos-titulo">
-    <div class="section-head">
-      <p class="kicker">Certificados</p>
-      <h2 id="cursos-titulo">Cursos e certificações</h2>
-      <p>{numero(horasConcluidas)} horas em cursos concluídos, além dos cursos em andamento listados abaixo.</p>
-    </div>
-    <div class="tabela-rolagem" role="region" aria-labelledby="cursos-titulo" tabindex="0">
-      <table class="tabela">
-        <caption class="visually-hidden">Cursos, instituição, carga horária e situação</caption>
-        <thead>
-          <tr>
-            <th scope="col">Curso</th>
-            <th scope="col">Instituição</th>
-            <th scope="col" class="num">Carga horária</th>
-            <th scope="col">Situação</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            cursos.map((c) => (
-              <tr>
-                <th scope="row">{c.curso}</th>
-                <td><SeloInstituicao nome={c.instituicao} logo={c.logo} /></td>
-                <td class="num">{c.cargaHoraria ? `${c.cargaHoraria}h` : <span class="muted">não informada</span>}</td>
-                <td>
-                  <span class:list={['status', c.status]}>
-                    {c.status === 'concluido' ? `Concluído, ${mesAno(c.data)}` : `Em andamento, previsão ${mesAno(c.data)}`}
-                  </span>
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+  <section class="section container" aria-labelledby="formacao-resumo-titulo">
+    <div class="atalhos-formacao">
+      <a class="atalho card card-link" id="formacao" href={url('/formacao/')}>
+        <span class="kicker">Formação</span>
+        <span id="formacao-resumo-titulo" class="atalho-titulo">Graduação, cursos técnicos e ensino médio</span>
+        <span class="muted">{formacaoAcademica.map((f) => f.curso).slice(0, 3).join(' · ')}</span>
+        <span class="link-seta">Ver formação</span>
+      </a>
+      <a class="atalho card card-link" id="cursos" href={url('/certificados/')}>
+        <span class="kicker">Certificados</span>
+        <span class="atalho-titulo">{cursos.filter((c) => c.status === 'concluido').length} cursos concluídos, {numero(horasConcluidas)} horas</span>
+        <span class="muted">Power BI, banco de dados, Python, Excel e mais</span>
+        <span class="link-seta">Ver certificados</span>
+      </a>
     </div>
   </section>
 
@@ -165,29 +125,12 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
   .objetivo-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.4rem; }
   .kicker-escuro { color: #fff; }
 
-  .linhas { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-  .linhas li {
-    display: grid;
-    gap: 0.25rem 2rem;
-    padding-block: 1.1rem;
-    border-bottom: 1px solid var(--line);
-  }
-  @media (min-width: 760px) { .linhas li { grid-template-columns: minmax(0, 5fr) minmax(0, 2.4fr) minmax(0, 3fr); align-items: center; } }
-  .curso { font-family: var(--font-display); font-size: var(--step-1); color: var(--navy); font-weight: 700; }
-  .inst { color: var(--muted); }
-
-  .status { font-size: 0.92rem; display: inline-flex; align-items: center; gap: 0.45rem; }
-  .status::before { content: ''; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--navy); flex: none; }
-  .status.andamento::before { background: transparent; border: 2px dashed var(--accent); }
-
-  .tabela-rolagem { overflow-x: auto; }
-  .tabela { width: 100%; border-collapse: collapse; font-size: 0.98rem; min-width: 38rem; }
-  .tabela td:nth-child(2) { white-space: nowrap; }
-  .tabela th, .tabela td { text-align: left; padding: 0.7rem 1rem 0.7rem 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
-  .tabela thead th { font-size: var(--step--1); color: var(--muted); font-weight: 500; border-bottom-color: var(--line-strong); }
-  .tabela tbody th { font-weight: 500; color: var(--ink); }
-  .num { text-align: right !important; font-variant-numeric: tabular-nums; padding-right: 2rem !important; }
-
+  .atalhos-formacao { display: grid; gap: 1rem; }
+  @media (min-width: 760px) { .atalhos-formacao { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .atalho { display: grid; gap: 0.45rem; padding: 1.4rem 1.5rem; text-decoration: none; color: var(--ink); scroll-margin-top: 6rem; }
+  .atalho .kicker { margin: 0; }
+  .atalho-titulo { font: 700 var(--step-2) / 1.25 var(--font-display); color: var(--navy); letter-spacing: -0.02em; }
+  .atalho .link-seta { margin-top: 0.4rem; }
   .comp-grupos { display: grid; gap: 3rem 4rem; }
   @media (min-width: 900px) { .comp-grupos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .comp-grupo {

@@ -1,0 +1,120 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#07101f}canvas{display:block}</style></head>
+<body><canvas id="c"></canvas>
+<script>
+// Centro de distribuição em perspectiva isométrica, com estantes, caixas, piso iluminado e painéis holográficos.
+const q = new URLSearchParams(location.search);
+const W = +q.get('w') || 2400, H = +q.get('h') || 1500;
+const cv = document.getElementById('c'); cv.width = W; cv.height = H;
+const g = cv.getContext('2d');
+let s = 3; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+const U = W / 46; // unidade
+const OX = W * 0.5, OY = H * 0.3;
+const C = Math.cos(Math.PI / 6), S = Math.sin(Math.PI / 6);
+const iso = (x, y, z = 0) => [OX + (x - y) * C * U, OY + (x + y) * S * U - z * U];
+
+// fundo
+let bg = g.createLinearGradient(0, 0, 0, H);
+bg.addColorStop(0, '#0a1834'); bg.addColorStop(1, '#060d1c');
+g.fillStyle = bg; g.fillRect(0, 0, W, H);
+let lz = g.createRadialGradient(W * 0.5, H * 0.45, 0, W * 0.5, H * 0.45, W * 0.6);
+lz.addColorStop(0, 'rgba(60,130,255,0.18)'); lz.addColorStop(1, 'rgba(60,130,255,0)');
+g.fillStyle = lz; g.fillRect(0, 0, W, H);
+
+// piso: grade
+const N = 22;
+g.lineWidth = 1;
+for (let i = -2; i <= N; i++) {
+  g.strokeStyle = 'rgba(110,170,255,0.12)';
+  let [a, b] = [iso(i, -2), iso(i, N)]; g.beginPath(); g.moveTo(...a); g.lineTo(...b); g.stroke();
+  [a, b] = [iso(-2, i), iso(N, i)]; g.beginPath(); g.moveTo(...a); g.lineTo(...b); g.stroke();
+}
+// faixas de corredor (laranja)
+function faixa(y, x0, x1, cor, larg) {
+  g.strokeStyle = cor; g.lineWidth = larg; g.beginPath(); g.moveTo(...iso(x0, y)); g.lineTo(...iso(x1, y)); g.stroke();
+}
+for (const y of [4.6, 10.6, 16.6]) {
+  if (false) continue;
+  g.save(); g.shadowColor = 'rgba(255,121,31,0.9)'; g.shadowBlur = 18;
+  faixa(y, -1, 20, 'rgba(255,140,60,0.75)', 3);
+  g.restore();
+  // setas no piso
+  for (let x = 1; x < 19; x += 4) {
+    const [a1, a2, a3] = [iso(x, y - 0.35), iso(x + 0.8, y), iso(x, y + 0.35)];
+    g.fillStyle = 'rgba(255,140,60,0.35)'; g.beginPath(); g.moveTo(...a1); g.lineTo(...a2); g.lineTo(...a3); g.closePath(); g.fill();
+  }
+}
+
+// cuboide com 3 faces
+function cubo(x, y, z, dx, dy, dz, topo, esq, dir, borda) {
+  const p = (a, b, c) => iso(x + a, y + b, z + c);
+  const face = (pts, cor) => { g.fillStyle = cor; g.beginPath(); g.moveTo(...pts[0]); for (const q2 of pts.slice(1)) g.lineTo(...q2); g.closePath(); g.fill(); if (borda) { g.strokeStyle = borda; g.lineWidth = 1; g.stroke(); } };
+  face([p(0, dy, 0), p(dx, dy, 0), p(dx, dy, dz), p(0, dy, dz)], esq);   // frente-esquerda
+  face([p(dx, 0, 0), p(dx, dy, 0), p(dx, dy, dz), p(dx, 0, dz)], dir);   // frente-direita
+  face([p(0, 0, dz), p(dx, 0, dz), p(dx, dy, dz), p(0, dy, dz)], topo);  // topo
+}
+
+// caixas: tons de papelão sob luz azul + alguns contentores azuis
+function caixa(x, y, z, w, d, h) {
+  const t = rnd();
+  if (t < 0.18) cubo(x, y, z, w, d, h, '#2b5ea8', '#16376a', '#1d4785', 'rgba(140,190,255,0.35)');
+  else if (t < 0.26) cubo(x, y, z, w, d, h, '#ff9a4d', '#c4561a', '#e06a22', 'rgba(255,200,150,0.4)');
+  else { const k = 0.8 + rnd() * 0.25; cubo(x, y, z, w, d, h, `rgb(${Math.round(176 * k)},${Math.round(140 * k)},${Math.round(112 * k)})`, `rgb(${Math.round(104 * k)},${Math.round(78 * k)},${Math.round(64 * k)})`, `rgb(${Math.round(136 * k)},${Math.round(104 * k)},${Math.round(84 * k)})`, 'rgba(20,30,50,0.35)'); }
+}
+
+// estante: montantes, longarinas e caixas em 4 níveis
+function estante(x0, y0, comp) {
+  const niveis = [0, 1.35, 2.7, 4.05], prof = 1.4;
+  // caixas e prateleiras (de trás para frente)
+  for (let n = 0; n < niveis.length; n++) {
+    const z = niveis[n];
+    cubo(x0, y0, z, comp, prof, 0.12, '#24406b', '#162a4a', '#1c3459');
+    for (let x = x0 + 0.1; x < x0 + comp - 0.9; x += 1.0 + rnd() * 0.15) {
+      if (rnd() < 0.12) continue;
+      const h = 0.6 + rnd() * 0.5;
+      caixa(x, y0 + 0.2, z + 0.12, 0.85, prof - 0.4, h);
+    }
+  }
+  // montantes
+  for (let x = x0; x <= x0 + comp + 0.01; x += comp / 4) {
+    for (const yy of [y0, y0 + prof]) cubo(x - 0.06, yy - 0.06, 0, 0.12, 0.12, 5.3, '#5b84c0', '#2c4a78', '#3b5f96');
+  }
+}
+
+// fileiras de estantes, da mais distante para a mais próxima
+for (const y of [1.6, 7.6, 13.6]) {
+  estante(0, y, 18);
+}
+
+// painéis holográficos flutuantes
+function holograma(x, y, z, icone) {
+  const [cx, cy] = iso(x, y, z);
+  const L = U * 1.7;
+  g.save();
+  // feixe vertical
+  let fx = g.createLinearGradient(cx, cy, cx, cy + U * 4);
+  fx.addColorStop(0, 'rgba(90,170,255,0.35)'); fx.addColorStop(1, 'rgba(90,170,255,0)');
+  g.fillStyle = fx; g.fillRect(cx - 2, cy + L / 2, 4, U * 4);
+  g.shadowColor = 'rgba(80,160,255,0.9)'; g.shadowBlur = 30;
+  g.fillStyle = 'rgba(30,80,170,0.35)'; g.strokeStyle = 'rgba(140,200,255,0.95)'; g.lineWidth = 3;
+  g.beginPath(); g.roundRect(cx - L / 2, cy - L / 2, L, L, 14); g.fill(); g.stroke();
+  g.shadowBlur = 12; g.strokeStyle = 'rgba(220,240,255,0.95)'; g.lineWidth = 4; g.lineJoin = 'round'; g.lineCap = 'round';
+  const k = L / 2 * 0.55;
+  g.beginPath();
+  if (icone === 'caixa') { g.moveTo(cx, cy - k); g.lineTo(cx + k, cy - k / 2); g.lineTo(cx + k, cy + k / 2); g.lineTo(cx, cy + k); g.lineTo(cx - k, cy + k / 2); g.lineTo(cx - k, cy - k / 2); g.closePath(); g.moveTo(cx - k, cy - k / 2); g.lineTo(cx, cy); g.lineTo(cx + k, cy - k / 2); g.moveTo(cx, cy); g.lineTo(cx, cy + k); }
+  if (icone === 'pino') { g.arc(cx, cy - k * 0.25, k * 0.55, Math.PI * 0.85, Math.PI * 2.15); g.lineTo(cx, cy + k); g.closePath(); g.moveTo(cx + k * 0.18, cy - k * 0.25); g.arc(cx, cy - k * 0.25, k * 0.18, 0, Math.PI * 2); }
+  if (icone === 'barras') { g.moveTo(cx - k, cy + k); g.lineTo(cx + k, cy + k); for (const [dx, hh] of [[-0.6, 0.6], [0, 1.1], [0.6, 1.6]]) { g.moveTo(cx + dx * k, cy + k * 0.8); g.lineTo(cx + dx * k, cy + k * 0.8 - hh * k); } }
+  if (icone === 'rota') { g.arc(cx - k * 0.6, cy + k * 0.6, k * 0.22, 0, Math.PI * 2); g.moveTo(cx + k * 0.82, cy - k * 0.6); g.arc(cx + k * 0.6, cy - k * 0.6, k * 0.22, 0, Math.PI * 2); g.moveTo(cx - k * 0.38, cy + k * 0.6); g.bezierCurveTo(cx + k, cy + k * 0.6, cx - k, cy - k * 0.6, cx + k * 0.38, cy - k * 0.6); }
+  g.stroke();
+  g.restore();
+}
+holograma(3, 1, 8.2, 'caixa');
+holograma(11, 6, 8.8, 'barras');
+holograma(17, 12, 8.0, 'pino');
+holograma(6, 13, 7.4, 'rota');
+
+let vin = g.createRadialGradient(W / 2, H / 2, W * 0.25, W / 2, H / 2, W * 0.75);
+vin.addColorStop(0, 'rgba(6,12,24,0)'); vin.addColorStop(1, 'rgba(6,12,24,0.75)');
+g.fillStyle = vin; g.fillRect(0, 0, W, H);
+document.title = 'pronto';
+</script></body></html>

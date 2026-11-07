@@ -1,84 +1,126 @@
 ---
-import { canaisVisiveis } from '../data/site';
+/**
+ * Faixa final de contato, com o mapa-múndi luminoso (imagem própria, gerada por código).
+ */
+import { canaisVisiveis, CURRICULO, temCurriculo } from '../data/site';
 import { url } from '../lib/formato';
 interface Props {
   titulo?: string;
   texto?: string;
 }
 const {
-  titulo = 'Vamos conversar sobre dados e tecnologia?',
-  texto = 'Estou aberto a oportunidades em análise de dados, Business Intelligence e tecnologia.',
+  titulo = 'Vamos conversar?',
+  texto = 'Estou aberto a oportunidades em logística, análise de dados, Business Intelligence e tecnologia.',
 } = Astro.props;
 const canais = canaisVisiveis();
-const curto = (v: string) => v.replace('linkedin.com/', '').replace('github.com/', '');
+const linkedin = canais.find((c) => c.id === 'linkedin');
+const curriculo = temCurriculo();
 ---
 
-<section class="faixa-contato cmd" aria-labelledby="faixa-contato-titulo">
-  <div class="container">
-    <div class="terminal painel-vidro">
-      <p class="terminal-barra mono" aria-hidden="true"><i></i><i></i><i></i><span>canais de contato</span></p>
-      <div class="terminal-corpo">
-        <div>
-          <h2 id="faixa-contato-titulo">{titulo}</h2>
-          <p class="muted">{texto}</p>
-        </div>
-        <div>
-          <ul class="canais">
-            {
-              canais.map((c) => (
-                <li>
-                  <a
-                    href={c.href}
-                    target={c.id === 'email' ? undefined : '_blank'}
-                    rel={c.id === 'email' ? undefined : 'noopener noreferrer'}
-                  >
-                    <span>{c.rotulo}</span>
-                    <span class="mono valor">{curto(c.valor)}</span>
-                    {c.id !== 'email' && <span class="visually-hidden"> (abre em nova aba)</span>}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-          <p class="todos"><a href={url('/contato/')}>Ver página de contato</a></p>
-        </div>
+<section class="faixa-contato" aria-labelledby="faixa-contato-titulo">
+  <img
+    class="fundo"
+    src={url('/img/fundos/contato-mapa-1600.webp')}
+    srcset={`${url('/img/fundos/contato-mapa-1600.webp')} 1600w, ${url('/img/fundos/contato-mapa.webp')} 2560w`}
+    sizes="100vw"
+    alt=""
+    width="2560"
+    height="1200"
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="container conteudo">
+    <div class="texto">
+      <p class="kicker">Contato</p>
+      <h2 id="faixa-contato-titulo">{titulo}</h2>
+      <p class="muted">{texto}</p>
+      <div class="acoes">
+        <a class="btn btn-primary" href={url('/contato/')}>
+          Entrar em contato
+          <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </a>
+        {
+          linkedin && (
+            <a class="btn btn-linha" href={linkedin.href} target="_blank" rel="noopener noreferrer">
+              Acompanhe no LinkedIn<span class="visually-hidden"> (abre em nova aba)</span>
+            </a>
+          )
+        }
+        {curriculo && <a class="btn btn-linha" href={url(CURRICULO)} download>Baixar currículo</a>}
       </div>
     </div>
+    <ul class="canais" aria-label="Canais de contato">
+      {
+        canais.map((c) => (
+          <li>
+            <a href={c.href} target={c.id === 'email' ? undefined : '_blank'} rel={c.id === 'email' ? undefined : 'noopener noreferrer'}>
+              <span class="rotulo">{c.rotulo}</span>
+              <span class="valor">{c.valor.replace('linkedin.com/', '').replace('github.com/', '')}</span>
+              {c.id !== 'email' && <span class="visually-hidden"> (abre em nova aba)</span>}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </section>
 
 <style>
-  .faixa-contato { padding-block: clamp(3rem, 7vw, 5rem); }
-  .terminal-barra {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  .faixa-contato {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: #070e1e;
+    padding-block: clamp(4rem, 9vw, 7rem);
+    border-top: 1px solid var(--cmd-line);
+  }
+  .fundo {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 30% 50%;
+    opacity: 0.9;
+  }
+  .faixa-contato::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, rgba(7, 14, 30, 0.2) 0%, rgba(7, 14, 30, 0.75) 45%, rgba(7, 14, 30, 0.92) 100%);
+  }
+  .conteudo { display: grid; gap: 2.5rem; align-items: center; }
+  @media (min-width: 960px) {
+    .conteudo { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+    .texto { grid-column: 2; grid-row: 1; }
+    .canais { grid-column: 2; grid-row: 2; }
+  }
+  h2 { font-size: var(--step-4); max-width: 14ch; }
+  h2::after { content: ''; display: block; width: 3rem; height: 3px; margin-top: 1rem; background: var(--accent); border-radius: 2px; }
+  .texto .muted { max-width: 46ch; }
+  .acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem; }
+  .canais {
+    list-style: none;
     margin: 0;
-    padding: 0.7rem 1.1rem;
-    border-bottom: 1px solid var(--cmd-line);
-    color: var(--cmd-muted);
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--cmd-line-2);
+    border-radius: var(--radius-l);
+    background: rgba(16, 28, 50, 0.6);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
   }
-  .terminal-barra i { width: 10px; height: 10px; border-radius: 50%; background: var(--cmd-line-2); }
-  .terminal-barra span { margin-left: 0.5rem; }
-  .terminal-corpo { display: grid; gap: 2rem; padding: clamp(1.25rem, 3vw, 2rem); }
-  @media (min-width: 900px) {
-    .terminal-corpo { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); align-items: end; }
-  }
-  h2 { font-size: var(--step-4); max-width: 16ch; font-weight: 750; letter-spacing: -0.03em; }
-  .terminal-corpo p { margin: 0; max-width: 52ch; }
-  .canais { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--cmd-line); }
+  .canais li + li { border-top: 1px solid var(--cmd-line); }
   .canais a {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     gap: 1rem;
-    min-height: 52px;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--cmd-line);
+    padding: 0.85rem 0;
     text-decoration: none;
-    font-weight: 500;
+    color: var(--cmd-text);
   }
   .canais a:hover .valor { color: var(--signal-text); }
-  .valor { color: var(--cmd-muted); overflow-wrap: anywhere; text-align: right; }
-  .todos { margin-top: 1rem !important; font-size: 0.95rem; }
+  .rotulo { font-weight: 600; }
+  .valor { font-family: var(--font-mono); font-size: 0.85rem; color: var(--cmd-muted); overflow-wrap: anywhere; text-align: right; }
 </style>

@@ -81,3 +81,8 @@ As demonstrações **não** reproduzem quantidades, indicadores, fórmulas ou re
 | **Foto opcional** (`Dados gerais › Foto profissional` no painel) | Sem foto, a abertura mostra uma ilustração de rotas em SVG; nunca uma pessoa genérica ou gerada por IA. |
 | **Capas dos projetos** (`npm run capas`) | Fotos das próprias demonstrações em código (dados fictícios, com selo no cartão); prints reais dos painéis da Profarma continuam proibidos. |
 | **Entrada suave dos blocos** (`src/scripts/revelar.ts`) | Só com JavaScript e sem "reduzir movimento"; sem script, tudo aparece normalmente. |
+| **Tema escuro como padrão** (`body.escuro`), com seções alternadas (`.secao-azul`, `.cmd`, `.claro`) | Pedido do Vitor (nov/2026): visual premium, cinematográfico, sem site predominantemente branco. Cartões de vidro, diagonais e destaques laranja. |
+| **Imagens de fundo próprias, geradas por código** (`scripts/imagens/`) | Sem gerador de imagens por IA disponível; as imagens são originais, sem texto e sem marca d'água. Fotos de banco ou geradas por IA só entram com origem e licença conhecidas. |
+| **Logotipos de tecnologias** (Simple Icons, CC0) | Power BI e Excel não têm ícone livre: pictogramas próprios nas cores das ferramentas. Cada item diz se foi usado no trabalho ou em formação. |
+| **Formação e Certificados com páginas próprias** | `/formacao/` e `/certificados/`; os antigos endereços `/sobre/#formacao` e `/sobre/#cursos` levam a atalhos para elas. |
+| **Formulário de contato com `mailto:`** | Sem servidor nem serviço externo: valida os campos e abre o aplicativo de e-mail do visitante com a mensagem pronta. Limitação: quem não tem aplicativo de e-mail configurado precisa copiar o endereço. |

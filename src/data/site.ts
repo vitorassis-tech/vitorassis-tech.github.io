@@ -70,17 +70,14 @@ export const canaisVisiveis = (): Canal[] => canais.filter((c) => c.exibir && c.
 
 export const inicio = conteudo.inicio as Inicio;
 
-/**
- * Menu principal. Formação e Certificados apontam por enquanto para as seções da página Sobre;
- * na fase D do redesign passam a ter páginas próprias (/formacao/ e /certificados/).
- */
+/** Menu principal. */
 export const navegacao = [
   { href: '/', rotulo: 'Início' },
   { href: '/sobre/', rotulo: 'Sobre' },
   { href: '/experiencia/', rotulo: 'Experiência' },
   { href: '/projetos/', rotulo: 'Projetos' },
-  { href: '/sobre/#formacao', rotulo: 'Formação' },
-  { href: '/sobre/#cursos', rotulo: 'Certificados' },
+  { href: '/formacao/', rotulo: 'Formação' },
+  { href: '/certificados/', rotulo: 'Certificados' },
   { href: '/contato/', rotulo: 'Contato' },
 ] as const;
 

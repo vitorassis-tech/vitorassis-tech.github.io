@@ -1,0 +1,56 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#07101f}canvas{display:block}</style></head>
+<body><canvas id="c"></canvas>
+<script>
+// Formação: capelo e livros em traço luminoso sobre rede de conhecimento.
+const q = new URLSearchParams(location.search);
+const W = +q.get('w') || 2560, H = +q.get('h') || 1440;
+const cv = document.getElementById('c'); cv.width = W; cv.height = H;
+const g = cv.getContext('2d');
+let s = 31; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+let bg = g.createLinearGradient(0, 0, W, H);
+bg.addColorStop(0, '#081329'); bg.addColorStop(0.6, '#0f2650'); bg.addColorStop(1, '#17365d');
+g.fillStyle = bg; g.fillRect(0, 0, W, H);
+let lz = g.createRadialGradient(W * 0.7, H * 0.45, 0, W * 0.7, H * 0.45, W * 0.45);
+lz.addColorStop(0, 'rgba(80,150,255,0.25)'); lz.addColorStop(1, 'rgba(80,150,255,0)');
+g.fillStyle = lz; g.fillRect(0, 0, W, H);
+// rede de pontos
+const nos = Array.from({ length: 110 }, () => [W * 0.3 + rnd() * W * 0.75, rnd() * H]);
+g.lineWidth = 1;
+for (let i = 0; i < nos.length; i++) for (let j = i + 1; j < nos.length; j++) {
+  const d = Math.hypot(nos[i][0] - nos[j][0], nos[i][1] - nos[j][1]);
+  if (d < 210) { g.strokeStyle = `rgba(130,185,255,${0.22 * (1 - d / 210)})`; g.beginPath(); g.moveTo(...nos[i]); g.lineTo(...nos[j]); g.stroke(); }
+}
+for (const [x, y] of nos) { g.fillStyle = rnd() < 0.15 ? 'rgba(255,150,70,0.9)' : 'rgba(170,210,255,0.7)'; g.beginPath(); g.arc(x, y, 2 + rnd() * 2.5, 0, Math.PI * 2); g.fill(); }
+// faixa diagonal laranja
+g.save(); g.globalCompositeOperation = 'lighter'; g.translate(W * 0.42, H / 2); g.rotate(0.5);
+let f = g.createLinearGradient(-180, 0, 180, 0); f.addColorStop(0, 'rgba(255,121,31,0)'); f.addColorStop(0.5, 'rgba(255,121,31,0.2)'); f.addColorStop(1, 'rgba(255,121,31,0)');
+g.fillStyle = f; g.fillRect(-180, -H, 360, 2 * H); g.fillStyle = 'rgba(255,170,100,0.5)'; g.fillRect(-1.5, -H, 3, 2 * H);
+g.restore();
+// traço luminoso
+function brilho(cor, larg, fn) {
+  g.save(); g.lineJoin = 'round'; g.lineCap = 'round'; g.shadowColor = cor;
+  for (const [lw, blur, a] of [[larg * 4, 40, 0.25], [larg, 16, 1]]) { g.shadowBlur = blur; g.strokeStyle = cor.replace('1)', `${a})`); g.lineWidth = lw; g.beginPath(); fn(); g.stroke(); }
+  g.restore();
+}
+const cx = W * 0.72, cy = H * 0.3, k = H * 0.165;
+// capelo: losango no topo
+brilho('rgba(225,238,255,1)', 6, () => { g.moveTo(cx - 2 * k, cy); g.lineTo(cx, cy - 0.85 * k); g.lineTo(cx + 2 * k, cy); g.lineTo(cx, cy + 0.85 * k); g.closePath(); });
+// base do capelo
+brilho('rgba(225,238,255,1)', 6, () => { g.moveTo(cx - 1.25 * k, cy + 0.35 * k); g.lineTo(cx - 1.25 * k, cy + 1.25 * k); g.quadraticCurveTo(cx, cy + 1.85 * k, cx + 1.25 * k, cy + 1.25 * k); g.lineTo(cx + 1.25 * k, cy + 0.35 * k); });
+// borla laranja
+brilho('rgba(255,140,60,1)', 6, () => { g.moveTo(cx, cy); g.lineTo(cx + 1.65 * k, cy + 0.15 * k); g.lineTo(cx + 1.65 * k, cy + 1.3 * k); });
+g.fillStyle = '#ff8a3d'; g.beginPath(); g.arc(cx + 1.65 * k, cy + 1.42 * k, 0.12 * k, 0, Math.PI * 2); g.fill();
+g.fillStyle = '#fff'; g.beginPath(); g.arc(cx, cy, 0.07 * k, 0, Math.PI * 2); g.fill();
+// livros abaixo
+const by = cy + 2.3 * k;
+const livros = [[-1.55, 3.1, 'rgba(130,190,255,1)'], [-1.35, 2.75, 'rgba(255,140,60,1)'], [-1.5, 3.0, 'rgba(225,238,255,1)']];
+livros.forEach(([dx, larg, cor], i) => {
+  const y = by + i * 0.34 * k;
+  brilho(cor, 4, () => { g.roundRect(cx + dx * k, y, larg * k, 0.26 * k, 8); });
+});
+let ov = g.createLinearGradient(0, 0, W * 0.55, 0);
+ov.addColorStop(0, 'rgba(6,12,24,0.88)'); ov.addColorStop(1, 'rgba(6,12,24,0)');
+if (q.get('esq') !== '0') { g.fillStyle = ov; g.fillRect(0, 0, W, H); }
+document.title = 'pronto';
+</script></body></html>

@@ -7,6 +7,8 @@ const ROTAS = [
   '/experiencia/',
   '/projetos/',
   '/contato/',
+  '/formacao/',
+  '/certificados/',
   '/projetos/torre-controle-expedicao/',
   '/projetos/painel-logistica-varejo/',
   '/projetos/simulacao-torre-controle/',
@@ -154,8 +156,8 @@ test.describe('navegação e acessibilidade', () => {
     const nav = page.locator('#menu-principal');
     await expect(nav.locator('ul a')).toHaveText(['Início', 'Sobre', 'Experiência', 'Projetos', 'Formação', 'Certificados', 'Contato']);
     await nav.getByRole('link', { name: 'Certificados' }).click();
-    await expect(page).toHaveURL(/\/sobre\/#cursos$/);
-    await expect(page.locator('#cursos')).toBeInViewport();
+    await expect(page).toHaveURL(/\/certificados\/$/);
+    await expect(page.locator('#menu-principal a[aria-current="page"]')).toHaveText('Certificados');
     // Sem public/curriculo/vitor-assis-curriculo.pdf, nada de botão de download sem arquivo
     await expect(page.locator('a[download]')).toHaveCount(0);
     await expect(nav.getByRole('link', { name: 'Vamos conversar' })).toHaveAttribute('href', /\/contato\/$/);
@@ -197,13 +199,13 @@ test.describe('conteúdo profissional (E1–E8)', () => {
     expect(valores).toHaveLength(4);
     expect(valores[0]).toMatch(/^\d+\+$/);
     await expect(page.locator('.indicadores')).toContainText('projetos profissionais');
-    // Foto real cadastrada no painel: carrega e tem descrição; sem ela, a abertura mostra a ilustração
+    // Foto real cadastrada no painel: carrega e tem descrição; sem ela, a abertura mostra só a imagem do globo
     const foto = page.locator('.hero .foto img');
     if (await foto.count()) {
       await expect(foto).toHaveAttribute('alt', /Vitor Assis/);
       await expect.poll(() => foto.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
     } else {
-      await expect(page.locator('.hero .ilustracao')).toBeVisible();
+      await expect(page.locator('.hero .hero-fundo')).toBeVisible();
     }
     // Inteligência Artificial aparece como "em formação"
     await expect(page.locator('.areas li.formacao')).toContainText('em formação');
@@ -501,6 +503,22 @@ test.describe('laboratório de roteirização', () => {
     const alturas = await page.locator('.mapa svg text[data-ordem]').evaluateAll((ts) => ts.map((t) => t.getBoundingClientRect().height));
     expect(alturas.length).toBeGreaterThan(0);
     expect(Math.min(...alturas)).toBeGreaterThanOrEqual(10.5);
+  });
+});
+
+test.describe('formação e certificados', () => {
+  test('páginas próprias mostram os dados do conteúdo, e os links antigos da página Sobre continuam funcionando', async ({ page }) => {
+    await page.goto('/formacao/');
+    await expect(page.locator('h1')).toHaveText('Formação acadêmica');
+    await expect(page.locator('main')).toContainText('Graduação Tecnológica em Logística');
+    await expect(page.locator('main')).toContainText('Técnico em Qualidade');
+    await page.goto('/certificados/');
+    await expect(page.locator('main')).toContainText('Programação em Python');
+    await expect(page.locator('main')).toContainText('168h');
+    // Endereços antigos (/sobre/#formacao e /sobre/#cursos) levam aos atalhos para as páginas novas
+    await page.goto('/sobre/#cursos');
+    await expect(page.locator('#cursos')).toHaveAttribute('href', /\/certificados\/$/);
+    await expect(page.locator('#formacao')).toHaveAttribute('href', /\/formacao\/$/);
   });
 });
 

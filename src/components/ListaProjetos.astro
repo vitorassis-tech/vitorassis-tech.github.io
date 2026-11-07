@@ -93,14 +93,14 @@ const usadas = categoriasEmUso();
     padding: 0.4rem 0.95rem;
     border-radius: 999px;
     border: 1.5px solid var(--line-strong);
-    background: var(--surface);
+    background: rgba(255, 255, 255, 0.04);
     color: var(--ink);
     font: 500 0.95rem var(--font-body);
     cursor: pointer;
     transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease);
   }
   .filtro:hover { border-color: var(--navy); }
-  .filtro[aria-pressed='true'] { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .filtro[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--navy-900); }
   .contagem {
     font-size: 0.8rem;
     font-variant-numeric: tabular-nums;
@@ -109,7 +109,7 @@ const usadas = categoriasEmUso();
     background: var(--navy-wash);
     color: var(--navy);
   }
-  .filtro[aria-pressed='true'] .contagem { background: rgba(255, 255, 255, 0.18); color: #fff; }
+  .filtro[aria-pressed='true'] .contagem { background: rgba(16, 28, 50, 0.18); color: var(--navy-900); }
 
   .itens {
     list-style: none;

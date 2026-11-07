@@ -1,0 +1,74 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#07101f}canvas{display:block}</style></head>
+<body><canvas id="c"></canvas>
+<script>
+// Rodovia à noite em perspectiva, com rastros de luz dos veículos e a cidade no horizonte.
+const q = new URLSearchParams(location.search);
+const W = +q.get('w') || 2560, H = +q.get('h') || 1440;
+const cv = document.getElementById('c'); cv.width = W; cv.height = H;
+const g = cv.getContext('2d');
+let s = 21; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+const VX = W * 0.62, VY = H * 0.46; // ponto de fuga
+// céu
+let ceu = g.createLinearGradient(0, 0, 0, VY);
+ceu.addColorStop(0, '#070f22'); ceu.addColorStop(0.7, '#10295a'); ceu.addColorStop(1, '#2a4c8a');
+g.fillStyle = ceu; g.fillRect(0, 0, W, VY);
+let sol = g.createRadialGradient(VX, VY, 0, VX, VY, W * 0.4);
+sol.addColorStop(0, 'rgba(255,150,70,0.45)'); sol.addColorStop(0.35, 'rgba(255,121,31,0.12)'); sol.addColorStop(1, 'rgba(255,121,31,0)');
+g.fillStyle = sol; g.fillRect(0, 0, W, VY + 40);
+for (let i = 0; i < 260; i++) { g.fillStyle = `rgba(210,225,255,${0.1 + rnd() * 0.4})`; g.fillRect(rnd() * W, rnd() * VY * 0.6, 1.5, 1.5); }
+// cidade no horizonte
+for (let i = 0; i < 90; i++) {
+  const x = rnd() * W, w = 20 + rnd() * 70, dist = Math.abs(x - VX) / W;
+  const h = (40 + rnd() * 260) * (1.2 - dist);
+  g.fillStyle = `rgba(${10 + rnd() * 10},${22 + rnd() * 15},${48 + rnd() * 25},0.95)`;
+  g.fillRect(x, VY - h, w, h + 2);
+  for (let j = 0; j < h / 9; j++) if (rnd() < 0.35) { g.fillStyle = rnd() < 0.7 ? 'rgba(140,190,255,0.55)' : 'rgba(255,170,90,0.6)'; g.fillRect(x + 4 + rnd() * (w - 8), VY - h + 6 + j * 9, 3, 2); }
+}
+// chão
+let chao = g.createLinearGradient(0, VY, 0, H);
+chao.addColorStop(0, '#0b1b3a'); chao.addColorStop(1, '#050b17');
+g.fillStyle = chao; g.fillRect(0, VY, W, H - VY);
+// pista
+const pista = (t) => [VX + (t) * (W * 1.1), H * 1.05];
+g.fillStyle = '#0a1426';
+g.beginPath(); g.moveTo(VX - 6, VY); g.lineTo(VX + 6, VY); g.lineTo(W * 1.5, H); g.lineTo(-W * 0.35, H); g.closePath(); g.fill();
+// faixas tracejadas
+g.strokeStyle = 'rgba(220,230,255,0.55)';
+for (const k of [-0.5, 0, 0.5]) {
+  for (let i = 0; i < 26; i++) {
+    const t1 = Math.pow(i / 26, 2.2), t2 = Math.pow((i + 0.45) / 26, 2.2);
+    const xe = VX + (k * W * 0.9 + (k + 0.15) * 0) , xb = k < 0 ? -W * 0.35 + (W * 1.85) * (k + 1) / 2 : 0;
+    const bx = VX + k * W * 1.05;
+    const p1 = [VX + (bx - VX) * t1, VY + (H - VY) * t1], p2 = [VX + (bx - VX) * t2, VY + (H - VY) * t2];
+    g.lineWidth = 1 + 7 * t2; g.beginPath(); g.moveTo(...p1); g.lineTo(...p2); g.stroke();
+  }
+}
+// rastros de luz
+g.save(); g.globalCompositeOperation = 'lighter';
+function rastro(bx, cor, larg, curva) {
+  for (const [lw, a] of [[larg * 6, 0.07], [larg * 2.5, 0.22], [larg, 0.95]]) {
+    g.strokeStyle = cor.replace('A', a); g.lineWidth = lw;
+    g.beginPath(); g.moveTo(VX, VY + 2);
+    g.quadraticCurveTo(VX + (bx - VX) * 0.4 + curva, VY + (H - VY) * 0.25, bx, H + 20); g.stroke();
+  }
+}
+for (let i = 0; i < 9; i++) rastro(VX - W * (0.12 + i * 0.07), 'rgba(255,121,31,A)', 3 + rnd() * 3, -40 - rnd() * 80);
+for (let i = 0; i < 9; i++) rastro(VX + W * (0.18 + i * 0.07), 'rgba(140,200,255,A)', 3 + rnd() * 3, 40 + rnd() * 80);
+for (let i = 0; i < 4; i++) rastro(VX - W * (0.75 + i * 0.1), 'rgba(255,90,40,A)', 2.5, -120);
+g.restore();
+// postes de luz
+for (let i = 1; i < 12; i++) {
+  const t = Math.pow(i / 12, 2);
+  const x = VX + (-W * 0.6 - VX) * t, y = VY + (H * 0.5) * t;
+  const h = 14 + 420 * t;
+  g.strokeStyle = 'rgba(40,60,100,0.9)'; g.lineWidth = 1 + 6 * t; g.beginPath(); g.moveTo(x, y); g.lineTo(x, y - h); g.stroke();
+  let l = g.createRadialGradient(x, y - h, 0, x, y - h, 10 + 90 * t); l.addColorStop(0, 'rgba(255,190,120,0.9)'); l.addColorStop(1, 'rgba(255,150,70,0)');
+  g.fillStyle = l; g.beginPath(); g.arc(x, y - h, 10 + 90 * t, 0, Math.PI * 2); g.fill();
+}
+// vinheta e lado esquerdo mais escuro para texto
+let ov = g.createLinearGradient(0, 0, W * 0.6, 0);
+ov.addColorStop(0, 'rgba(6,12,24,0.85)'); ov.addColorStop(1, 'rgba(6,12,24,0)');
+if (q.get('esq') !== '0') { g.fillStyle = ov; g.fillRect(0, 0, W, H); }
+document.title = 'pronto';
+</script></body></html>

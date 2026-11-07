@@ -1,0 +1,150 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CabecalhoPagina from '../components/CabecalhoPagina.astro';
+import FaixaContato from '../components/FaixaContato.astro';
+import SeloInstituicao from '../components/SeloInstituicao.astro';
+import { cursos } from '../data/trajetoria';
+import { mesAno, numero, url } from '../lib/formato';
+
+// Conteúdo em src/content/cursos.json (painel: Cursos). Ordem definida no painel.
+const andamento = cursos.filter((c) => c.status === 'andamento');
+const concluidos = cursos.filter((c) => c.status === 'concluido');
+const horas = concluidos.reduce((s, c) => s + (c.cargaHoraria ?? 0), 0);
+const instituicoes = new Set(concluidos.map((c) => c.instituicao)).size;
+const resumo = [
+  { valor: String(concluidos.length), rotulo: 'cursos concluídos' },
+  { valor: `${numero(horas)}h`, rotulo: 'de carga horária concluída' },
+  { valor: String(instituicoes), rotulo: instituicoes === 1 ? 'instituição' : 'instituições' },
+  { valor: String(andamento.length), rotulo: 'em andamento' },
+];
+---
+
+<BaseLayout
+  title="Certificados"
+  description="Cursos e certificados de Vitor Assis em Power BI, banco de dados, Python, Excel e Inteligência Artificial, com instituição, carga horária e data de conclusão."
+>
+  <CabecalhoPagina
+    imagem="formacao"
+    foco="70% 40%"
+    kicker="Certificados"
+    titulo="Cursos e certificações"
+    introducao="Cursos livres e de qualificação que sustentam a migração da operação logística para dados, BI e tecnologia. Carga horária e datas conforme os certificados."
+  >
+    <ul class="resumo" aria-label="Resumo dos cursos">
+      {
+        resumo.map((r) => (
+          <li>
+            <span class="valor">{r.valor}</span>
+            <span class="rotulo">{r.rotulo}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </CabecalhoPagina>
+
+  {
+    andamento.length > 0 && (
+      <section class="container secao" aria-labelledby="andamento-titulo">
+        <h2 id="andamento-titulo" class="subtitulo">Em andamento</h2>
+        <ul class="grade">
+          {andamento.map((c) => (
+            <li class="cartao card andamento revelar">
+              <span class="estado"><i aria-hidden="true" />Em andamento</span>
+              <h3>{c.curso}</h3>
+              <SeloInstituicao nome={c.instituicao} logo={c.logo} />
+              <p class="detalhes">
+                <span>{c.cargaHoraria ? `${c.cargaHoraria}h` : 'Carga horária não informada'}</span>
+                <span>Previsão {mesAno(c.data)}</span>
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="container secao" aria-labelledby="concluidos-titulo">
+    <h2 id="concluidos-titulo" class="subtitulo">Concluídos</h2>
+    <ul class="grade">
+      {
+        concluidos.map((c) => (
+          <li class="cartao card revelar">
+            <span class="estado concluido"><i aria-hidden="true" />Concluído</span>
+            <h3>{c.curso}</h3>
+            <SeloInstituicao nome={c.instituicao} logo={c.logo} />
+            <p class="detalhes">
+              <span>{c.cargaHoraria ? `${c.cargaHoraria}h` : 'Carga horária não informada'}</span>
+              <span>{mesAno(c.data)}</span>
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="nota muted">
+      A formação técnica e superior está na página <a href={url('/formacao/')}>Formação</a>.
+    </p>
+  </section>
+
+  <FaixaContato />
+</BaseLayout>
+
+<style>
+  .resumo {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    max-width: 52rem;
+    border: 1px solid var(--cmd-line);
+    border-radius: var(--radius-l);
+    overflow: hidden;
+    background: var(--cmd-line);
+  }
+  @media (min-width: 760px) { .resumo { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .resumo li { display: grid; gap: 0.15rem; padding: 1rem 1.15rem; background: rgba(16, 28, 50, 0.92); }
+  .resumo .valor { font: 800 var(--step-3) / 1 var(--font-display); color: #fff; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .resumo .rotulo { font-size: 0.9rem; color: var(--cmd-muted); }
+
+  .secao { margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+  .subtitulo { font-size: var(--step-2); margin-bottom: 1.25rem; }
+  .grade {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  }
+  .cartao { display: grid; align-content: start; justify-items: start; gap: 0.6rem; padding: 1.2rem 1.3rem 1.25rem; border-top: 3px solid rgba(120, 170, 235, 0.55); }
+  .cartao.andamento { border-top-color: var(--accent); }
+  .cartao h3 { font-size: var(--step-1); margin: 0; letter-spacing: -0.015em; }
+  .estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+  .estado i { width: 0.6rem; height: 0.6rem; border-radius: 50%; border: 2px dashed var(--accent); }
+  .estado.concluido { color: var(--navy); }
+  .estado.concluido i { border: 0; background: var(--navy); }
+  .detalhes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    margin: 0.15rem 0 0;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--line);
+    width: 100%;
+    font-size: 0.92rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .detalhes span:first-child { font-weight: 600; color: var(--ink); }
+  .nota { margin-top: 1.5rem; }
+</style>

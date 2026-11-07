@@ -4,7 +4,7 @@ import RotaCarreira from '../components/RotaCarreira.astro';
 import CartaoProjeto from '../components/CartaoProjeto.astro';
 import VitrineDemos from '../components/VitrineDemos.astro';
 import FaixaContato from '../components/FaixaContato.astro';
-import IlustracaoRotas from '../components/IlustracaoRotas.astro';
+import Tecnologias from '../components/Tecnologias.astro';
 import { site, inicio, CURRICULO, temCurriculo } from '../data/site';
 import { projetos } from '../data/projetos';
 import { experiencias, formacaoAcademica, cursos } from '../data/trajetoria';
@@ -26,10 +26,10 @@ const projetosTrabalho = projetos.filter((p) => p.natureza === 'trabalho').lengt
 const cursosConcluidos = cursos.filter((c) => c.status === 'concluido').length;
 const tecnicosConcluidos = formacaoAcademica.filter((f) => f.status === 'concluido' && /^Técnico/i.test(f.curso)).length;
 const indicadores = [
-  { valor: `${anosLogistica}+`, rotulo: 'anos na logística', detalhe: `${empresaLogistica.nomeCurto}, desde ${mesAno(empresaLogistica.inicio)}` },
-  { valor: String(projetosTrabalho), rotulo: projetosTrabalho === 1 ? 'projeto profissional' : 'projetos profissionais', detalhe: 'dashboards em Power BI' },
-  { valor: String(cursosConcluidos), rotulo: 'cursos concluídos', detalhe: 'Python, SQL, BI e mais' },
-  { valor: String(tecnicosConcluidos), rotulo: tecnicosConcluidos === 1 ? 'curso técnico' : 'cursos técnicos', detalhe: 'Logística e Qualidade, concluídos' },
+  { icone: 'maleta', valor: `${anosLogistica}+`, rotulo: 'anos na logística', detalhe: `${empresaLogistica.nomeCurto}, desde ${mesAno(empresaLogistica.inicio)}` },
+  { icone: 'grafico', valor: String(projetosTrabalho), rotulo: projetosTrabalho === 1 ? 'projeto profissional' : 'projetos profissionais', detalhe: 'dashboards em Power BI' },
+  { icone: 'certificado', valor: String(cursosConcluidos), rotulo: 'cursos concluídos', detalhe: 'Python, SQL, BI e mais' },
+  { icone: 'capelo', valor: String(tecnicosConcluidos), rotulo: tecnicosConcluidos === 1 ? 'curso técnico' : 'cursos técnicos', detalhe: 'Logística e Qualidade' },
 ];
 
 const cargos = empresaLogistica.cargos;
@@ -37,22 +37,50 @@ const graduacao = formacaoAcademica.find((f) => f.status === 'andamento');
 const formacaoConcluida = formacaoAcademica.filter((f) => f.status === 'concluido' && /^Técnico/i.test(f.curso));
 const cursosAndamento = cursos.filter((c) => c.status === 'andamento');
 
-/* Ícones simples, monocromáticos, para a faixa de ferramentas (escolhidos pelo nome) */
-const icone = (texto: string) => {
-  const t = texto.toLowerCase();
-  if (t.includes('power bi')) return 'barras';
-  if (t.includes('roadnet') || t.includes('rota')) return 'rota';
-  if (t.includes('banco') || t.includes('sql')) return 'banco';
-  if (t.includes('python')) return 'codigo';
-  if (t.includes('excel')) return 'grade';
-  return 'ponto';
+/* Ícones de linha (24 × 24), usados nas áreas, indicadores e frentes */
+const ICONES: Record<string, string> = {
+  caminhao: 'M3 6h11v9H3zM14 9h4l3 3v3h-7M7 18.5a1.5 1.5 0 1 0 0-.01M17 18.5a1.5 1.5 0 1 0 0-.01',
+  grafico: 'M4 20V10M10 20V4M16 20v-7M22 20H2',
+  codigo: 'M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16',
+  banco: 'M4.5 5.5a7.5 2.8 0 1 0 15 0a7.5 2.8 0 1 0-15 0M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8',
+  ia: 'M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3M6 6h12v12H6zM9.5 9.5h5v5h-5z',
+  maleta: 'M3 8h18v12H3zM8 8V5h8v3M3 13h18',
+  certificado: 'M5 3h14v12H5zM9 8h6M9 11h4M10 15l-1.5 6 3.5-2 3.5 2L14 15',
+  capelo: 'M2 9l10-5 10 5-10 5zM6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5M22 9v6',
+  operacao: 'M3 21V9l9-6 9 6v12M8 21v-6h8v6M8 12h8',
+  dados: 'M3 3v18h18M7 15l4-4 3 3 6-7',
 };
+const iconeArea = (nome: string) => {
+  const n = nome.toLowerCase();
+  if (n.includes('logística') || n.includes('transport')) return 'caminhao';
+  if (n.includes('dados e bi') || n.includes('análise')) return 'grafico';
+  if (n.includes('python')) return 'codigo';
+  if (n.includes('banco') || n.includes('sql')) return 'banco';
+  if (n.includes('intelig')) return 'ia';
+  return 'grafico';
+};
+const iconeFrente = ['operacao', 'dados', 'capelo'];
 ---
 
 <BaseLayout title={site.nome}>
   <!-- ============ Abertura ============ -->
-  <div class="cmd abertura">
-    <section class="container hero" aria-labelledby="hero-titulo">
+  <section class="hero" aria-labelledby="hero-titulo">
+    <picture>
+      <source media="(max-width: 759px)" srcset={url('/img/fundos/hero-globo-movel.webp')} width="1080" height="1500" />
+      <img
+        class="hero-fundo"
+        src={url('/img/fundos/hero-globo-1600.webp')}
+        srcset={`${url('/img/fundos/hero-globo-1600.webp')} 1600w, ${url('/img/fundos/hero-globo.webp')} 2560w`}
+        sizes="100vw"
+        alt=""
+        width="2560"
+        height="1440"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
+    <div class="container hero-grade">
       <div class="hero-texto">
         <p class="selo-topo"><i aria-hidden="true"></i>Logística · Dados · Tecnologia</p>
         <h1 id="hero-titulo" class="nome">
@@ -60,83 +88,95 @@ const icone = (texto: string) => {
           <span class="visually-hidden">: {inicio.posicionamento}</span>
         </h1>
         <p class="posicionamento" aria-hidden="true">{inicio.posicionamento}</p>
-        <p class="frase">
-          {fraseInicio}<em>{fraseDestaque}</em>{frasePontuacao}
-        </p>
+        <p class="frase">{fraseInicio}<em>{fraseDestaque}</em>{frasePontuacao}</p>
         <p class="subtitulo">{inicio.subtitulo}</p>
         <div class="cta">
-          <a class="btn btn-primary" href={url('/projetos/')}>
-            Conheça meu portfólio
+          <a class="btn btn-primary" href={url('/sobre/')}>
+            Conheça minha trajetória
             <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
           </a>
+          <a class="btn btn-linha" href={url('/projetos/')}>Explore meus projetos</a>
           {
-            curriculo ? (
+            curriculo && (
               <a class="btn btn-linha" href={url(CURRICULO)} download>
                 Baixar currículo
                 <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2v8m0 0 3.5-3.5M8 10 4.5 6.5M3 13.5h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
               </a>
-            ) : (
-              <a class="btn btn-linha" href="#demonstracoes">Experimentar as demonstrações</a>
             )
           }
         </div>
       </div>
 
-      <div class="hero-visual">
+      <div class="hero-lado">
         {
-          site.foto ? (
+          site.foto && (
             <figure class="foto">
-              <img src={url(site.foto.arquivo)} alt={site.foto.alt} width="960" height="1200" loading="eager" fetchpriority="high" decoding="async" />
+              <img src={url(site.foto.arquivo)} alt={site.foto.alt} width="960" height="1200" loading="eager" decoding="async" />
             </figure>
-          ) : (
-            <div class="ilustracao-caixa"><IlustracaoRotas /></div>
           )
         }
-        <aside class="areas painel-vidro" aria-labelledby="areas-titulo">
+        <aside class="areas vidro" aria-labelledby="areas-titulo">
           <p id="areas-titulo" class="areas-titulo">Áreas de atuação</p>
           <ul>
             {
               inicio.areas.map((a) => (
                 <li class:list={{ formacao: a.formacao }}>
-                  <i aria-hidden="true" />
-                  {a.nome}
-                  {a.formacao && <span class="em-formacao">em formação</span>}
+                  <span class="area-icone" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20"><path d={ICONES[iconeArea(a.nome)]} fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  </span>
+                  <span>
+                    {a.nome}
+                    {a.formacao && <span class="em-formacao">em formação</span>}
+                  </span>
                 </li>
               ))
             }
           </ul>
         </aside>
       </div>
-    </section>
-  </div>
+    </div>
 
-  <!-- ============ Indicadores (calculados) ============ -->
-  <section class="container indicadores-secao" aria-label="Trajetória em números">
-    <ul class="indicadores card">
-      {
-        indicadores.map((i) => (
-          <li>
-            <span class="valor">{i.valor}</span>
-            <span class="rotulo">{i.rotulo}</span>
-            <span class="detalhe">{i.detalhe}</span>
-          </li>
-        ))
-      }
-    </ul>
+    <div class="container">
+      <ul class="indicadores vidro" aria-label="Trajetória em números">
+        {
+          indicadores.map((i) => (
+            <li>
+              <span class="ind-icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="26" height="26"><path d={ICONES[i.icone]} fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </span>
+              <span class="ind-texto">
+                <span class="valor">{i.valor}</span>
+                <span class="rotulo">{i.rotulo}</span>
+                <span class="detalhe">{i.detalhe}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </section>
 
   <!-- ============ Sobre + Experiência ============ -->
-  <section class="section container sobre" aria-labelledby="sobre-titulo">
-    <div class="sobre-grade">
+  <section class="section secao-azul diagonal sobre" aria-labelledby="sobre-titulo">
+    <div class="container sobre-grade">
       <div class="revelar">
         <p class="kicker">Sobre mim</p>
-        <h2 id="sobre-titulo">Conectando logística, dados e tecnologia.</h2>
+        <h2 id="sobre-titulo">Conectando logística, dados e <em class="laranja">tecnologia</em>.</h2>
         <p class="sobre-texto">{inicio.apresentacao}</p>
-        <a class="link-seta" href={url('/sobre/')}>Saiba mais sobre mim</a>
+        <a class="btn btn-ghost" href={url('/sobre/')}>
+          Saiba mais sobre mim
+          <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </a>
       </div>
+      <figure class="sobre-imagem revelar">
+        <img src={url('/img/fundos/sobre-armazem-1600.webp')} alt="" width="1600" height="1000" loading="lazy" decoding="async" />
+      </figure>
+    </div>
+
+    <div class="container exp-grade">
       <div class="experiencia card revelar" aria-labelledby="exp-titulo">
         <div class="exp-cab">
-          <p class="kicker" id="exp-titulo">Experiência</p>
+          <p class="kicker" id="exp-titulo">Experiência profissional</p>
           <p class="exp-empresa">{empresaLogistica.nome} <span>{periodo(empresaLogistica.inicio, empresaLogistica.fim)}</span></p>
         </div>
         <ol class="cargos">
@@ -151,40 +191,44 @@ const icone = (texto: string) => {
         </ol>
         <a class="link-seta" href={url('/experiencia/')}>Ver experiência completa</a>
       </div>
-    </div>
-
-    <div class="frentes">
-      {
-        inicio.frentes.map((f) => (
-          <article class:list={['frente revelar', { formacao: f.formacao }]}>
-            <p class="frente-rotulo">{f.titulo}</p>
-            <p>{f.texto}</p>
-          </article>
-        ))
-      }
+      <div class="frentes">
+        {
+          inicio.frentes.map((f, i) => (
+            <article class:list={['frente card revelar', { formacao: f.formacao }]}>
+              <span class="frente-icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d={ICONES[iconeFrente[i] ?? 'dados']} fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </span>
+              <p class="frente-rotulo">{f.titulo}</p>
+              <p>{f.texto}</p>
+            </article>
+          ))
+        }
+      </div>
     </div>
   </section>
 
   <!-- ============ Projetos ============ -->
-  <section class="section container" aria-labelledby="projetos-titulo">
-    <div class="cabecalho-secao">
-      <div>
-        <p class="kicker">Projetos</p>
-        <h2 id="projetos-titulo">Soluções para desafios reais de logística e dados.</h2>
-        <p class="muted">Cada projeto informa se é profissional, acadêmico ou demonstração com dados fictícios.</p>
+  <section class="section diagonal projetos-secao" aria-labelledby="projetos-titulo">
+    <div class="container">
+      <div class="cabecalho-secao">
+        <div>
+          <p class="kicker">Meus projetos</p>
+          <h2 id="projetos-titulo">Soluções para desafios reais de <em class="laranja">logística e dados</em>.</h2>
+          <p class="muted">Cada projeto informa se é profissional, acadêmico ou demonstração com dados fictícios.</p>
+        </div>
+        <a class="btn btn-ghost" href={url('/projetos/')}>Ver todos os {projetos.length} projetos</a>
       </div>
-      <a class="btn btn-ghost" href={url('/projetos/')}>Ver todos os {projetos.length} projetos</a>
+      <ul class="grade-projetos">
+        {destaques.map((p) => <li class="revelar"><CartaoProjeto projeto={p} /></li>)}
+      </ul>
     </div>
-    <ul class="grade-projetos">
-      {destaques.map((p) => <li class="revelar"><CartaoProjeto projeto={p} /></li>)}
-    </ul>
   </section>
 
   <!-- ============ Demonstrações ============ -->
   <section class="cmd section-cmd" id="demonstracoes" aria-labelledby="demos-titulo">
     <div class="container">
       <div class="section-head">
-        <p class="kicker kicker-escuro">Demonstrações interativas</p>
+        <p class="kicker">Demonstrações interativas</p>
         <h2 id="demos-titulo">Experimente, não só leia</h2>
         <p class="muted">Os dois painéis de Power BI que desenvolvi no trabalho, reconstruídos em código, e três demonstrações criadas para o portfólio. Tudo funciona no navegador, com dados fictícios e independentes da Profarma.</p>
       </div>
@@ -192,49 +236,42 @@ const icone = (texto: string) => {
     </div>
   </section>
 
-  <!-- ============ Ferramentas + Trajetória ============ -->
-  <section class="section container" aria-labelledby="ferramentas-titulo">
-    <div class="section-head">
-      <p class="kicker">Ferramentas</p>
-      <h2 id="ferramentas-titulo">Tecnologias com evidência</h2>
-      <p>Onde cada ferramenta foi usada. Lista completa, com a origem de cada competência, na página <a href={url('/sobre/#competencias')}>Sobre</a>.</p>
-    </div>
-    <ul class="ferramentas">
-      {
-        inicio.faixa.map((f) => (
-          <li class="card revelar">
-            <span class="ferramenta-icone" data-icone={icone(f.destaque)} aria-hidden="true" />
-            <span class="ferramenta-nome">{f.destaque}</span>
-            <span class="ferramenta-uso">{f.complemento}</span>
-          </li>
-        ))
-      }
-    </ul>
+  <!-- ============ Tecnologias + Trajetória ============ -->
+  <section class="section secao-azul" aria-labelledby="ferramentas-titulo">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">Tecnologias e habilidades</p>
+        <h2 id="ferramentas-titulo">Ferramentas que uso e estudo</h2>
+        <p class="muted">"No trabalho" indica uso na rotina profissional; "Em formação", cursos e projetos de estudo. Detalhes de cada competência na página <a href={url('/sobre/#competencias')}>Sobre</a>.</p>
+      </div>
+      <Tecnologias />
 
-    <div class="trajetoria cmd revelar">
-      <p class="trajetoria-cab">
-        <span class="trajetoria-titulo">Telemetria de carreira</span>
-        <span class="mono muted">atualizado em {mesAno(site.revisadoEm.slice(0, 7))}</span>
-      </p>
-      <div class="trajetoria-corpo"><RotaCarreira /></div>
+      <div class="trajetoria vidro revelar">
+        <p class="trajetoria-cab">
+          <span class="trajetoria-titulo">Telemetria de carreira</span>
+          <span class="mono muted">atualizado em {mesAno(site.revisadoEm.slice(0, 7))}</span>
+        </p>
+        <div class="trajetoria-corpo"><RotaCarreira /></div>
+      </div>
     </div>
   </section>
 
-  <!-- ============ Formação ============ -->
-  <section class="section container formacao" aria-labelledby="formacao-titulo">
-    <div class="formacao-grade">
+  <!-- ============ Formação (seção clara, para respiro) ============ -->
+  <section class="section claro formacao" aria-labelledby="formacao-titulo">
+    <div class="container formacao-grade">
       <div class="revelar">
         <p class="kicker">Formação e certificados</p>
-        <h2 id="formacao-titulo">Aprendizado contínuo, com certificado.</h2>
+        <h2 id="formacao-titulo">Conhecimento contínuo para ir ainda mais <em class="laranja">longe</em>.</h2>
         <div class="formacao-links">
-          <a class="link-seta" href={url('/sobre/#formacao')}>Ver formação</a>
-          <a class="link-seta" href={url('/sobre/#cursos')}>Ver certificados</a>
+          <a class="btn btn-primary" href={url('/formacao/')}>Ver formação</a>
+          <a class="btn btn-ghost" href={url('/certificados/')}>Ver certificados</a>
         </div>
       </div>
       <ul class="formacao-cards">
         {
           graduacao && (
             <li class="card revelar">
+              <span class="f-icone" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d={ICONES.capelo} fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
               <span class="estado andamento">Em andamento</span>
               <span class="f-titulo">{graduacao.curso}</span>
               <span class="f-detalhe">{graduacao.instituicao}, previsão {mesAno(graduacao.data)}</span>
@@ -242,16 +279,16 @@ const icone = (texto: string) => {
           )
         }
         <li class="card revelar">
+          <span class="f-icone" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d={ICONES.maleta} fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
           <span class="estado">Concluídos</span>
           <span class="f-titulo">{formacaoConcluida.map((f) => f.curso).join(' e ')}</span>
           <span class="f-detalhe">{[...new Set(formacaoConcluida.map((f) => f.instituicao))].join(', ')}</span>
         </li>
         <li class="card revelar">
+          <span class="f-icone" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d={ICONES.certificado} fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
           <span class="estado">{cursosConcluidos} concluídos{cursosAndamento.length > 0 && ` · ${cursosAndamento.length} em andamento`}</span>
-          <span class="f-titulo">Cursos livres e de qualificação</span>
-          <span class="f-detalhe">
-            {cursos.filter((c) => c.status === 'concluido').slice(0, 3).map((c) => c.curso).join(' · ')}
-          </span>
+          <span class="f-titulo">Cursos e certificações</span>
+          <span class="f-detalhe">{cursos.filter((c) => c.status === 'concluido').slice(0, 3).map((c) => c.curso).join(' · ')}</span>
         </li>
       </ul>
     </div>
@@ -261,221 +298,215 @@ const icone = (texto: string) => {
 </BaseLayout>
 
 <style>
+  .laranja { font-style: normal; color: var(--signal); }
+  .claro .laranja { color: var(--accent-ink); }
+  .vidro {
+    border: 1px solid rgba(160, 190, 228, 0.22);
+    border-radius: var(--radius-l);
+    background: linear-gradient(180deg, rgba(23, 54, 93, 0.55), rgba(11, 20, 38, 0.72));
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
   /* ---------- Abertura ---------- */
-  .abertura { overflow: hidden; }
   .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: #060c18;
+    padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+  .hero-fundo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 70% 50%;
+  }
+  .hero-grade {
     display: grid;
     gap: 2.5rem;
-    padding-top: clamp(2.5rem, 6vw, 4.5rem);
-    padding-bottom: clamp(5.5rem, 9vw, 7rem); /* espaço para o cartão de indicadores sobreposto */
+    min-height: clamp(560px, 78vh, 760px);
     align-items: center;
+    padding-top: clamp(2.5rem, 6vw, 4rem);
+    padding-bottom: 2.5rem;
   }
-  @media (min-width: 980px) {
-    .hero { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 3rem; }
+  @media (min-width: 1080px) {
+    .hero-grade { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+    .hero-lado { justify-self: end; display: grid; justify-items: end; gap: 1rem; }
   }
   .selo-topo {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
     margin: 0 0 1.5rem;
-    padding: 0.35rem 0.9rem 0.35rem 0.75rem;
+    padding: 0.4rem 0.95rem 0.4rem 0.8rem;
     border: 1px solid var(--cmd-line-2);
     border-radius: var(--radius-pill);
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(16, 28, 50, 0.55);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     color: var(--cmd-text);
     font-size: 0.9rem;
   }
-  .selo-topo i { width: 8px; height: 8px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 4px var(--signal-soft); }
+  .selo-topo i { width: 8px; height: 8px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 4px var(--signal-soft), 0 0 12px var(--signal); }
   .nome {
-    font-size: clamp(3rem, 1.6rem + 6vw, 5.75rem);
+    font-size: clamp(3.1rem, 1.6rem + 6.4vw, 6.25rem);
     font-weight: 800;
     letter-spacing: -0.045em;
-    line-height: 0.98;
+    line-height: 0.96;
     margin: 0;
   }
-  .nome-2 { color: var(--signal); }
+  .nome-2 { color: var(--signal); text-shadow: 0 0 40px rgba(255, 121, 31, 0.35); }
   .posicionamento {
     display: flex;
     align-items: center;
     gap: 0.85rem;
-    margin: 1rem 0 1.75rem;
+    margin: 1.1rem 0 1.75rem;
     font: 600 clamp(0.8rem, 0.7rem + 0.4vw, 1rem) / 1.2 var(--font-display);
-    letter-spacing: 0.32em;
+    letter-spacing: 0.34em;
     text-transform: uppercase;
     color: var(--cmd-text);
   }
-  .posicionamento::before { content: ''; width: 2rem; height: 2px; background: var(--signal); }
+  .posicionamento::before { content: ''; width: 2.25rem; height: 2px; background: var(--signal); }
   .frase {
-    font: 700 clamp(1.45rem, 1.1rem + 1.3vw, 2.1rem) / 1.22 var(--font-display);
+    font: 700 clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem) / 1.2 var(--font-display);
     letter-spacing: -0.02em;
     color: #fff;
     max-width: 24ch;
     margin: 0 0 1rem;
   }
-  .frase em { font-style: normal; color: var(--signal-text); }
-  .subtitulo { color: var(--cmd-muted); max-width: 52ch; margin: 0; font-size: 1.08rem; }
+  .frase em { font-style: normal; color: var(--signal); }
+  .subtitulo { color: var(--cmd-text); opacity: 0.86; max-width: 54ch; margin: 0; font-size: 1.06rem; }
   .cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
 
-  .hero-visual { position: relative; }
-  @media (max-width: 979px) {
-    /* No celular a ilustração sai para encurtar a abertura; a foto, quando houver, fica menor */
-    .ilustracao-caixa { display: none; }
-    .foto { max-width: 320px; margin-inline: auto; }
-  }
-  .ilustracao-caixa {
-    border-radius: 24px;
-    border: 1px solid var(--cmd-line);
-    background: rgba(20, 36, 63, 0.5);
-    overflow: hidden;
-  }
   .foto {
     margin: 0;
+    width: min(320px, 100%);
     border-radius: 24px;
     overflow: hidden;
     aspect-ratio: 4 / 5;
-    max-height: 560px;
-    background: var(--cmd-1);
     border: 1px solid var(--cmd-line-2);
-    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
   }
   .foto img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-  .areas {
-    margin-top: 1rem;
-    padding: 1rem 1.15rem 1.1rem;
+
+  .areas { padding: 1.15rem 1.2rem 1.2rem; width: min(290px, 100%); }
+  .areas-titulo { margin: 0 0 0.75rem; font: 700 1rem/1.2 var(--font-display); color: #fff; }
+  .areas ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; }
+  .areas li { display: flex; align-items: center; gap: 0.75rem; color: var(--cmd-text); font-size: 0.95rem; line-height: 1.3; }
+  .area-icone {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 121, 31, 0.12);
+    border: 1px solid rgba(255, 121, 31, 0.35);
+    color: var(--signal);
   }
-  @media (min-width: 980px) {
-    .areas { position: absolute; right: -0.75rem; bottom: -2.25rem; width: min(250px, 52%); margin: 0; }
+  .areas li.formacao .area-icone { background: transparent; border-style: dashed; }
+  .em-formacao { display: inline-block; margin-left: 0.4rem; font-size: 0.72rem; color: var(--signal-text); border: 1px solid rgba(255, 121, 31, 0.5); border-radius: var(--radius-pill); padding: 0 0.45rem; vertical-align: 0.1em; }
+  @media (max-width: 1079px) {
+    .hero-grade { min-height: 0; }
+    .hero-lado { display: grid; gap: 1rem; }
+    .areas { width: 100%; }
+    .areas ul { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
   }
-  .areas-titulo { margin: 0 0 0.6rem; font: 700 0.95rem/1.2 var(--font-display); color: #fff; }
-  .areas ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.15rem; }
-  .areas li { display: flex; flex-wrap: wrap; align-items: center; gap: 0.2rem 0.55rem; padding: 0.3rem 0; color: var(--cmd-text); font-size: 0.93rem; }
-  .areas li i { width: 7px; height: 7px; border-radius: 2px; background: var(--signal); transform: rotate(45deg); }
-  .areas li.formacao i { background: transparent; border: 1.5px solid var(--signal); }
-  .em-formacao { font-size: 0.75rem; color: var(--signal-text); border: 1px solid rgba(255, 121, 31, 0.5); border-radius: var(--radius-pill); padding: 0 0.45rem; }
 
   /* ---------- Indicadores ---------- */
-  .indicadores-secao { position: relative; margin-top: -3.5rem; z-index: 2; }
   .indicadores {
     list-style: none;
     margin: 0;
-    padding: 0.5rem;
+    padding: 0.4rem;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    box-shadow: var(--shadow-2);
   }
-  @media (min-width: 860px) { .indicadores { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-  .indicadores li { display: grid; gap: 0.15rem; padding: 1.1rem 1.25rem; }
-  @media (min-width: 860px) {
-    .indicadores li + li { border-left: 1px solid var(--line); }
+  @media (min-width: 900px) { .indicadores { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .indicadores li { display: flex; align-items: center; gap: 0.9rem; padding: 1.05rem 1.15rem; }
+  @media (min-width: 900px) { .indicadores li + li { border-left: 1px solid rgba(255, 121, 31, 0.35); } }
+  @media (max-width: 899px) {
+    .indicadores li:nth-child(n + 3) { border-top: 1px solid var(--cmd-line); }
+    .indicadores li:nth-child(even) { border-left: 1px solid var(--cmd-line); }
+    .indicadores li { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
   }
-  @media (max-width: 859px) {
-    .indicadores li:nth-child(n + 3) { border-top: 1px solid var(--line); }
-    .indicadores li:nth-child(even) { border-left: 1px solid var(--line); }
-  }
-  .valor { font: 800 clamp(1.9rem, 1.5rem + 1.4vw, 2.6rem) / 1 var(--font-display); color: var(--navy); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
-  .valor::after { content: ''; display: block; width: 1.5rem; height: 3px; margin-top: 0.55rem; background: var(--accent); border-radius: 2px; }
-  .rotulo { font-weight: 600; color: var(--ink); margin-top: 0.35rem; }
-  .detalhe { font-size: 0.88rem; color: var(--muted); }
+  .ind-icone { color: var(--signal); display: grid; place-items: center; flex: none; width: 48px; height: 48px; border-radius: 12px; background: rgba(255, 121, 31, 0.1); }
+  .ind-texto { display: grid; }
+  .valor { font: 800 clamp(1.7rem, 1.4rem + 1.1vw, 2.3rem) / 1 var(--font-display); color: #fff; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .rotulo { font-weight: 600; color: var(--cmd-text); margin-top: 0.2rem; }
+  .detalhe { font-size: 0.84rem; color: var(--cmd-muted); }
 
   /* ---------- Sobre + experiência ---------- */
-  .sobre-grade { display: grid; gap: 2.5rem; align-items: start; }
-  @media (min-width: 900px) { .sobre-grade { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 4rem; } }
+  .sobre-grade { display: grid; gap: 2.5rem; align-items: center; }
+  @media (min-width: 960px) { .sobre-grade { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 3.5rem; } }
   .sobre h2 { font-size: var(--step-4); max-width: 16ch; }
-  .sobre-texto { color: var(--muted); max-width: 58ch; font-size: 1.08rem; }
+  .sobre-texto { color: var(--cmd-text); opacity: 0.88; max-width: 56ch; font-size: 1.06rem; margin-bottom: 1.75rem; }
+  .sobre-imagem {
+    margin: 0;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid var(--cmd-line-2);
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
+    clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%, 0 14%);
+    position: relative;
+  }
+  .sobre-imagem::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(255, 121, 31, 0.25); border-radius: 22px; pointer-events: none; }
+  .sobre-imagem img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+
+  .exp-grade { display: grid; gap: 1.25rem; margin-top: clamp(2.5rem, 6vw, 4rem); }
+  @media (min-width: 1000px) { .exp-grade { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: stretch; } }
   .experiencia { padding: 1.5rem 1.5rem 1.4rem; }
   .exp-cab { display: grid; gap: 0.1rem; margin-bottom: 1.1rem; }
   .exp-cab .kicker { margin: 0; }
-  .exp-empresa { margin: 0.4rem 0 0; font: 700 var(--step-1) / 1.2 var(--font-display); color: var(--navy); }
-  .exp-empresa span { display: block; font: 400 0.92rem var(--font-body); color: var(--muted); margin-top: 0.15rem; }
+  .exp-empresa { margin: 0.4rem 0 0; font: 700 var(--step-1) / 1.2 var(--font-display); color: #fff; }
+  .exp-empresa span { display: block; font: 400 0.92rem var(--font-body); color: var(--cmd-muted); margin-top: 0.15rem; }
   .cargos { list-style: none; margin: 0 0 1.25rem; padding: 0; position: relative; }
-  .cargos::before { content: ''; position: absolute; left: 6px; top: 0.6rem; bottom: 0.6rem; width: 2px; background: var(--line); }
+  .cargos::before { content: ''; position: absolute; left: 6px; top: 0.6rem; bottom: 0.6rem; width: 2px; background: linear-gradient(var(--signal), rgba(255, 121, 31, 0.15)); }
   .cargos li { position: relative; display: grid; padding: 0.5rem 0 0.5rem 1.75rem; }
-  .cargos li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.85rem;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--surface);
-    border: 2px solid var(--line-strong);
-  }
-  .cargos li.atual::before { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 4px var(--accent-wash); }
-  .cargo { font-weight: 600; color: var(--ink); }
-  .quando { font-size: 0.9rem; color: var(--muted); }
+  .cargos li::before { content: ''; position: absolute; left: 0; top: 0.85rem; width: 14px; height: 14px; border-radius: 50%; background: #0b1426; border: 2px solid rgba(255, 140, 60, 0.7); }
+  .cargos li.atual::before { background: var(--signal); border-color: var(--signal); box-shadow: 0 0 0 4px var(--signal-soft), 0 0 14px var(--signal); }
+  .cargo { font-weight: 600; color: #fff; }
+  .quando { font-size: 0.9rem; color: var(--cmd-muted); }
 
-  .frentes { display: grid; gap: 1rem; margin-top: 3rem; }
-  @media (min-width: 860px) { .frentes { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; } }
-  .frente { padding: 1.25rem 0 0; border-top: 2px solid var(--navy); }
-  .frente.formacao { border-top-color: var(--accent); }
-  .frente-rotulo { display: flex; align-items: center; gap: 0.5rem; margin: 0 0 0.5rem; font: 700 var(--step-0) / 1.3 var(--font-display); color: var(--navy); }
-  .frente p:last-child { margin: 0; color: var(--muted); font-size: 0.98rem; }
+  .frentes { display: grid; gap: 1rem; }
+  @media (min-width: 760px) { .frentes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .frente { padding: 1.3rem 1.25rem 1.35rem; }
+  .frente-icone { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; color: var(--signal); background: rgba(255, 121, 31, 0.1); border: 1px solid rgba(255, 121, 31, 0.3); margin-bottom: 0.9rem; }
+  .frente-rotulo { margin: 0 0 0.45rem; font: 700 var(--step-1) / 1.3 var(--font-display); color: #fff; }
+  .frente p:last-child { margin: 0; color: var(--cmd-muted); font-size: 0.96rem; }
 
   /* ---------- Projetos ---------- */
+  .projetos-secao { background: radial-gradient(900px 500px at 10% 0%, rgba(79, 155, 217, 0.1), transparent 60%), #0b1426; }
   .cabecalho-secao { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1.25rem 2rem; margin-bottom: 2.25rem; }
-  .cabecalho-secao h2 { font-size: var(--step-4); max-width: 22ch; margin-bottom: 0.5rem; }
+  .cabecalho-secao h2 { font-size: var(--step-4); max-width: 20ch; margin-bottom: 0.5rem; }
   .cabecalho-secao p { margin: 0; }
   .grade-projetos { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
   @media (min-width: 640px) { .grade-projetos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 1100px) { .grade-projetos { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
   .section-cmd { padding-block: var(--section); }
-  .kicker-escuro { color: #fff; }
 
-  /* ---------- Ferramentas ---------- */
-  .ferramentas { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
-  .ferramentas li { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.9rem; align-items: center; padding: 1rem 1.15rem; }
-  .ferramenta-icone {
-    grid-row: span 2;
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    background: var(--navy-wash);
-    position: relative;
-  }
-  .ferramenta-icone::before {
-    content: '';
-    position: absolute;
-    inset: 10px;
-    background: var(--navy);
-    -webkit-mask: var(--icone) center / contain no-repeat;
-    mask: var(--icone) center / contain no-repeat;
-  }
-  .ferramenta-icone[data-icone='barras'] { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 20V12h4v8zm6 0V4h4v16zm6 0v-6h4v6z'/%3E%3C/svg%3E"); }
-  .ferramenta-icone[data-icone='rota'] { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='5' cy='18' r='2.5'/%3E%3Ccircle cx='19' cy='6' r='2.5'/%3E%3Cpath d='M7.5 18H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h7.5'/%3E%3C/svg%3E"); }
-  .ferramenta-icone[data-icone='banco'] { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2'%3E%3Cellipse cx='12' cy='5.5' rx='7.5' ry='2.8'/%3E%3Cpath d='M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8'/%3E%3C/svg%3E"); }
-  .ferramenta-icone[data-icone='codigo'] { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16'/%3E%3C/svg%3E"); }
-  .ferramenta-icone[data-icone='grade'] { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2'%3E%3Crect x='3.5' y='3.5' width='17' height='17' rx='2'/%3E%3Cpath d='M3.5 9.5h17M3.5 15h17M10 3.5v17'/%3E%3C/svg%3E"); }
-  .ferramenta-icone[data-icone='ponto'] { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3C/svg%3E"); }
-  .ferramenta-nome { font: 700 1rem/1.25 var(--font-display); color: var(--ink); align-self: end; }
-  .ferramenta-uso { font-size: 0.9rem; color: var(--muted); align-self: start; }
-
-  .trajetoria { margin-top: 2.5rem; border-radius: var(--radius-l); overflow: hidden; }
-  .trajetoria-cab {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 0.5rem 1rem;
-    margin: 0;
-    padding: 0.9rem 1.25rem;
-    border-bottom: 1px solid var(--cmd-line);
-  }
+  .trajetoria { margin-top: 2.5rem; overflow: hidden; }
+  .trajetoria-cab { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1rem; margin: 0; padding: 0.9rem 1.25rem; border-bottom: 1px solid var(--cmd-line); }
   .trajetoria-titulo { font-weight: 600; color: #fff; }
   .trajetoria-corpo { padding: 1.25rem 1.25rem 1rem; }
 
-  /* ---------- Formação ---------- */
-  .formacao { padding-top: 0; }
+  /* ---------- Formação (clara) ---------- */
   .formacao-grade { display: grid; gap: 2rem; align-items: start; }
   @media (min-width: 960px) { .formacao-grade { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 3rem; } }
   .formacao h2 { font-size: var(--step-3); max-width: 18ch; }
-  .formacao-links { display: flex; flex-wrap: wrap; gap: 0.75rem 1.75rem; }
+  .formacao-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
   .formacao-cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
   @media (min-width: 700px) { .formacao-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .formacao-cards li { display: grid; align-content: start; gap: 0.35rem; padding: 1.15rem 1.2rem 1.3rem; border-top: 3px solid var(--navy); }
-  .estado { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+  .formacao-cards li { display: grid; align-content: start; gap: 0.4rem; padding: 1.25rem 1.2rem 1.35rem; }
+  .f-icone { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; background: #e8eef6; color: #17365d; margin-bottom: 0.5rem; }
+  .formacao-cards li:has(.andamento) .f-icone { background: #fff1e6; color: #a84b06; }
+  .estado { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
   .estado.andamento { color: var(--accent-ink); }
-  .formacao-cards li:has(.andamento) { border-top-color: var(--accent); }
   .f-titulo { font: 700 1.05rem/1.3 var(--font-display); color: var(--ink); }
   .f-detalhe { font-size: 0.92rem; color: var(--muted); }
 </style>

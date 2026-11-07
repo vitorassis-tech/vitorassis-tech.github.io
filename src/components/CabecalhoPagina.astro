@@ -1,41 +1,107 @@
 ---
+/**
+ * Abertura das páginas internas: imagem cinematográfica ao fundo (própria, gerada por código),
+ * rótulo com traço laranja, título e introdução.
+ */
+import { url } from '../lib/formato';
 interface Props {
   titulo: string;
   introducao?: string;
-  /** Texto curto acima do título, usado só quando agrega informação (ex.: trilha de navegação) */
+  /** Trilha de navegação (ex.: voltar para Todos os projetos) */
   trilha?: { href: string; rotulo: string };
   /** Rótulo da seção, com o traço laranja (ex.: Experiência) */
   kicker?: string;
+  /** Nome da imagem em public/img/fundos (sem extensão), ex.: sobre-armazem */
+  imagem?: string;
+  /** Posição da imagem (object-position) */
+  foco?: string;
 }
-const { titulo, introducao, trilha, kicker } = Astro.props;
+const { titulo, introducao, trilha, kicker, imagem, foco = 'center' } = Astro.props;
 ---
 
-<header class="cabecalho cmd">
-  <div class="container">
+<header class:list={['cabecalho', { 'com-imagem': imagem }]}>
   {
-    trilha && (
-      <nav aria-label="Trilha de navegação" class="trilha">
-        <a href={trilha.href}>{trilha.rotulo}</a>
-      </nav>
+    imagem && (
+      <img
+        class="fundo"
+        src={url(`/img/fundos/${imagem}-1600.webp`)}
+        srcset={`${url(`/img/fundos/${imagem}-1600.webp`)} 1600w, ${url(`/img/fundos/${imagem}.webp`)} 2560w`}
+        sizes="100vw"
+        alt=""
+        width="2560"
+        height="1440"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        style={`object-position: ${foco}`}
+      />
     )
   }
-  {kicker && <p class="kicker kicker-escuro">{kicker}</p>}
-  <h1>{titulo}</h1>
-  {introducao && <p class="lede">{introducao}</p>}
-  <slot />
+  <div class="container">
+    {
+      trilha && (
+        <nav aria-label="Trilha de navegação" class="trilha">
+          <a href={trilha.href}>{trilha.rotulo}</a>
+        </nav>
+      )
+    }
+    {kicker && <p class="kicker">{kicker}</p>}
+    <h1>{titulo}</h1>
+    {introducao && <p class="lede">{introducao}</p>}
+    <slot />
   </div>
 </header>
 
 <style>
   .cabecalho {
-    padding-top: clamp(2.5rem, 6vw, 4.5rem);
-    padding-bottom: clamp(2.25rem, 5vw, 3.75rem);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-top: clamp(3rem, 7vw, 5.5rem);
+    padding-bottom: clamp(2.75rem, 6vw, 4.5rem);
     margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    background:
+      radial-gradient(1100px 480px at 80% 10%, rgba(79, 155, 217, 0.15), transparent 60%),
+      linear-gradient(160deg, #101c32, #0b1426);
     border-bottom: 1px solid var(--cmd-line);
   }
-  h1 { font-size: clamp(2.3rem, 1.4rem + 3.6vw, 4rem); max-width: 20ch; font-weight: 800; letter-spacing: -0.04em; }
-  .kicker-escuro { color: #fff; }
-  .lede { margin: 0; }
+  .com-imagem { min-height: clamp(360px, 52vh, 520px); display: flex; align-items: center; }
+  .com-imagem > .container { width: 100%; }
+  .fundo {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .com-imagem::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, rgba(8, 14, 28, 0.94) 0%, rgba(8, 14, 28, 0.78) 42%, rgba(8, 14, 28, 0.2) 100%);
+  }
+  /* faixa diagonal laranja */
+  .cabecalho::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: -30%;
+    bottom: -30%;
+    left: 52%;
+    width: 160px;
+    background: linear-gradient(90deg, transparent, rgba(255, 121, 31, 0.14), transparent);
+    border-right: 1px solid rgba(255, 150, 80, 0.4);
+    transform: skewX(-24deg);
+    pointer-events: none;
+  }
+  @media (max-width: 759px) {
+    .com-imagem::before { background: linear-gradient(180deg, rgba(8, 14, 28, 0.6), rgba(8, 14, 28, 0.92)); }
+    .cabecalho::after { left: 70%; }
+  }
+  h1 { font-size: clamp(2.3rem, 1.4rem + 3.6vw, 4rem); max-width: 20ch; font-weight: 800; letter-spacing: -0.04em; color: #fff; }
+  .lede { margin: 0; color: var(--cmd-text); opacity: 0.88; }
   .trilha { margin-bottom: 1.25rem; font-size: 0.95rem; }
   .trilha a { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 32px; }
   .trilha a::before { content: '‹'; font-size: 1.3em; line-height: 1; text-decoration: none; }
