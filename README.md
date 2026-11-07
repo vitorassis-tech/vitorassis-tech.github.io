@@ -67,6 +67,7 @@ Depois abra **http://localhost:4321**.
 | `npm run preview` | Serve o build final localmente |
 | `npm run dados` | Regenera os dados fictícios (Python → SQLite → SQL → JSON/CSV). Funciona no Windows (`py`/`python`) e no Linux/macOS (`python3`) |
 | `npm run og` | Regenera a imagem de compartilhamento `public/og-image.png` |
+| `npm run capas` | Gera as capas dos projetos com demonstração (rode `npm run build` antes) |
 | `npm run typecheck` | Verifica os tipos TypeScript |
 | `npm test` | Testes unitários e de conteúdo (Vitest) |
 | `npm run test:dados` | Testes do gerador de dados (Python) |
@@ -112,11 +113,16 @@ portfolio-vitor-assis/
 - [docs/PENDENCIAS.md](docs/PENDENCIAS.md): informações que faltam e limitações conhecidas
 - [docs/DECISOES.md](docs/DECISOES.md): arquitetura, identidade visual, indicadores fictícios e justificativas
 
-## 6. Currículo para download
+## 6. Foto e capas dos projetos
+
+- **Foto:** `npm run admin` → **Dados gerais** → **Foto profissional**. Use uma foto real, vertical, com boa resolução. Sem foto, a página inicial mostra uma ilustração de rotas.
+- **Capas:** projetos com demonstração usam uma foto da própria demonstração (dados fictícios). Se uma demonstração mudar, rode `npm run build` e depois `npm run capas`. Os demais projetos usam a capa definida no painel (campo **Imagem de capa**).
+
+## 7. Currículo para download
 
 Salve o PDF em `public/curriculo/vitor-assis-curriculo.pdf` (crie a pasta se não existir). No próximo build, o botão **Baixar currículo** aparece no menu automaticamente. Sem o arquivo, o menu mostra **Vamos conversar**, que leva à página de contato. Para trocar o currículo, substitua o arquivo mantendo o mesmo nome.
 
-## 7. Privacidade e segurança
+## 8. Privacidade e segurança
 
 - Não há chaves, senhas ou tokens no projeto. O site publicado não tem formulário que envie dados.
 - O painel administrativo roda só em `127.0.0.1`, com token aleatório por sessão, e não faz parte do site publicado.

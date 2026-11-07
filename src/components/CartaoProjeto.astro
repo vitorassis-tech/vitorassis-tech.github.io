@@ -1,0 +1,131 @@
+---
+/**
+ * Cartão de projeto com imagem de capa. O cartão inteiro é clicável,
+ * mas há um único link acessível (o título).
+ * Capas de demonstrações e réplicas usam dados fictícios: o cartão avisa.
+ */
+import SeloNatureza from './SeloNatureza.astro';
+import type { Projeto } from '../data/projetos';
+import { url } from '../lib/formato';
+
+interface Props {
+  projeto: Projeto;
+  nivelTitulo?: 'h2' | 'h3';
+  /** Carregamento imediato da imagem (só para cartões na primeira dobra) */
+  prioridade?: boolean;
+}
+const { projeto: p, nivelTitulo = 'h3', prioridade = false } = Astro.props;
+const Titulo = nivelTitulo;
+const capaFicticia = Boolean(p.demo);
+---
+
+<article class="cartao card card-link">
+  <div class="capa">
+    {
+      p.imagem ? (
+        <img
+          src={url(p.imagem.arquivo)}
+          alt={p.imagem.alt}
+          width="960"
+          height="600"
+          loading={prioridade ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+      ) : (
+        <div class="capa-vazia" aria-hidden="true" />
+      )
+    }
+    {capaFicticia && <span class="aviso-capa">Dados fictícios</span>}
+  </div>
+  <div class="corpo">
+    <div class="meta">
+      <SeloNatureza natureza={p.natureza} detalhe={p.instituicao} />
+    </div>
+    <Titulo class="titulo">
+      <a href={url(`/projetos/${p.slug}/`)}>{p.titulo}</a>
+    </Titulo>
+    <p class="resumo">{p.resumo}</p>
+    <ul class="tag-list" aria-label="Tecnologias">
+      {p.tecnologias.slice(0, 4).map((t) => <li>{t}</li>)}
+    </ul>
+    <span class="ver" aria-hidden="true">Ver projeto</span>
+  </div>
+</article>
+
+<style>
+  .cartao {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+  .capa {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: var(--cmd-0);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .capa img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.5s var(--ease);
+  }
+  .cartao:hover .capa img { transform: scale(1.03); }
+  .capa-vazia {
+    width: 100%;
+    height: 100%;
+    background:
+      linear-gradient(rgba(160, 190, 228, 0.1) 1px, transparent 1px) 0 0 / 28px 28px,
+      linear-gradient(90deg, rgba(160, 190, 228, 0.1) 1px, transparent 1px) 0 0 / 28px 28px,
+      var(--cmd-0);
+  }
+  .aviso-capa {
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-pill);
+    background: rgba(16, 28, 50, 0.88);
+    border: 1px solid rgba(255, 121, 31, 0.6);
+    color: var(--signal-text);
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .corpo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    flex: 1;
+    padding: 1.15rem 1.25rem 1.3rem;
+  }
+  .titulo { font-size: var(--step-1); margin: 0; letter-spacing: -0.015em; }
+  .titulo a { color: var(--navy); text-decoration: none; }
+  /* Cartão inteiro clicável com um único link */
+  .titulo a::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  .titulo a:focus-visible { box-shadow: none; }
+  .cartao:has(.titulo a:focus-visible) { box-shadow: var(--focus); }
+  .resumo {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.97rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .tag-list { margin-top: auto; }
+  .ver {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--navy);
+  }
+  .ver::after { content: '→'; color: var(--accent-ink); transition: transform 0.2s var(--ease); }
+  .cartao:hover .ver::after { transform: translateX(3px); }
+</style>

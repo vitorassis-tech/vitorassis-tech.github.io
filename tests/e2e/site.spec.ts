@@ -180,9 +180,36 @@ test.describe('conteúdo profissional (E1–E8)', () => {
     expect(profarma).toContain('Profarma');
     expect(profarma).not.toMatch(/\bSQL\b/);
     await page.goto('/');
-    const operacaoEDados = await page.locator('.modulo').filter({ hasNotText: 'Em formação' }).allInnerTexts();
+    const operacaoEDados = await page.locator('.frente:not(.formacao)').allInnerTexts();
+    expect(operacaoEDados.length).toBeGreaterThan(0);
     for (const t of operacaoEDados) expect(t).not.toMatch(/\bSQL\b/);
-    await expect(page.locator('.modulo.formacao')).toContainText('SQL');
+    expect(await page.locator('.experiencia').innerText()).not.toMatch(/\bSQL\b/);
+    await expect(page.locator('.frente.formacao')).toContainText('SQL');
+  });
+
+  test('página inicial: abertura, indicadores calculados e capas reais dos projetos', async ({ page }) => {
+    await page.goto('/');
+    const h1 = page.locator('h1');
+    await expect(h1).toContainText('Vitor Assis');
+    await expect(page.locator('.frase')).toContainText('Transformando dados em decisões');
+    // Indicadores vêm do conteúdo: anos desde ago/2019, projetos profissionais, cursos e técnicos concluídos
+    const valores = await page.locator('.indicadores .valor').allInnerTexts();
+    expect(valores).toHaveLength(4);
+    expect(valores[0]).toMatch(/^\d+\+$/);
+    await expect(page.locator('.indicadores')).toContainText('projetos profissionais');
+    // Sem foto cadastrada, a abertura mostra a ilustração (nunca uma pessoa genérica)
+    await expect(page.locator('.hero .foto')).toHaveCount(0);
+    // Inteligência Artificial aparece como "em formação"
+    await expect(page.locator('.areas li.formacao')).toContainText('em formação');
+    // Capas carregam; as de réplicas e demonstrações avisam que os dados são fictícios
+    const cartoes = page.locator('.grade-projetos .cartao');
+    await expect(cartoes).toHaveCount(4);
+    for (const img of await page.locator('.grade-projetos img').all()) {
+      await img.scrollIntoViewIfNeeded();
+      await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+    }
+    await expect(cartoes.filter({ hasText: 'Painel de Expedição' }).locator('.aviso-capa')).toHaveText('Dados fictícios');
+    await expect(cartoes.filter({ hasText: 'Atividade Flask' }).locator('.aviso-capa')).toHaveCount(0);
   });
 
   test('estudo de caso da Torre: Roadnet e Excel, uso diário, sem fórmulas e com link para a simulação', async ({ page }) => {

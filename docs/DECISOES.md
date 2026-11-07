@@ -77,4 +77,7 @@ As demonstrações **não** reproduzem quantidades, indicadores, fórmulas ou re
 | **Títulos em Plus Jakarta Sans** (licença OFL, servida pelo próprio site) | Sans geométrica moderna, próxima das referências visuais. Substitui a Fraunces; o texto corrido continua em IBM Plex Sans. |
 | **Monograma "VA"** em SVG (`src/components/Monograma.astro`) | Substitui o ícone genérico de gráfico; usado no menu, rodapé, painel e favicon. |
 | **Menu com 7 itens** e botão de destaque | Formação e Certificados ganham acesso direto. O botão mostra "Baixar currículo" só quando o PDF existe; senão, "Vamos conversar". |
-
+| **Página inicial nova** | Abertura com nome, posicionamento, frase e áreas de atuação; indicadores **calculados a partir do conteúdo** (anos desde o início na Profarma, projetos profissionais, cursos e técnicos concluídos), nunca digitados à mão. |
+| **Foto opcional** (`Dados gerais › Foto profissional` no painel) | Sem foto, a abertura mostra uma ilustração de rotas em SVG; nunca uma pessoa genérica ou gerada por IA. |
+| **Capas dos projetos** (`npm run capas`) | Fotos das próprias demonstrações em código (dados fictícios, com selo no cartão); prints reais dos painéis da Profarma continuam proibidos. |
+| **Entrada suave dos blocos** (`src/scripts/revelar.ts`) | Só com JavaScript e sem "reduzir movimento"; sem script, tudo aparece normalmente. |

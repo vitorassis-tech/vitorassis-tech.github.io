@@ -1,6 +1,26 @@
 {
-  "titulo": "Da operação logística às decisões guiadas por dados.",
+  "posicionamento": "Technology & Data",
+  "titulo": "Transformando dados em decisões e tecnologia em resultados.",
+  "subtitulo": "Profissional de Logística, Análise de Dados e Business Intelligence, com experiência em operações, automação e soluções inteligentes.",
   "apresentacao": "Assistente de Logística II no Grupo Profarma. Planejo e roteirizo a distribuição para a capital e o interior e transformo os dados da operação em dashboards gerenciais em Power BI. Com Python e SQL concluídos, levo cada vez mais análise e automação para a logística.",
+  "areas": [
+    {
+      "nome": "Logística e transportes"
+    },
+    {
+      "nome": "Análise de dados e BI"
+    },
+    {
+      "nome": "Python e automação"
+    },
+    {
+      "nome": "Banco de dados e SQL"
+    },
+    {
+      "nome": "Inteligência Artificial",
+      "formacao": true
+    }
+  ],
   "frentes": [
     {
       "rotulo": "Módulo operação",

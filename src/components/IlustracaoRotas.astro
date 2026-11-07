@@ -1,0 +1,64 @@
+---
+/**
+ * Ilustração leve (SVG) de uma rede de distribuição saindo de um CD.
+ * Usada no lugar da foto enquanto ela não é enviada. Puramente decorativa.
+ * O canto inferior direito fica livre para o painel "Áreas de atuação".
+ */
+---
+
+<svg class="ilustracao" viewBox="0 0 520 440" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="ilu-brilho" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#2563a8" stop-opacity="0.35"></stop>
+      <stop offset="1" stop-color="#2563a8" stop-opacity="0"></stop>
+    </radialGradient>
+    <pattern id="ilu-grade" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="rgba(160,190,228,0.12)" stroke-width="1"></path>
+    </pattern>
+  </defs>
+  <rect width="520" height="440" rx="24" fill="url(#ilu-grade)"></rect>
+  <circle cx="210" cy="210" r="200" fill="url(#ilu-brilho)"></circle>
+
+  <!-- Rotas concluídas -->
+  <g fill="none" stroke="#cfe2f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85">
+    <path d="M200 220 L130 160 L60 190"></path>
+    <path d="M200 220 L120 290 L70 370"></path>
+    <path d="M200 220 L230 330 L160 400"></path>
+    <path d="M200 220 L110 90 L60 60"></path>
+  </g>
+  <!-- Rota em andamento -->
+  <path class="rota-ativa" d="M200 220 L290 130 L390 110 L460 50" fill="none" stroke="#ff791f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 9"></path>
+
+  <!-- Entregas -->
+  <g fill="#14243f" stroke="#cfe2f6" stroke-width="2.5">
+    <circle cx="130" cy="160" r="7"></circle>
+    <circle cx="60" cy="190" r="7"></circle>
+    <circle cx="120" cy="290" r="7"></circle>
+    <circle cx="70" cy="370" r="7"></circle>
+    <circle cx="230" cy="330" r="7"></circle>
+    <circle cx="160" cy="400" r="7"></circle>
+    <circle cx="110" cy="90" r="7"></circle>
+    <circle cx="60" cy="60" r="7"></circle>
+  </g>
+  <g fill="#14243f" stroke="#ff791f" stroke-width="2.5">
+    <circle cx="290" cy="130" r="7"></circle>
+    <circle cx="390" cy="110" r="7"></circle>
+    <circle cx="460" cy="50" r="7" stroke-dasharray="4 3"></circle>
+  </g>
+
+  <!-- CD -->
+  <g transform="translate(200 220)">
+    <circle r="34" fill="rgba(255,121,31,0.14)"></circle>
+    <rect x="-17" y="-17" width="34" height="34" rx="7" fill="#ff791f"></rect>
+    <path d="M-8 2 L0 -6 L8 2 M-6 0 V8 H6 V0" fill="none" stroke="#101c32" stroke-width="2.4" stroke-linejoin="round"></path>
+  </g>
+
+</svg>
+
+<style>
+  .ilustracao { width: 100%; height: auto; display: block; }
+  @media (prefers-reduced-motion: no-preference) {
+    .rota-ativa { animation: rota-andar 2.4s linear infinite; }
+    @keyframes rota-andar { to { stroke-dashoffset: -38; } }
+  }
+</style>

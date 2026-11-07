@@ -32,6 +32,8 @@ export interface Site {
   objetivo: string;
   /** Data da última revisão do conteúdo (AAAA-MM-DD). */
   revisadoEm: string;
+  /** Foto profissional (opcional), enviada pelo painel. */
+  foto?: { arquivo: string; alt: string };
 }
 
 export interface FrenteInicio {
@@ -42,8 +44,13 @@ export interface FrenteInicio {
 }
 
 export interface Inicio {
+  /** Linha abaixo do nome, ex.: Technology & Data */
+  posicionamento: string;
+  /** Frase principal; a última palavra recebe destaque */
   titulo: string;
+  subtitulo: string;
   apresentacao: string;
+  areas: { nome: string; formacao?: boolean }[];
   frentes: FrenteInicio[];
   faixa: { destaque: string; complemento: string }[];
   projetosDestaque: string[];

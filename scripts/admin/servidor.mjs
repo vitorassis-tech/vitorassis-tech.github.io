@@ -38,7 +38,7 @@ const ARQUIVO_ESQUEMA = join(PROJETO, 'src', 'lib', 'esquema.mjs');
 const LIMITE_JSON = 1024 * 1024; // 1 MB
 const LIMITE_IMAGEM = 2 * 1024 * 1024; // 2 MB (arquivo decodificado)
 const LIMITE_CORPO_IMAGEM = Math.ceil((LIMITE_IMAGEM * 4) / 3) + 64 * 1024;
-const PASTAS_IMAGEM = new Set(['projetos', 'instituicoes']);
+const PASTAS_IMAGEM = new Set(['projetos', 'instituicoes', 'perfil']);
 const TIPOS_IMAGEM = { 'image/png': '.png', 'image/jpeg': '.jpg', 'image/webp': '.webp', 'image/svg+xml': '.svg' };
 
 const MIME = {

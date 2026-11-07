@@ -73,7 +73,11 @@
     ],
     "pendencias": [],
     "status": "publicado",
-    "demo": "replica-expedicao"
+    "demo": "replica-expedicao",
+    "imagem": {
+      "arquivo": "/img/projetos/capa-torre-controle-expedicao.webp",
+      "alt": "Réplica em código do Painel de Expedição com dados fictícios: percentual expedido, volume, valor, pendências e saídas do dia."
+    }
   },
   {
     "titulo": "Painel de Logística Varejo",
@@ -141,7 +145,11 @@
     "galeria": [],
     "pendencias": [],
     "status": "publicado",
-    "demo": "replica-varejo"
+    "demo": "replica-varejo",
+    "imagem": {
+      "arquivo": "/img/projetos/capa-painel-logistica-varejo.webp",
+      "alt": "Réplica em código do Painel de Logística Varejo com dados fictícios: volume, ocupação dos veículos e ocupação por região."
+    }
   },
   {
     "titulo": "Simulação da Torre de Controle",
@@ -217,7 +225,11 @@
     "demo": "torre-simulacao",
     "pendencias": [],
     "notaAutoria": "Desenvolvido com apoio de ferramentas de IA generativa.",
-    "status": "publicado"
+    "status": "publicado",
+    "imagem": {
+      "arquivo": "/img/projetos/capa-simulacao-torre-controle.webp",
+      "alt": "Simulação da Torre de Controle com dados fictícios: parâmetros ajustáveis, cargas programadas, expedidas e pendentes."
+    }
   },
   {
     "titulo": "Painel de frota e entregas",
@@ -302,7 +314,11 @@
     "demo": "painel-fretes",
     "pendencias": [],
     "notaAutoria": "Desenvolvido com apoio de ferramentas de IA generativa.",
-    "status": "publicado"
+    "status": "publicado",
+    "imagem": {
+      "arquivo": "/img/projetos/capa-painel-fretes-simulado.webp",
+      "alt": "Painel de frota e entregas com dados fictícios: entregas, OTIF, custo por entrega, cobertura de frota e gráficos."
+    }
   },
   {
     "titulo": "Laboratório de roteirização",
@@ -364,7 +380,11 @@
     "demo": "roteirizacao",
     "pendencias": [],
     "notaAutoria": "Desenvolvido com apoio de ferramentas de IA generativa.",
-    "status": "publicado"
+    "status": "publicado",
+    "imagem": {
+      "arquivo": "/img/projetos/capa-laboratorio-roteirizacao.webp",
+      "alt": "Laboratório de roteirização com pontos fictícios: mapa da rota, distâncias calculadas e sequência de visitas."
+    }
   },
   {
     "titulo": "Atividade Flask",
@@ -475,7 +495,11 @@
       }
     ],
     "pendencias": [],
-    "status": "publicado"
+    "status": "publicado",
+    "imagem": {
+      "arquivo": "/img/projetos/atividade-flask-inicio.webp",
+      "alt": "Página inicial com o título Projeto web com Python, Flask e SQLite e o menu Início, Novo conteúdo, Sobre e Contatos."
+    }
   },
   {
     "titulo": "Banco de dados de uma escola de música",
@@ -569,6 +593,10 @@
     ],
     "links": [],
     "pendencias": [],
-    "status": "publicado"
+    "status": "publicado",
+    "imagem": {
+      "arquivo": "/img/projetos/banco-escola-musica-diagrama.webp",
+      "alt": "Diagrama com as tabelas INSTRUMENTO, CURSO, TURMA, PROFESSOR, ALUNO e MATRICULA, suas colunas e tipos, e as ligações 1 para N entre elas."
+    }
   }
 ]

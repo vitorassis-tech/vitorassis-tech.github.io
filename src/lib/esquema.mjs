@@ -366,8 +366,23 @@ export const COLECOES = [
       {
         titulo: 'Abertura',
         campos: [
-          { nome: 'titulo', rotulo: 'Título principal', tipo: 'texto', obrigatorio: true, max: 80 },
-          { nome: 'apresentacao', rotulo: 'Apresentação', tipo: 'textoLongo', obrigatorio: true, max: 420 },
+          { nome: 'posicionamento', rotulo: 'Posicionamento (abaixo do nome)', tipo: 'texto', obrigatorio: true, max: 40, ajuda: 'Ex.: Technology & Data.' },
+          { nome: 'titulo', rotulo: 'Frase principal', tipo: 'texto', obrigatorio: true, max: 80, ajuda: 'A última palavra aparece em destaque laranja.' },
+          { nome: 'subtitulo', rotulo: 'Texto complementar', tipo: 'textoLongo', obrigatorio: true, max: 220 },
+          { nome: 'apresentacao', rotulo: 'Apresentação (bloco Sobre da página inicial)', tipo: 'textoLongo', obrigatorio: true, max: 420 },
+          {
+            nome: 'areas',
+            rotulo: 'Áreas de atuação',
+            tipo: 'listaObjetos',
+            rotuloItem: 'Área',
+            minItens: 1,
+            maxItens: 6,
+            obrigatorio: true,
+            campos: [
+              { nome: 'nome', rotulo: 'Área', tipo: 'texto', obrigatorio: true, max: 40 },
+              { nome: 'formacao', rotulo: 'Marcar como "em formação"', tipo: 'booleano' },
+            ],
+          },
         ],
       },
       {
@@ -432,6 +447,13 @@ export const COLECOES = [
           { nome: 'empresaAtual', rotulo: 'Empresa atual', tipo: 'texto', obrigatorio: true, max: 60 },
           { nome: 'posicionamento', rotulo: 'Posicionamento (rodapé)', tipo: 'texto', obrigatorio: true, max: 80 },
           { nome: 'local', rotulo: 'Cidade', tipo: 'texto', obrigatorio: true, max: 60 },
+          {
+            nome: 'foto',
+            rotulo: 'Foto profissional',
+            tipo: 'imagem',
+            pasta: 'perfil',
+            ajuda: 'Opcional. Foto real, de preferência vertical (retrato), com boa resolução e fundo neutro. JPG, PNG ou WebP até 2 MB. Sem foto, a página inicial mostra uma ilustração de rotas.',
+          },
         ],
       },
       {
