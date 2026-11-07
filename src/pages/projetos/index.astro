@@ -11,6 +11,7 @@ import { projetos, naturezas, type Natureza } from '../../data/projetos';
   description="Projetos de Vitor Assis em Power BI, SQL, Python, desenvolvimento web e logística, com estudos de caso detalhados e demonstrações interativas."
 >
   <CabecalhoPagina
+    kicker="Projetos"
     titulo="Projetos e estudos de caso"
     introducao="Do painel feito para a gerência às demonstrações abertas com dados fictícios. Cada estudo de caso mostra contexto, decisões, limitações e próximos passos."
   >
@@ -43,6 +44,7 @@ import { projetos, naturezas, type Natureza } from '../../data/projetos';
     margin: 2.25rem 0 0;
   }
   @media (min-width: 900px) { .legenda-natureza { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .legenda-natureza dd { margin: 0.5rem 0 0; color: var(--muted); font-size: 0.95rem; }
+  .legenda-natureza > div { padding: 1rem 1.1rem; border: 1px solid var(--cmd-line); border-radius: var(--radius-m); background: rgba(255, 255, 255, 0.03); }
+  .legenda-natureza dd { margin: 0.6rem 0 0; color: var(--cmd-muted); font-size: 0.93rem; }
   .espaco { height: var(--section); }
 </style>

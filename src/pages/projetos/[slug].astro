@@ -41,6 +41,11 @@ const secoes = [
 const ogProjeto = `/og/${p.slug}.png`;
 const ogImage = existsSync(join(process.cwd(), 'public', 'og', `${p.slug}.png`)) ? ogProjeto : undefined;
 
+// A capa só aparece no topo quando não repete a demonstração (mostrada ao vivo) nem a primeira tela da galeria.
+const capaNoTopo = p.imagem && !p.demo && !p.galeria.some((g) => g.imagem.arquivo === p.imagem?.arquivo) ? p.imagem : undefined;
+// Atalhos do topo: demonstração e código-fonte (primeiro link externo), quando existirem.
+const linkCodigo = p.links.find((l) => l.externo);
+
 const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 'Demonstração funcional', pendente: 'Pendente' } as const;
 ---
 
@@ -59,6 +64,24 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
       <span class="muted">{p.categorias.map((c) => categorias[c]).join(', ')}</span>
     </div>
     <p class="explica-natureza muted">{naturezas[p.natureza].explicacao}</p>
+    {
+      (p.demo || linkCodigo) && (
+        <div class="atalhos">
+          {p.demo && (
+            <a class="btn btn-primary" href="#demonstracao">
+              Abrir a demonstração
+              <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 3v10m0 0 4-4m-4 4-4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </a>
+          )}
+          {linkCodigo && (
+            <a class="btn btn-linha" href={url(linkCodigo.href)} target="_blank" rel="noopener noreferrer">
+              {linkCodigo.rotulo}
+              <span class="visually-hidden"> (abre em nova aba)</span>
+            </a>
+          )}
+        </div>
+      )
+    }
   </CabecalhoPagina>
 
   {
@@ -72,9 +95,9 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
     )
   }
   {
-    p.imagem && (
+    capaNoTopo && (
       <figure class="container capa">
-        <img src={url(p.imagem.arquivo)} alt={p.imagem.alt} loading="eager" decoding="async" />
+        <img src={url(capaNoTopo.arquivo)} alt={capaNoTopo.alt} loading="eager" decoding="async" />
       </figure>
     )
   }
@@ -244,6 +267,7 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
 <style>
   .ficha { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.25rem; margin-top: 1.75rem; font-size: 0.95rem; }
   .explica-natureza { font-size: 0.95rem; margin: 0.75rem 0 0; max-width: 70ch; }
+  .atalhos { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem; }
   .aviso-previa { margin: 0 0 2rem; padding: 0.85rem 1rem; border-radius: var(--radius-m); background: #fff4de; border: 1px dashed #d9931e; color: #5c3700; }
   .capa { margin-top: 0; margin-bottom: clamp(2rem, 5vw, 3rem); }
   .capa img { width: 100%; max-height: 520px; object-fit: contain; border-radius: var(--radius-l); border: 1px solid var(--line); background: var(--surface); }
@@ -253,8 +277,16 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
     .corpo { grid-template-columns: 14rem minmax(0, 1fr); }
     .sumario { position: sticky; top: 6rem; align-self: start; }
   }
-  .sumario { border-top: 3px solid var(--navy); padding-top: 1rem; font-size: 0.95rem; }
-  .sumario-titulo { font-weight: 600; margin-bottom: 0.5rem; }
+  .sumario {
+    font-size: 0.95rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--accent);
+    border-radius: var(--radius-l);
+    padding: 1.1rem 1.15rem 1.25rem;
+    box-shadow: var(--shadow-1);
+  }
+  .sumario-titulo { font: 700 0.8rem/1.2 var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--navy); margin-bottom: 0.6rem; }
   .sumario ol { list-style: none; padding: 0; margin: 0 0 1.75rem; display: grid; gap: 0.1rem; }
   .sumario ol a { display: inline-flex; min-height: 32px; align-items: center; color: var(--ink); text-decoration-color: var(--line-strong); }
   .sumario ol a:hover { text-decoration-color: var(--accent); }
@@ -264,23 +296,25 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
 
   .conteudo { min-width: 0; }
   .conteudo > section { padding-bottom: clamp(2.5rem, 5vw, 3.5rem); margin-bottom: clamp(2.5rem, 5vw, 3.5rem); border-bottom: 1px solid var(--line); scroll-margin-top: 6rem; }
-  .conteudo h2 { font-size: var(--step-3); }
+  .conteudo h2 { font-size: var(--step-3); display: flex; align-items: baseline; gap: 0.7rem; }
+  .conteudo h2::before { content: ''; flex: none; width: 0.32rem; height: 0.8em; background: var(--accent); border-radius: 1px; transform: skewX(-20deg); }
   .conteudo h3 { font-size: var(--step-1); font-family: var(--font-body); font-weight: 600; color: var(--ink); letter-spacing: 0; }
   .conteudo p, .conteudo ul, .conteudo ol, .conteudo dl { max-width: 70ch; }
-  .destaque { font-family: var(--font-display); font-size: var(--step-2); line-height: 1.4; color: var(--navy); font-weight: 400; max-width: 34ch !important; }
+  .destaque { font-family: var(--font-display); font-size: var(--step-2); line-height: 1.45; color: var(--navy); font-weight: 500; letter-spacing: -0.01em; max-width: 40ch !important; }
   .duas { display: grid; gap: 1.5rem 3rem; }
   @media (min-width: 760px) { .duas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .duas p { margin: 0; }
   .duas ul { padding-left: 1.1rem; margin: 0; display: grid; gap: 0.4rem; }
 
   .origem { padding: 0.85rem 1rem; background: var(--navy-wash); border-radius: var(--radius-m); font-size: 0.97rem; }
-  .origem.simulada { background: var(--accent-wash); border: 1px solid #efc79c; }
+  .origem.simulada { background: var(--accent-wash); border: 1px solid #ffc9a3; }
 
   .passos { counter-reset: passo; list-style: none; padding: 0; display: grid; gap: 1rem; }
   .passos li { counter-increment: passo; display: grid; grid-template-columns: 2.25rem 1fr; gap: 0.75rem; align-items: baseline; }
   .passos li::before {
     content: counter(passo);
     font-family: var(--font-display);
+    font-weight: 800;
     font-size: 1.35rem;
     color: var(--accent-ink);
     font-variant-numeric: tabular-nums;
@@ -305,8 +339,19 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
   .pendencias ul { margin: 0; padding-left: 1.1rem; color: var(--muted); }
   .autoria { font-size: 0.92rem; margin-top: 1.25rem; }
 
-  .proximo { display: grid; gap: 0.25rem; }
-  .proximo a { font-family: var(--font-display); font-size: var(--step-3); text-decoration-thickness: 2px; }
+  .proximo {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1.4rem 1.5rem;
+    border-radius: var(--radius-l);
+    background: var(--cmd-0);
+    color: var(--cmd-muted);
+  }
+  .proximo .muted { color: var(--cmd-muted); }
+  .proximo a { font: 700 var(--step-3) / 1.2 var(--font-display); color: #fff; text-decoration: none; letter-spacing: -0.02em; }
+  .proximo a::after { content: ' →'; color: var(--signal); }
+  .proximo a:hover { color: var(--signal-text); }
+  .proximo a:focus-visible { box-shadow: var(--focus-escuro); }
 
   .secao-demo { max-width: none; }
 

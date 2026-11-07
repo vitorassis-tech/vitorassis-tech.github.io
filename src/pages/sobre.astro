@@ -16,6 +16,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
   description="Trajetória de Vitor Assis: do armazém ao planejamento de transportes e aos dashboards em Power BI, com estudos em SQL, Python e bancos de dados. Formação, cursos e competências."
 >
   <CabecalhoPagina
+    kicker="Sobre mim"
     titulo="Logística na prática, dados como ferramenta"
     introducao={`${site.nomeCompleto}, ${site.local}. Construí minha carreira dentro da operação e uso esse conhecimento para criar análises que fazem sentido para quem decide.`}
   />
@@ -45,14 +46,20 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
         Inteligência Artificial (FAETEC) e curso a Graduação Tecnológica em Logística (UNISUAM).
       </p>
     </div>
-    <aside class="objetivo" aria-labelledby="objetivo-titulo">
+    <aside class="objetivo cmd" aria-labelledby="objetivo-titulo">
+      <p class="kicker kicker-escuro">Objetivo</p>
       <h3 id="objetivo-titulo">O que busco</h3>
-      <p>{site.objetivo}</p>
+      <p class="objetivo-texto">{site.objetivo}</p>
+      <div class="objetivo-links">
+        <a class="btn btn-primary btn-sm" href={url('/projetos/')}>Ver projetos</a>
+        <a class="btn btn-linha btn-sm" href={url('/contato/')}>Falar comigo</a>
+      </div>
     </aside>
   </section>
 
   <section class="section container" id="formacao" aria-labelledby="formacao-titulo">
     <div class="section-head">
+      <p class="kicker">Trajetória acadêmica</p>
       <h2 id="formacao-titulo">Formação</h2>
       <p>Formação técnica e superior em logística, complementada por cursos de dados e programação.</p>
     </div>
@@ -73,6 +80,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
 
   <section class="section container" id="cursos" aria-labelledby="cursos-titulo">
     <div class="section-head">
+      <p class="kicker">Certificados</p>
       <h2 id="cursos-titulo">Cursos e certificações</h2>
       <p>{numero(horasConcluidas)} horas em cursos concluídos, além dos cursos em andamento listados abaixo.</p>
     </div>
@@ -109,6 +117,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
 
   <section class="section container" id="competencias" aria-labelledby="comp-titulo">
     <div class="section-head">
+      <p class="kicker">Competências</p>
       <h2 id="comp-titulo">Competências e evidências</h2>
       <p>Cada competência aponta para onde ela foi usada ou aprendida. Não atribuo níveis sem uma avaliação formal.</p>
     </div>
@@ -142,15 +151,19 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
   .trajetoria { display: grid; gap: 2.5rem 4rem; padding-top: 0; }
   @media (min-width: 960px) { .trajetoria { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); align-items: start; } }
   .texto-longo { font-size: 1.12rem; line-height: 1.7; }
-  .texto-longo p:first-child::first-line { font-weight: 500; color: var(--navy); }
+  .texto-longo p:first-child { font-size: 1.22rem; color: var(--navy); font-weight: 500; }
   .objetivo {
-    border-left: 3px solid var(--accent);
-    padding: 0.25rem 0 0.25rem 1.5rem;
+    padding: 1.5rem 1.6rem 1.6rem;
+    border-radius: var(--radius-l);
+    border-top: 3px solid var(--signal);
     position: sticky;
-    top: 6rem;
+    top: 6.5rem;
+    overflow: hidden;
   }
   .objetivo h3 { font-size: var(--step-2); }
-  .objetivo p { margin: 0; color: var(--muted); }
+  .objetivo-texto { margin: 0; color: var(--cmd-text); }
+  .objetivo-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.4rem; }
+  .kicker-escuro { color: #fff; }
 
   .linhas { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
   .linhas li {
@@ -177,9 +190,17 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
 
   .comp-grupos { display: grid; gap: 3rem 4rem; }
   @media (min-width: 900px) { .comp-grupos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .comp-grupo h3 { margin-bottom: 0.25rem; }
+  .comp-grupo {
+    padding: 1.4rem 1.5rem 0.75rem;
+    border-radius: var(--radius-l);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-1);
+  }
+  .comp-grupo h3 { margin-bottom: 0.25rem; font-size: var(--step-2); }
   dl { margin: 1.25rem 0 0; border-top: 1px solid var(--line); }
   .comp { padding-block: 0.75rem; border-bottom: 1px solid var(--line); }
+  .comp:last-child { border-bottom: 0; }
   dt { font-weight: 600; display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
   .contexto { font-weight: 500; font-size: 0.8rem; color: var(--navy); padding: 0.05rem 0.5rem; border-radius: 999px; border: 1.5px solid var(--navy); white-space: nowrap; }
   .comp[data-contexto='formacao'] .contexto { border-style: dashed; border-color: var(--accent); color: var(--accent-ink); }

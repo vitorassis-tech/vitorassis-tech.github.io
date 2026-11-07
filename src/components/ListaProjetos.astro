@@ -1,12 +1,11 @@
 ---
 /**
- * Índice de projetos em formato de lista editorial.
+ * Índice de projetos em grade de cartões com capa.
  * Com `filtros`, exibe botões de categoria (melhoria progressiva:
  * sem JavaScript, todos os projetos continuam visíveis).
  */
 import { categorias, categoriasEmUso, type Projeto } from '../data/projetos';
-import SeloNatureza from './SeloNatureza.astro';
-import { url } from '../lib/formato';
+import CartaoProjeto from './CartaoProjeto.astro';
 
 interface Props {
   projetos: Projeto[];
@@ -14,7 +13,6 @@ interface Props {
   nivelTitulo?: 'h2' | 'h3';
 }
 const { projetos, filtros = false, nivelTitulo = 'h3' } = Astro.props;
-const Titulo = nivelTitulo;
 const usadas = categoriasEmUso();
 ---
 
@@ -39,19 +37,7 @@ const usadas = categoriasEmUso();
     {
       projetos.map((p) => (
         <li class="item" data-categorias={p.categorias.join(' ')}>
-          <article>
-            <div class="meta">
-              <SeloNatureza natureza={p.natureza} detalhe={p.instituicao} />
-              <span class="muted ano">{p.periodo}</span>
-            </div>
-            <Titulo class="titulo">
-              <a href={url(`/projetos/${p.slug}/`)}>{p.titulo}</a>
-            </Titulo>
-            <p class="resumo">{p.resumo}</p>
-            <ul class="tag-list" aria-label="Tecnologias">
-              {p.tecnologias.slice(0, 6).map((t) => <li>{t}</li>)}
-            </ul>
-          </article>
+          <CartaoProjeto projeto={p} nivelTitulo={nivelTitulo} />
         </li>
       ))
     }
@@ -125,35 +111,13 @@ const usadas = categoriasEmUso();
   }
   .filtro[aria-pressed='true'] .contagem { background: rgba(255, 255, 255, 0.18); color: #fff; }
 
-  .itens { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-  .item { border-bottom: 1px solid var(--line); }
-  .item[hidden] { display: none; }
-  article {
+  .itens {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
-    gap: 0.6rem 2.5rem;
-    padding-block: 1.75rem;
-    position: relative;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   }
-  @media (min-width: 900px) {
-    article {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-      grid-template-areas: 'meta resumo' 'titulo resumo' 'titulo tags';
-      align-items: start;
-    }
-    .meta { grid-area: meta; }
-    .titulo { grid-area: titulo; }
-    .resumo { grid-area: resumo; }
-    .tag-list { grid-area: tags; }
-  }
-  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
-  .ano { font-size: var(--step--1); font-variant-numeric: tabular-nums; }
-  .titulo { font-size: var(--step-3); margin: 0; }
-  .titulo a { text-decoration: none; color: var(--navy); background-image: linear-gradient(var(--accent), var(--accent)); background-size: 0 2px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size 0.35s var(--ease); }
-  .titulo a:hover, .titulo a:focus-visible { background-size: 100% 2px; }
-  /* Toda a linha é clicável, mantendo um único link acessível */
-  .titulo a::after { content: ''; position: absolute; inset: 0; }
-  .titulo a:focus-visible { box-shadow: none; }
-  article:has(.titulo a:focus-visible) { box-shadow: var(--focus); border-radius: var(--radius-m); }
-  .resumo { margin: 0; color: var(--muted); max-width: 60ch; }
-  .tag-list { position: relative; }
+  .item[hidden] { display: none; }
 </style>

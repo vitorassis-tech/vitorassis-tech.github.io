@@ -86,7 +86,7 @@ const icone = (texto: string) => {
         {
           site.foto ? (
             <figure class="foto">
-              <img src={url(site.foto.arquivo)} alt={site.foto.alt} width="640" height="800" loading="eager" fetchpriority="high" decoding="async" />
+              <img src={url(site.foto.arquivo)} alt={site.foto.alt} width="960" height="1200" loading="eager" fetchpriority="high" decoding="async" />
             </figure>
           ) : (
             <div class="ilustracao-caixa"><IlustracaoRotas /></div>
@@ -320,7 +320,7 @@ const icone = (texto: string) => {
   @media (max-width: 979px) {
     /* No celular a ilustração sai para encurtar a abertura; a foto, quando houver, fica menor */
     .ilustracao-caixa { display: none; }
-    .foto { max-width: 340px; }
+    .foto { max-width: 320px; margin-inline: auto; }
   }
   .ilustracao-caixa {
     border-radius: 24px;

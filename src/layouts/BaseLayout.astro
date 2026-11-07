@@ -50,6 +50,7 @@ const personJsonLd = {
   worksFor: { '@type': 'Organization', name: site.empresaAtual },
   address: { '@type': 'PostalAddress', addressLocality: 'Rio de Janeiro', addressRegion: 'RJ', addressCountry: 'BR' },
   url: new URL(url('/'), Astro.site).toString(),
+  ...(site.foto ? { image: new URL(url(site.foto.arquivo), Astro.site).toString() } : {}),
   sameAs: canaisVisiveis()
     .filter((c) => c.id === 'linkedin' || c.id === 'github')
     .map((c) => c.href),

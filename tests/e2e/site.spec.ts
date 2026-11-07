@@ -197,8 +197,14 @@ test.describe('conteúdo profissional (E1–E8)', () => {
     expect(valores).toHaveLength(4);
     expect(valores[0]).toMatch(/^\d+\+$/);
     await expect(page.locator('.indicadores')).toContainText('projetos profissionais');
-    // Sem foto cadastrada, a abertura mostra a ilustração (nunca uma pessoa genérica)
-    await expect(page.locator('.hero .foto')).toHaveCount(0);
+    // Foto real cadastrada no painel: carrega e tem descrição; sem ela, a abertura mostra a ilustração
+    const foto = page.locator('.hero .foto img');
+    if (await foto.count()) {
+      await expect(foto).toHaveAttribute('alt', /Vitor Assis/);
+      await expect.poll(() => foto.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+    } else {
+      await expect(page.locator('.hero .ilustracao')).toBeVisible();
+    }
     // Inteligência Artificial aparece como "em formação"
     await expect(page.locator('.areas li.formacao')).toContainText('em formação');
     // Capas carregam; as de réplicas e demonstrações avisam que os dados são fictícios
@@ -225,7 +231,7 @@ test.describe('conteúdo profissional (E1–E8)', () => {
 
   test('objetivo profissional aprovado aparece na página Sobre', async ({ page }) => {
     await page.goto('/sobre/');
-    await expect(page.locator('.objetivo p')).toHaveText(
+    await expect(page.locator('.objetivo-texto')).toHaveText(
       'Atuar nas áreas de Análise de Dados, Business Intelligence e tecnologia, aplicando conhecimentos em Power BI, Excel, SQL, Python e automação para transformar dados em informações úteis à tomada de decisão.',
     );
   });
@@ -240,7 +246,10 @@ test.describe('conteúdo profissional (E1–E8)', () => {
       expect((await img.getAttribute('alt'))?.length).toBeGreaterThan(20);
     }
     await expect(page.locator('#telas figcaption').first()).not.toBeEmpty();
-    await expect(page.getByRole('link', { name: /Código-fonte no GitHub/ })).toHaveAttribute('href', 'https://github.com/vitorassis-tech/atividade_flask');
+    // O repositório aparece no topo (atalho) e na seção Código e materiais
+    const repo = page.getByRole('link', { name: /Código-fonte no GitHub/ });
+    await expect(repo).toHaveCount(2);
+    for (const l of await repo.all()) await expect(l).toHaveAttribute('href', 'https://github.com/vitorassis-tech/atividade_flask');
     await expect(page.getByText('Informações pendentes')).toHaveCount(0);
     await expect(page.locator('.sumario a[href="#telas"]')).toHaveText('Telas');
   });
