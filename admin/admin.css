@@ -1,28 +1,28 @@
 /* Painel administrativo — mesma identidade do site (Centro de Comando: lateral escura, área clara de trabalho) */
-@font-face { font-family: 'Fraunces Variable'; src: url('/fontes/fraunces.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: 'Plus Jakarta Sans Variable'; src: url('/fontes/jakarta.woff2') format('woff2'); font-weight: 200 800; font-display: swap; }
 @font-face { font-family: 'IBM Plex Sans'; src: url('/fontes/plex-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
 @font-face { font-family: 'IBM Plex Sans'; src: url('/fontes/plex-500.woff2') format('woff2'); font-weight: 500; font-display: swap; }
 @font-face { font-family: 'IBM Plex Sans'; src: url('/fontes/plex-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
 
 :root {
-  --cmd-0: #07111f;
-  --cmd-1: #0b1a2c;
+  --cmd-0: #101c32;
+  --cmd-1: #14243f;
   --cmd-line: rgba(150, 185, 225, 0.16);
   --cmd-line-2: rgba(150, 185, 225, 0.3);
-  --cmd-text: #e7eef7;
-  --cmd-muted: #a3b5cb;
-  --signal: #e58a2b;
-  --signal-text: #f6c690;
-  --bg: #f7f9fc;
+  --cmd-text: #eef3f9;
+  --cmd-muted: #a9bad0;
+  --signal: #ff791f;
+  --signal-text: #ffb27a;
+  --bg: #f5f7fa;
   --surface: #fff;
-  --ink: #15253b;
+  --ink: #202b3a;
   --muted: #4a5a70;
   --line: #d9e2ec;
   --line-2: #b9c7d8;
   --navy: #17365d;
-  --navy-900: #0f2541;
+  --navy-900: #101c32;
   --navy-wash: #e9eff7;
-  --accent-ink: #9a4d08;
+  --accent-ink: #a84b06;
   --accent-wash: #fff4e6;
   --erro: #b42318;
   --erro-wash: #fdecea;
@@ -30,7 +30,7 @@
   --ok-wash: #e7f7ee;
   --aviso: #8a5300;
   --aviso-wash: #fff4de;
-  --display: 'Fraunces Variable', Georgia, serif;
+  --display: 'Plus Jakarta Sans Variable', 'Segoe UI', system-ui, sans-serif;
   --body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
   --mono: ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', Consolas, monospace;
   --r-s: 4px;

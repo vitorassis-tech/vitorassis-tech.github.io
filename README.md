@@ -112,7 +112,11 @@ portfolio-vitor-assis/
 - [docs/PENDENCIAS.md](docs/PENDENCIAS.md): informações que faltam e limitações conhecidas
 - [docs/DECISOES.md](docs/DECISOES.md): arquitetura, identidade visual, indicadores fictícios e justificativas
 
-## 6. Privacidade e segurança
+## 6. Currículo para download
+
+Salve o PDF em `public/curriculo/vitor-assis-curriculo.pdf` (crie a pasta se não existir). No próximo build, o botão **Baixar currículo** aparece no menu automaticamente. Sem o arquivo, o menu mostra **Vamos conversar**, que leva à página de contato. Para trocar o currículo, substitua o arquivo mantendo o mesmo nome.
+
+## 7. Privacidade e segurança
 
 - Não há chaves, senhas ou tokens no projeto. O site publicado não tem formulário que envie dados.
 - O painel administrativo roda só em `127.0.0.1`, com token aleatório por sessão, e não faz parte do site publicado.

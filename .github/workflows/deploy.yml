@@ -1,6 +1,5 @@
-# Modelo de publicação automática no GitHub Pages.
-# Fica DESATIVADO nesta pasta. Para ativar, copie para .github/workflows/deploy.yml
-# (veja docs/PUBLICACAO.md). Só faça isso quando decidir publicar.
+# Publicação automática no GitHub Pages (ATIVA).
+# A cada push na branch main: typecheck, testes, build e deploy (veja docs/PUBLICACAO.md).
 name: Publicar no GitHub Pages
 
 on:

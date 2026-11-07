@@ -74,7 +74,7 @@ export function iniciarLaboratorio(raiz: HTMLElement): void {
 
     const cd = pontos[0];
     const lado = raio * 2.6;
-    svg.append(svgEl('rect', { x: cd.x - lado / 2, y: cd.y - lado / 2, width: lado, height: lado, rx: lado * 0.18, fill: corToken('--signal', '#e58a2b') }));
+    svg.append(svgEl('rect', { x: cd.x - lado / 2, y: cd.y - lado / 2, width: lado, height: lado, rx: lado * 0.18, fill: corToken('--signal', '#ff791f') }));
     svg.append(svgEl('text', { x: cd.x, y: cd.y + fonte * 0.36, 'text-anchor': 'middle', 'font-size': fonte, 'font-weight': 700, fill: '#1b0f02' }, 'CD'));
 
     mapa.replaceChildren(svg);

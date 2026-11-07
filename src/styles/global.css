@@ -1,70 +1,79 @@
 /* ==========================================================================
-   Portfólio Vitor Assis — estilos globais
-   Paleta-base do briefing: #17365D, #F7F9FC, #D9E2EC, #E58A2B
-   Variações foram criadas apenas para garantir contraste (WCAG AA).
+   Portfólio Vitor Assis — estilos globais (sistema de design)
+   Paleta: #101C32 azul-marinho profundo · #17365D institucional · #FFFFFF
+           #F5F7FA fundo · #D9E2EC linhas · #FF791F laranja · #202B3A grafite
+   O laranja #FF791F tem contraste 2,6:1 sobre fundo claro: só em botões
+   (com texto azul-marinho, 6,5:1), ícones, marcadores e linhas. Para texto
+   laranja em fundo claro usa-se --accent-ink (5,2:1 ou mais).
    ========================================================================== */
 
 :root {
   color-scheme: light;
 
   /* Cor */
-  --navy: #17365d;          /* marca, títulos */
-  --navy-900: #0f2541;      /* faixa escura */
-  --ink: #15253b;           /* texto principal (contraste 14:1) */
-  --muted: #4a5a70;         /* texto secundário (contraste 6.8:1) */
-  --bg: #f7f9fc;            /* fundo */
+  --navy: #17365d;          /* azul institucional: títulos, links */
+  --navy-900: #101c32;      /* azul-marinho profundo */
+  --ink: #202b3a;           /* grafite: texto principal (13:1) */
+  --muted: #4a5a70;         /* texto secundário (6,5:1) */
+  --bg: #f5f7fa;            /* fundo */
   --surface: #ffffff;
   --line: #d9e2ec;          /* divisórias */
   --line-strong: #b9c7d8;
-  --accent: #e58a2b;        /* laranja: marcas gráficas, nunca texto pequeno */
-  --accent-ink: #9a4d08;    /* laranja para texto (contraste 6:1) */
-  --accent-wash: #fdf1e4;
-  --navy-wash: #e9eff7;
+  --accent: #ff791f;        /* laranja: botões, marcas gráficas, nunca texto pequeno em fundo claro */
+  --accent-hover: #ff8f45;
+  --accent-ink: #a84b06;    /* laranja para texto em fundo claro (5,2:1) */
+  --accent-wash: #fff1e6;
+  --navy-wash: #e8eef6;
 
-  /* Séries de gráficos (validadas para daltonismo e contraste ≥ 3:1) */
+  /* Séries de gráficos (fundo claro) */
   --serie-1: #2563a8;
-  --serie-2: #c9741f;
+  --serie-2: #d9661a;
 
   /* Tipografia */
-  --font-display: 'Fraunces Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-display: 'Plus Jakarta Sans Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-body: 'IBM Plex Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
 
   --step--1: 0.875rem;
   --step-0: 1.0625rem;
   --step-1: 1.25rem;
-  --step-2: clamp(1.45rem, 1.2rem + 0.9vw, 1.75rem);
-  --step-3: clamp(1.8rem, 1.4rem + 1.6vw, 2.5rem);
-  --step-4: clamp(2.3rem, 1.6rem + 3vw, 3.75rem);
-  --step-5: clamp(2.6rem, 1.5rem + 5vw, 5.25rem);
+  --step-2: clamp(1.4rem, 1.2rem + 0.8vw, 1.65rem);
+  --step-3: clamp(1.75rem, 1.4rem + 1.5vw, 2.35rem);
+  --step-4: clamp(2.1rem, 1.5rem + 2.6vw, 3.3rem);
+  --step-5: clamp(2.5rem, 1.5rem + 4.6vw, 4.75rem);
 
-  /* Espaço e layout */
+  /* Espaço e forma */
   --gutter: clamp(1rem, 4vw, 3rem);
-  --max: 74rem;
+  --max: 76rem;
   --measure: 66ch;
-  --section: clamp(4rem, 8vw, 7rem);
-  --radius-s: 4px;
-  --radius-m: 8px;
-  --radius-l: 14px;
+  --section: clamp(4rem, 8vw, 6.5rem);
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 16px;
+  --radius-pill: 999px;
+
+  /* Sombras (azul, nunca preto puro) */
+  --shadow-1: 0 1px 2px rgba(16, 28, 50, 0.06), 0 2px 8px -2px rgba(16, 28, 50, 0.06);
+  --shadow-2: 0 2px 4px rgba(16, 28, 50, 0.05), 0 18px 40px -18px rgba(16, 28, 50, 0.22);
 
   --focus: 0 0 0 3px var(--bg), 0 0 0 6px var(--navy);
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
-  /* Superfícies de comando (escuras) — direção visual híbrida "Centro de Comando" */
-  --cmd-0: #07111f;         /* fundo das faixas escuras */
-  --cmd-1: #0b1a2c;         /* painéis */
-  --cmd-2: #10243b;         /* painéis elevados */
-  --cmd-line: rgba(150, 185, 225, 0.16);
-  --cmd-line-2: rgba(150, 185, 225, 0.3);
-  --cmd-text: #e7eef7;      /* contraste 16:1 sobre --cmd-0 */
-  --cmd-muted: #a3b5cb;     /* contraste 8,6:1 sobre --cmd-0 */
-  --signal: #e58a2b;        /* laranja de sinal: contraste 7:1 sobre --cmd-0 */
-  --signal-text: #f6c690;
-  --signal-soft: rgba(229, 138, 43, 0.16);
+  /* Superfícies escuras (menu, faixas de destaque, demonstrações) */
+  --cmd-0: #101c32;         /* fundo das faixas escuras */
+  --cmd-1: #14243f;         /* painéis */
+  --cmd-2: #1a2f50;         /* painéis elevados */
+  --cmd-line: rgba(160, 190, 228, 0.16);
+  --cmd-line-2: rgba(160, 190, 228, 0.3);
+  --cmd-text: #eef3f9;      /* contraste 16:1 sobre --cmd-0 */
+  --cmd-muted: #a9bad0;     /* contraste 8:1 sobre --cmd-0 */
+  --signal: #ff791f;        /* laranja: 6,5:1 sobre --cmd-0 */
+  --signal-text: #ffb27a;   /* texto laranja sobre escuro (9,6:1) */
+  --signal-soft: rgba(255, 121, 31, 0.16);
   --trace: #cfe2f6;         /* rota concluída */
-  /* Séries de gráficos sobre fundo escuro (validadas para daltonismo e contraste ≥ 3:1) */
+  /* Séries de gráficos (fundo escuro) */
   --serie-1-escuro: #4f9bd9;
-  --serie-2-escuro: #cf7a24;
-  /* Status do farol (sempre acompanhados de forma e texto) */
+  --serie-2-escuro: #ff8a3d;
+  /* Status de painéis (sempre acompanhados de forma ou texto) */
   --st-normal: #5fd08a;
   --st-atencao: #f2c14e;
   --st-critico: #f0645a;
@@ -107,16 +116,15 @@ h3,
 h4 {
   font-family: var(--font-display);
   color: var(--navy);
-  font-weight: 560;
-  line-height: 1.1;
-  letter-spacing: -0.015em;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
   margin: 0 0 0.5em;
-  font-optical-sizing: auto;
   text-wrap: balance;
 }
 
-h1 { font-size: var(--step-5); letter-spacing: -0.03em; line-height: 1.02; }
-h2 { font-size: var(--step-4); letter-spacing: -0.025em; }
+h1 { font-size: var(--step-5); font-weight: 800; letter-spacing: -0.035em; line-height: 1.04; }
+h2 { font-size: var(--step-4); font-weight: 750; letter-spacing: -0.03em; }
 h3 { font-size: var(--step-2); }
 h4 { font-size: var(--step-1); }
 
@@ -195,24 +203,79 @@ a:hover { color: var(--accent-ink); }
   .section-head { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr); align-items: end; }
 }
 
-/* Botões ------------------------------------------------------------------- */
+/* Botões -------------------------------------------------------------------
+   .btn-primary  laranja com texto azul-marinho (ação principal, 1 por bloco)
+   .btn-ghost    contorno azul (ação secundária)
+   .link-seta    link de texto com seta
+   -------------------------------------------------------------------------- */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  min-height: 44px;
-  padding: 0.65rem 1.2rem;
-  border-radius: var(--radius-m);
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 46px;
+  padding: 0.65rem 1.35rem;
+  border-radius: var(--radius-pill);
   border: 1.5px solid var(--navy);
-  font: 500 var(--step-0) / 1.2 var(--font-body);
+  font: 600 var(--step-0) / 1.2 var(--font-body);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
 }
-.btn-primary { background: var(--navy); color: #fff; }
-.btn-primary:hover { background: var(--navy-900); color: #fff; }
+.btn svg { flex: none; transition: transform 0.2s var(--ease); }
+.btn:hover svg[data-seta] { transform: translateX(3px); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--navy-900); }
+.btn-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: var(--navy-900);
+  box-shadow: 0 10px 24px -12px rgba(255, 121, 31, 0.7);
+}
 .btn-ghost { background: transparent; color: var(--navy); }
 .btn-ghost:hover { background: var(--navy-wash); color: var(--navy); }
+.btn-sm { min-height: 40px; padding: 0.45rem 1rem; font-size: var(--step--1); }
+
+.link-seta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--navy);
+}
+.link-seta::after { content: '→'; color: var(--accent-ink); transition: transform 0.2s var(--ease); }
+.link-seta:hover::after { transform: translateX(3px); }
+
+/* Rótulo de seção com o traço laranja "/" ---------------------------------- */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.85rem;
+  font: 700 var(--step--1) / 1.2 var(--font-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+.kicker::before {
+  content: '';
+  width: 0.32rem;
+  height: 1.05rem;
+  background: var(--accent);
+  border-radius: 1px;
+  transform: skewX(-20deg);
+}
+
+/* Cartão base -------------------------------------------------------------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-1);
+  transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.card-link:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); border-color: var(--line-strong); }
 
 /* Selo de natureza do projeto (forma + texto, nunca só cor) ----------------- */
 .natureza {
@@ -238,14 +301,14 @@ a:hover { color: var(--accent-ink); }
 }
 .natureza[data-natureza='trabalho']::before { border-radius: 50%; }
 .natureza[data-natureza='academico']::before { background: var(--muted); border-radius: 2px; }
-.natureza[data-natureza='demonstracao'] { background: var(--accent-wash); border-color: #efc79c; }
+.natureza[data-natureza='demonstracao'] { background: var(--accent-wash); border-color: #ffc9a3; }
 .natureza[data-natureza='demonstracao']::before { background: var(--accent); transform: rotate(45deg); }
 
 .tag-list { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; padding: 0; margin: 0; }
 .tag-list li {
   font-size: var(--step--1);
-  padding: 0.15rem 0.55rem;
-  border-radius: var(--radius-s);
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-pill);
   background: var(--navy-wash);
   color: var(--navy);
 }
@@ -258,7 +321,7 @@ a:hover { color: var(--accent-ink); }
   padding: 0.85rem 1rem;
   border-radius: var(--radius-m);
   background: var(--accent-wash);
-  border: 1px solid #efc79c;
+  border: 1px solid #ffc9a3;
   color: #4d2a06;
   font-size: var(--step--1);
   line-height: 1.5;
@@ -310,12 +373,12 @@ a:hover { color: var(--accent-ink); }
   --focus: var(--focus-escuro);
 }
 .cmd .natureza[data-natureza='demonstracao'],
-.console .natureza[data-natureza='demonstracao'] { border-color: rgba(229, 138, 43, 0.5); }
+.console .natureza[data-natureza='demonstracao'] { border-color: rgba(255, 121, 31, 0.5); }
 .cmd .natureza[data-natureza='academico']::before,
 .console .natureza[data-natureza='academico']::before { background: var(--cmd-muted); }
 .cmd .natureza[data-natureza='trabalho']::before,
 .console .natureza[data-natureza='trabalho']::before { background: var(--trace); }
-.cmd .aviso-simulado { background: rgba(229, 138, 43, 0.12); border-color: rgba(229, 138, 43, 0.5); color: var(--signal-text); }
+.cmd .aviso-simulado { background: rgba(255, 121, 31, 0.12); border-color: rgba(255, 121, 31, 0.5); color: var(--signal-text); }
 .cmd .aviso-simulado strong { color: #fff; }
 .cmd .tag-list li, .console .tag-list li { background: rgba(255, 255, 255, 0.07); color: var(--cmd-text); }
 
@@ -323,7 +386,7 @@ a:hover { color: var(--accent-ink); }
   --bg: var(--cmd-0);
   background:
     radial-gradient(1100px 480px at 80% 10%, rgba(79, 155, 217, 0.13), transparent 60%),
-    radial-gradient(700px 380px at 5% 100%, rgba(229, 138, 43, 0.09), transparent 60%),
+    radial-gradient(700px 380px at 5% 100%, rgba(255, 121, 31, 0.09), transparent 60%),
     var(--cmd-0);
   color: var(--cmd-text);
   position: relative;
@@ -374,8 +437,8 @@ a:hover { color: var(--accent-ink); }
     linear-gradient(var(--signal), var(--signal)) bottom right / 2px 18px no-repeat;
 }
 
-.btn-sinal { background: var(--signal); border-color: var(--signal); color: #1b0f02; font-weight: 600; }
-.btn-sinal:hover { background: #f19a3e; border-color: #f19a3e; color: #1b0f02; }
+.btn-sinal { background: var(--signal); border-color: var(--signal); color: var(--navy-900); font-weight: 600; }
+.btn-sinal:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--navy-900); }
 .btn-linha { background: rgba(255, 255, 255, 0.03); border-color: var(--cmd-line-2); color: var(--cmd-text); }
 .btn-linha:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
 
@@ -387,7 +450,7 @@ a:hover { color: var(--accent-ink); }
   font-family: var(--font-mono);
   font-size: 0.78rem;
   color: var(--signal-text);
-  border: 1px solid rgba(229, 138, 43, 0.45);
+  border: 1px solid rgba(255, 121, 31, 0.45);
   background: var(--signal-soft);
   padding: 0.15rem 0.6rem;
   border-radius: 999px;
@@ -405,5 +468,5 @@ a:hover { color: var(--accent-ink); }
 }
 .console :focus-visible { box-shadow: var(--focus-escuro); }
 .console a { color: var(--cmd-text); text-decoration-color: var(--signal); }
-.console .aviso-simulado { background: rgba(229, 138, 43, 0.12); border-color: rgba(229, 138, 43, 0.5); color: var(--signal-text); }
+.console .aviso-simulado { background: rgba(255, 121, 31, 0.12); border-color: rgba(255, 121, 31, 0.5); color: var(--signal-text); }
 .console .aviso-simulado strong { color: #fff; }

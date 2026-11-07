@@ -5,6 +5,8 @@
  * (editáveis pelo painel: npm run admin).
  * O telefone está OCULTO por padrão: só exiba com autorização do proprietário.
  */
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { conteudo } from './conteudo';
 
 export type TipoCanal = 'email' | 'linkedin' | 'github' | 'telefone';
@@ -61,10 +63,23 @@ export const canaisVisiveis = (): Canal[] => canais.filter((c) => c.exibir && c.
 
 export const inicio = conteudo.inicio as Inicio;
 
+/**
+ * Menu principal. Formação e Certificados apontam por enquanto para as seções da página Sobre;
+ * na fase D do redesign passam a ter páginas próprias (/formacao/ e /certificados/).
+ */
 export const navegacao = [
   { href: '/', rotulo: 'Início' },
   { href: '/sobre/', rotulo: 'Sobre' },
   { href: '/experiencia/', rotulo: 'Experiência' },
   { href: '/projetos/', rotulo: 'Projetos' },
+  { href: '/sobre/#formacao', rotulo: 'Formação' },
+  { href: '/sobre/#cursos', rotulo: 'Certificados' },
   { href: '/contato/', rotulo: 'Contato' },
 ] as const;
+
+/**
+ * Currículo para download. O botão "Baixar currículo" só aparece quando o arquivo existe:
+ * basta salvar o PDF em public/curriculo/vitor-assis-curriculo.pdf.
+ */
+export const CURRICULO = '/curriculo/vitor-assis-curriculo.pdf';
+export const temCurriculo = (): boolean => existsSync(join(process.cwd(), 'public', CURRICULO));

@@ -1,4 +1,5 @@
 ---
+import Monograma from './Monograma.astro';
 import { canaisVisiveis, navegacao, site } from '../data/site';
 import { mesAno, url } from '../lib/formato';
 const canais = canaisVisiveis();
@@ -7,27 +8,38 @@ const ano = new Date().getFullYear();
 
 <footer class="site-footer">
   <div class="container grade">
-    <div>
-      <p class="nome">{site.nome}</p>
-      <p class="muted">{site.posicionamento}. {site.local}.</p>
+    <div class="identidade">
+      <a class="marca" href={url('/')} aria-label={`${site.nome}, página inicial`}>
+        <Monograma tamanho={36} />
+        <span class="marca-texto">
+          <span class="marca-nome">{site.nome}</span>
+          <span class="marca-sub">Technology &amp; Data</span>
+        </span>
+      </a>
+      <p class="resumo">{site.posicionamento}. {site.local}.</p>
+      <p class="frentes" aria-label="Áreas">Logística · Dados · Tecnologia</p>
     </div>
     <nav aria-label="Rodapé">
+      <p class="titulo">Navegação</p>
       <ul>
         {navegacao.map((n) => <li><a href={url(n.href)}>{n.rotulo}</a></li>)}
       </ul>
     </nav>
-    <ul class="canais" aria-label="Perfis e contato">
-      {
-        canais.map((c) => (
-          <li>
-            <a href={c.href} rel={c.id === 'email' ? undefined : 'noopener noreferrer'} target={c.id === 'email' ? undefined : '_blank'}>
-              {c.rotulo}
-              {c.id !== 'email' && <span class="visually-hidden"> (abre em nova aba)</span>}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    <div>
+      <p class="titulo">Contato</p>
+      <ul class="canais" aria-label="Perfis e contato">
+        {
+          canais.map((c) => (
+            <li>
+              <a href={c.href} rel={c.id === 'email' ? undefined : 'noopener noreferrer'} target={c.id === 'email' ? undefined : '_blank'}>
+                {c.rotulo}
+                {c.id !== 'email' && <span class="visually-hidden"> (abre em nova aba)</span>}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
   <div class="container nota">
     <p>
@@ -39,37 +51,51 @@ const ano = new Date().getFullYear();
 
 <style>
   .site-footer {
-    border-top: 1px solid var(--line);
-    padding-block: 3rem 2rem;
+    background: var(--cmd-0);
+    color: var(--cmd-muted);
+    padding-block: 3.5rem 2rem;
     font-size: 0.95rem;
+    border-top: 3px solid var(--signal);
   }
-  .grade {
-    display: grid;
-    gap: 2rem;
-  }
+  .site-footer :focus-visible { box-shadow: var(--focus-escuro); }
+  .grade { display: grid; gap: 2.25rem; }
   @media (min-width: 760px) {
     .grade { grid-template-columns: 2fr 1fr 1fr; }
   }
-  .nome {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    color: var(--navy);
-    margin-bottom: 0.25rem;
+  .marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: #fff;
+    text-decoration: none;
+    margin-bottom: 1rem;
   }
-  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.15rem; }
-  a {
+  .marca:hover { color: #fff; }
+  .marca-texto { display: grid; line-height: 1.1; }
+  .marca-nome { font: 700 1.15rem/1.1 var(--font-display); letter-spacing: -0.02em; }
+  .marca-sub { font-size: 0.78rem; color: var(--cmd-muted); }
+  .resumo { margin-bottom: 0.4rem; }
+  .frentes { color: var(--signal-text); font-weight: 500; margin: 0; }
+  .titulo {
+    font: 700 0.8rem/1.2 var(--font-display);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0 0 0.75rem;
+  }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.1rem; }
+  ul a {
     display: inline-flex;
     align-items: center;
     min-height: 32px;
-    color: var(--ink);
-    text-decoration-color: var(--line-strong);
+    color: var(--cmd-text);
+    text-decoration: none;
   }
-  a:hover { text-decoration-color: var(--accent); }
+  ul a:hover { color: var(--signal-text); text-decoration: underline; text-decoration-color: var(--signal); }
   .nota {
-    margin-top: 2rem;
+    margin-top: 2.5rem;
     padding-top: 1.25rem;
-    border-top: 1px solid var(--line);
-    color: var(--muted);
+    border-top: 1px solid var(--cmd-line);
     font-size: var(--step--1);
   }
   .nota p { margin: 0; max-width: 80ch; }

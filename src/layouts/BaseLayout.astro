@@ -1,11 +1,11 @@
 ---
-import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/plus-jakarta-sans/wght.css';
 import '@fontsource/ibm-plex-sans/400.css';
 import '@fontsource/ibm-plex-sans/500.css';
 import '@fontsource/ibm-plex-sans/600.css';
 import '../styles/global.css';
 // Pré-carrega as duas fontes usadas acima da dobra (subconjunto latino)
-import fonteTitulo from '@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2?url';
+import fonteTitulo from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
 import fonteTexto from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -67,7 +67,7 @@ const personJsonLd = {
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
     <meta name="author" content={site.nomeCompleto} />
-    <meta name="theme-color" content="#07111F" />
+    <meta name="theme-color" content="#101C32" />
     <link rel="preload" href={fonteTitulo} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={fonteTexto} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />

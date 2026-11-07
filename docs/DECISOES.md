@@ -10,7 +10,7 @@
 | **Painel administrativo local (Node puro, sem dependências)** | CRUD completo sem contas nem serviços externos. Roda só em 127.0.0.1, com token por sessão, validação no servidor, histórico, lixeira e detecção de edição simultânea. Não faz parte do site publicado. A versão on-line (Fase 2) depende de autorização. |
 | **Status dos projetos** | `publicado`, `rascunho` e `arquivado`. O build publica só os publicados e oculta links para os demais; a prévia (`npm run admin`) mostra todos, com aviso. |
 | **Logotipos das instituições** | Só arquivos oficiais enviados pelo proprietário. Sem arquivo, um selo neutro genérico (não imita nenhuma marca). |
-| **CSS próprio, sem framework e sem dependência nova** | A identidade "Centro de Comando" foi feita só com CSS e SVG e as fontes já instaladas (Fraunces e IBM Plex Sans). Os rótulos técnicos usam a fonte monoespaçada do próprio sistema. |
+| **CSS próprio, sem framework e sem dependência nova** | A identidade "Centro de Comando" foi feita só com CSS e SVG e as fontes do próprio site (IBM Plex Sans; títulos em Fraunces até nov/2026, depois Plus Jakarta Sans no redesign). Os rótulos técnicos usam a fonte monoespaçada do próprio sistema. |
 | **Gráficos em SVG sem biblioteca** | Leves e sem dependência externa. As cores das séries foram validadas para daltonismo e contraste nas superfícies clara e escura. |
 | **Fontes auto-hospedadas** | Nenhuma requisição a terceiros. As duas fontes principais são pré-carregadas. |
 | **Lógica em funções puras (`src/lib`)** | Testáveis isoladamente; a interface só desenha. |
@@ -68,3 +68,13 @@ As demonstrações **não** reproduzem quantidades, indicadores, fórmulas ou re
 - Resultados do tipo "medido" não existem enquanto não houver medição autorizada; um teste garante isso.
 - Projetos acadêmicos mostram só o que está comprovado. O que falta aparece como pendência no próprio site.
 - As demonstrações informam que foram feitas com apoio de IA generativa.
+
+## Redesign premium (nov/2026)
+
+| Decisão | Motivo |
+|---|---|
+| **Nova paleta** `#101C32`, `#17365D`, `#F5F7FA`, `#D9E2EC`, `#FF791F`, `#202B3A` | Identidade aprovada pelo Vitor. O laranja tem contraste 2,6:1 sobre fundo claro: só em botões (texto azul-marinho, 6,5:1), ícones e detalhes; texto laranja em fundo claro usa `--accent-ink` (`#A84B06`). |
+| **Títulos em Plus Jakarta Sans** (licença OFL, servida pelo próprio site) | Sans geométrica moderna, próxima das referências visuais. Substitui a Fraunces; o texto corrido continua em IBM Plex Sans. |
+| **Monograma "VA"** em SVG (`src/components/Monograma.astro`) | Substitui o ícone genérico de gráfico; usado no menu, rodapé, painel e favicon. |
+| **Menu com 7 itens** e botão de destaque | Formação e Certificados ganham acesso direto. O botão mostra "Baixar currículo" só quando o PDF existe; senão, "Vamos conversar". |
+

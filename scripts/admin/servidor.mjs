@@ -487,7 +487,7 @@ export function criarServidor(opcoes = {}) {
       if (caminho.startsWith('/fontes/')) {
         const nome = caminho.slice('/fontes/'.length);
         const mapa = {
-          'fraunces.woff2': join(PROJETO, 'node_modules/@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2'),
+          'jakarta.woff2': join(PROJETO, 'node_modules/@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2'),
           'plex-400.woff2': join(PROJETO, 'node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2'),
           'plex-500.woff2': join(PROJETO, 'node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-500-normal.woff2'),
           'plex-600.woff2': join(PROJETO, 'node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2'),

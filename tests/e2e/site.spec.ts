@@ -148,6 +148,19 @@ test.describe('navegação e acessibilidade', () => {
     await expect(page.locator('#menu-principal a[aria-current="page"]')).toHaveText('Projetos');
   });
 
+  test('menu tem os 7 itens e o botão de destaque leva ao contato enquanto não há currículo em PDF', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    const nav = page.locator('#menu-principal');
+    await expect(nav.locator('ul a')).toHaveText(['Início', 'Sobre', 'Experiência', 'Projetos', 'Formação', 'Certificados', 'Contato']);
+    await nav.getByRole('link', { name: 'Certificados' }).click();
+    await expect(page).toHaveURL(/\/sobre\/#cursos$/);
+    await expect(page.locator('#cursos')).toBeInViewport();
+    // Sem public/curriculo/vitor-assis-curriculo.pdf, nada de botão de download sem arquivo
+    await expect(page.locator('a[download]')).toHaveCount(0);
+    await expect(nav.getByRole('link', { name: 'Vamos conversar' })).toHaveAttribute('href', /\/contato\/$/);
+  });
+
   for (const rota of [...ROTAS, '/nao-existe/']) {
     test(`axe sem violações sérias em ${rota}`, async ({ page }) => {
       await page.emulateMedia({ reducedMotion: 'reduce' });
