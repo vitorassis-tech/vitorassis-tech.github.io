@@ -135,7 +135,7 @@ def main() -> None:
     # ---------- Competências ----------
     hist += secao("Competências")
     grupos = [
-        ("Logística e transporte", "roteirização de entregas (Roadnet), expedição, gestão de transportadoras e fretes, documentação fiscal e de transporte (CT-e, XML de NF-e, DANFE), gerenciamento de riscos (GR), agendamento de cargas e entregas, rastreamento de entregas, inventário e 5S"),
+        ("Logística e transporte", "roteirização de entregas (Roadnet), expedição, gestão de transportadoras e fretes, documentação fiscal e de transporte (CT-e, XML de NF-e, DANFE), envio de dados ao gerenciamento de riscos (GR), agendamento de cargas e entregas, rastreamento de entregas, inventário e 5S"),
         ("Dados e BI", "Power BI, Power Query (M), DAX, Excel avançado (tabelas dinâmicas), indicadores (KPIs) e relatórios gerenciais"),
         ("Programação e bancos de dados", "Python, SQL, MySQL, SQLite, modelagem relacional (MER/DER), JSON, Flask, HTML, CSS, JavaScript, Git e GitHub"),
         ("Inteligência Artificial", "curso de Inteligência Artificial concluído (FAETEC, 168h)"),

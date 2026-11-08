@@ -338,7 +338,7 @@ export const COLECOES = [
   {
     id: 'marcos',
     tipo: 'lista',
-    rotulo: 'Telemetria de carreira',
+    rotulo: 'Linha do tempo da carreira',
     singular: 'marco',
     arquivo: 'marcos.json',
     chave: 'id',
@@ -375,7 +375,7 @@ export const COLECOES = [
           { nome: 'apresentacao', rotulo: 'Apresentação (bloco Sobre da página inicial)', tipo: 'textoLongo', obrigatorio: true, max: 420 },
           {
             nome: 'areas',
-            rotulo: 'Áreas de atuação',
+            rotulo: 'Áreas de foco',
             tipo: 'listaObjetos',
             rotuloItem: 'Área',
             minItens: 1,

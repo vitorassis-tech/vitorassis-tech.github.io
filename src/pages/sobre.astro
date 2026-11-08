@@ -27,7 +27,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
 
 <BaseLayout
   title="Sobre"
-  description="Trajetória de Vitor Assis: do armazém ao planejamento de transportes e aos dashboards em Power BI, com estudos em SQL, Python e bancos de dados. Formação, cursos e competências."
+  description="Trajetória de Vitor Assis: do armazém ao planejamento de transportes e aos dashboards em Power BI, com cursos de Python e banco de dados concluídos e SQL em formação."
 >
   <section class:list={['sobre-hero', { 'com-foto': site.foto }]} aria-labelledby="sobre-titulo">
     <div class="container sobre-grade">
@@ -73,7 +73,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
       }
     </div>
     <div class="container">
-      <ul class="sobre-areas" aria-label="Áreas de atuação">
+      <ul class="sobre-areas" aria-label="Áreas de foco">
         {
           inicio.areas.map((a) => (
             <li>
