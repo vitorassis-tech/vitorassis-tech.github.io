@@ -46,6 +46,12 @@
         "href": "/projetos/banco-dados-relacional/"
       },
       {
+        "nome": "JSON e CSS no Power BI",
+        "contexto": "trabalho",
+        "evidencia": "Personalização visual dos dashboards de Power BI na Profarma",
+        "href": "/projetos/torre-controle-expedicao/"
+      },
+      {
         "nome": "KPIs e indicadores",
         "contexto": "trabalho",
         "evidencia": "Relatórios diários de expedição: volumes, notas fiscais, pendências e percentual expedido"
