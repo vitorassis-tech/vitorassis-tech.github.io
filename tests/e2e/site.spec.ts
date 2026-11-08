@@ -150,12 +150,13 @@ test.describe('navegação e acessibilidade', () => {
     await expect(page.locator('#menu-principal a[aria-current="page"]')).toHaveText('Projetos');
   });
 
-  test('menu tem os 7 itens e o botão de destaque baixa o currículo em PDF', async ({ page, request }) => {
+  test('menu tem os 7 itens, convida ao contato e o currículo em PDF baixa pela abertura', async ({ page, request }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
     const nav = page.locator('#menu-principal');
     await expect(nav.locator('ul a')).toHaveText(['Início', 'Sobre', 'Experiência', 'Projetos', 'Formação', 'Certificados', 'Contato']);
-    const botao = nav.getByRole('link', { name: 'Baixar currículo' });
+    await expect(nav.getByRole('link', { name: 'Vamos conectar?' })).toHaveAttribute('href', /\/contato\/$/);
+    const botao = page.locator('.hero').getByRole('link', { name: 'Baixar currículo' });
     await expect(botao).toHaveAttribute('download', '');
     const href = await botao.getAttribute('href');
     expect(href).toMatch(/\/curriculo\/vitor-assis-curriculo\.pdf$/);

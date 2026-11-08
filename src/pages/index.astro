@@ -66,7 +66,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
 
 <BaseLayout title={site.nome}>
   <!-- ============ Abertura ============ -->
-  <section class="hero" aria-labelledby="hero-titulo">
+  <section class:list={['hero', { 'com-foto': site.foto }]} aria-labelledby="hero-titulo">
     <picture>
       <source media="(max-width: 759px)" srcset={url('/img/fundos/hero-globo-movel.webp')} width="1080" height="1500" />
       <img
@@ -84,7 +84,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
     </picture>
     <div class="container hero-grade">
       <div class="hero-texto">
-        <p class="selo-topo"><i aria-hidden="true"></i>Logística · Dados · Tecnologia</p>
+        <p class="selo-topo"><i aria-hidden="true"></i>Logística · Dados · Tecnologia · Inovação</p>
         <h1 id="hero-titulo" class="nome">
           <span class="nome-1">{site.nome.split(' ')[0]}</span>{' '}<span class="nome-2">{site.nome.split(' ').slice(1).join(' ')}</span>
           <span class="visually-hidden">: {inicio.posicionamento}</span>
@@ -119,7 +119,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
         {
           site.foto && (
             <figure class="foto">
-              <img src={url(site.foto.arquivo)} alt={site.foto.alt} width="960" height="1200" loading="eager" decoding="async" />
+              <img src={url(site.foto.arquivo)} alt={site.foto.alt} width="585" height="784" loading="eager" fetchpriority="high" decoding="async" />
             </figure>
           )
         }
@@ -426,16 +426,16 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
   .subtitulo { color: var(--cmd-text); opacity: 0.86; max-width: 54ch; margin: 0; font-size: 1.06rem; }
   .cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
 
-  .foto {
-    margin: 0;
-    width: min(320px, 100%);
-    border-radius: 24px;
-    overflow: hidden;
-    aspect-ratio: 4 / 5;
-    border: 1px solid var(--cmd-line-2);
-    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+  /* Foto recortada (fundo transparente): sem moldura, apoiada na base da abertura */
+  .foto { margin: 0 auto; width: min(340px, 78%); }
+  .foto img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 22px rgba(79, 155, 217, 0.22));
+    -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
   }
-  .foto img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 
   .areas { padding: 1rem 1.05rem 1.05rem; width: min(250px, 100%); background: linear-gradient(180deg, rgba(16, 28, 50, 0.94), rgba(10, 18, 36, 0.96)); }
   .areas-titulo { margin: 0 0 0.75rem; font: 700 1.02rem/1.2 var(--font-display); color: #fff; }
@@ -451,6 +451,36 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
     background: rgba(255, 255, 255, 0.05);
   }
   .area-icone svg { width: 21px; height: 21px; }
+  /* Computador com foto (como no modelo): texto compacto à esquerda, foto grande no centro
+     apoiada na faixa de indicadores, caminhão livre à direita e o painel na lateral */
+  @media (min-width: 1200px) {
+    .hero.com-foto .hero-grade {
+      min-height: clamp(520px, 36vw, 680px);
+      padding-top: clamp(1.5rem, 2.5vw, 2.5rem);
+      padding-bottom: 3.5rem;
+    }
+    .hero.com-foto .hero-texto { max-width: 30rem; }
+    .hero.com-foto .selo-topo { margin-bottom: 1.1rem; }
+    .hero.com-foto .nome { font-size: clamp(3.4rem, 1.2rem + 3.6vw, 5rem); }
+    .hero.com-foto .posicionamento { display: none; }
+    .hero.com-foto .frase { font-size: clamp(1.35rem, 0.8rem + 0.8vw, 1.65rem); margin: 0.9rem 0 0.9rem; max-width: 20em; text-wrap: balance; }
+    .hero.com-foto .subtitulo { font-size: 1rem; max-width: 44ch; }
+    .hero.com-foto .cta { margin-top: 1.6rem; flex-wrap: nowrap; gap: 0.65rem; }
+    .hero.com-foto .cta .btn { padding-inline: 1.15rem; font-size: 0.95rem; white-space: nowrap; }
+    .hero.com-foto .foto {
+      position: absolute;
+      bottom: 0;
+      /* começa a ~40% da tela, nunca antes do fim do texto */
+      left: max(calc(40vw - (100vw - 100%) / 2), calc(var(--gutter) + 31.5rem));
+      width: auto;
+      height: calc(100% - 2.75rem);
+      max-height: 610px;
+      z-index: 1;
+    }
+    .hero.com-foto .foto img { height: 100%; width: auto; -webkit-mask-image: none; mask-image: none; }
+    /* faixa de indicadores sobe e cobre a base da foto */
+    .hero.com-foto .indicadores { position: relative; z-index: 3; margin-top: -2.75rem; }
+  }
   /* Computador: painel encostado na lateral direita da tela, centralizado na altura da abertura (como na referência) */
   @media (min-width: 1200px) {
     .hero-grade { position: relative; }

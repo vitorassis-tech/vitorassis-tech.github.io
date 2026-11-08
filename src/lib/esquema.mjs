@@ -453,7 +453,7 @@ export const COLECOES = [
             rotulo: 'Foto profissional',
             tipo: 'imagem',
             pasta: 'perfil',
-            ajuda: 'Opcional. Foto real, de preferência vertical (retrato), com boa resolução e fundo neutro. JPG, PNG ou WebP até 2 MB. Sem foto, a página inicial mostra uma ilustração de rotas.',
+            ajuda: 'Opcional. Foto real recortada, com fundo transparente (PNG ou WebP), da cintura para cima, até 2 MB. Ela aparece no centro da abertura da página inicial, sobre a cidade.',
           },
         ],
       },

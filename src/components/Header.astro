@@ -1,13 +1,12 @@
 ---
 import Monograma from './Monograma.astro';
-import { navegacao, site, CURRICULO, temCurriculo } from '../data/site';
+import { navegacao, site } from '../data/site';
 import { url } from '../lib/formato';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const atual = Astro.url.pathname.replace(base, '') || '/';
 const ativo = (href: string) => (href === '/' ? atual === '/' : atual.startsWith(href.replace(/\/$/, '')));
 // Botão de destaque: currículo quando o PDF existir; senão, contato.
-const curriculo = temCurriculo();
 // Na página inicial o menu fica transparente sobre a imagem da abertura até a página rolar.
 const transparente = atual === '/';
 ---
@@ -43,24 +42,14 @@ const transparente = atual === '/';
         }
       </ul>
       <span class="risco" aria-hidden="true"></span>
-      {
-        curriculo ? (
-          <a class="btn btn-escuro btn-sm cta" href={url(CURRICULO)} download>
-            Baixar currículo
-            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-              <path d="M8 2v8m0 0 3.5-3.5M8 10 4.5 6.5M3 13.5h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </a>
-        ) : (
-          <a class="btn btn-escuro btn-sm cta" href={url('/contato/')}>
-            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2M9 15l-3-3 6-7c2.5-2.5 6.5-2.5 9-2-.5 2.5.5 6.5-2 9l-7 6zM14.5 9.5a1.2 1.2 0 1 0 0-.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
-            Vamos conectar?
-            <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-              <path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </a>
-        )
-      }
+      {/* Como no modelo: o menu convida ao contato; o currículo fica na abertura e no Contato */}
+      <a class="btn btn-escuro btn-sm cta" href={url('/contato/')}>
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2M9 15l-3-3 6-7c2.5-2.5 6.5-2.5 9-2-.5 2.5.5 6.5-2 9l-7 6zM14.5 9.5a1.2 1.2 0 1 0 0-.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        Vamos conectar?
+        <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+          <path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
     </nav>
   </div>
 </header>
