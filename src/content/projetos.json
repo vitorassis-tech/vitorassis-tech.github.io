@@ -244,6 +244,11 @@
     ],
     "links": [
       {
+        "rotulo": "Ver site no ar (lgdelicias.com.br)",
+        "href": "https://lgdelicias.com.br/",
+        "externo": true
+      },
+      {
         "rotulo": "Instagram da L&G Delícias",
         "href": "https://www.instagram.com/lucitortasalgada",
         "externo": true
