@@ -2,7 +2,7 @@
   "posicionamento": "Technology & Data",
   "titulo": "Transformando dados em decisões e tecnologia em resultados.",
   "subtitulo": "Profissional com experiência em logística, operações e análise de dados, conectando conhecimento operacional, tecnologia e inteligência de negócios para desenvolver soluções e melhorar processos.",
-  "apresentacao": "Assistente de Logística II no Grupo Profarma. Planejo e roteirizo a distribuição para a capital e o interior e transformo os dados da operação em dashboards gerenciais em Power BI. Com o curso de Python concluído e SQL em estudo, levo cada vez mais análise e automação para a logística.",
+  "apresentacao": "Assistente de Logística II no Grupo Profarma. Planejo e roteirizo a distribuição para a capital e o interior e transformo os dados da operação em dashboards gerenciais em Power BI. Com o curso de Programação em Python concluído e SQL em formação, levo cada vez mais análise e automação para a logística.",
   "areas": [
     {
       "nome": "Logística & Supply Chain"
@@ -34,7 +34,7 @@
     {
       "rotulo": "Módulo em formação",
       "titulo": "Em formação",
-      "texto": "Concluídos: Programação em Python (Senac RJ, 28/10/2026), Administrador de Banco de Dados (Firjan SENAI), Inteligência Artificial (FAETEC) e Técnico em Qualidade (Senac). Em estudo: SQL e modelagem de dados. Em andamento: Graduação Tecnológica em Logística (UNISUAM).",
+      "texto": "Concluídos: Programação em Python (Senac RJ, 168h, 28/10/2026), Administrador de Banco de Dados (Firjan SENAI, 180h), Inteligência Artificial (FAETEC, 168h) e Técnico em Qualidade (Senac). Em formação: SQL, com estudos e projetos práticos. Em andamento: Graduação Tecnológica em Logística (UNISUAM).",
       "formacao": true
     }
   ],
@@ -48,8 +48,8 @@
       "complemento": "na roteirização diária"
     },
     {
-      "destaque": "Banco de dados",
-      "complemento": "Firjan SENAI, 180h"
+      "destaque": "Administrador de Banco de Dados",
+      "complemento": "Firjan SENAI, 180h, concluído"
     },
     {
       "destaque": "Python",
