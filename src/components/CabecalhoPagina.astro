@@ -15,11 +15,13 @@ interface Props {
   imagem?: string;
   /** Posição da imagem (object-position) */
   foco?: string;
+  /** Tema da abertura: escuro (padrão) ou claro (imagem clara, texto azul-marinho) */
+  tema?: 'escuro' | 'claro';
 }
-const { titulo, introducao, trilha, kicker, imagem, foco = 'center' } = Astro.props;
+const { titulo, introducao, trilha, kicker, imagem, foco = 'center', tema = 'escuro' } = Astro.props;
 ---
 
-<header class:list={['cabecalho', { 'com-imagem': imagem }]}>
+<header class:list={['cabecalho', { 'com-imagem': imagem, 'tema-claro': tema === 'claro' }]}>
   {
     imagem && (
       <img
@@ -102,6 +104,40 @@ const { titulo, introducao, trilha, kicker, imagem, foco = 'center' } = Astro.pr
   }
   h1 { font-size: clamp(2.3rem, 1.4rem + 3.6vw, 4rem); max-width: 20ch; font-weight: 800; letter-spacing: -0.04em; color: #fff; }
   .lede { margin: 0; color: var(--cmd-text); opacity: 0.88; }
+
+  /* ---------- Tema claro (Sobre, Experiência, Formação, Certificados) ---------- */
+  .tema-claro {
+    --ink: #202b3a;
+    --muted: #4a5a70;
+    --navy: #17365d;
+    background: #eef3f9;
+    border-bottom: 1px solid #d9e2ec;
+    min-height: clamp(380px, 56vh, 560px);
+  }
+  .tema-claro.com-imagem::before {
+    background: linear-gradient(90deg, rgba(245, 248, 252, 0.97) 0%, rgba(245, 248, 252, 0.9) 34%, rgba(245, 248, 252, 0.35) 55%, rgba(245, 248, 252, 0) 70%);
+  }
+  .tema-claro::after { display: none; }
+  .tema-claro h1 { color: #101c32; }
+  .tema-claro h1::after { content: ''; display: block; width: 3.25rem; height: 4px; margin-top: 1.1rem; border-radius: 3px; background: var(--accent); }
+  .tema-claro .lede { color: #2c3a4f; opacity: 1; }
+  .tema-claro .kicker { color: #17365d; }
+  .tema-claro .trilha a { color: #17365d; }
+  /* No tema claro a imagem ocupa a direita e se dissolve no fundo claro */
+  .tema-claro .fundo {
+    left: auto;
+    width: 66%;
+    object-position: right center;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 30%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 30%);
+  }
+  .tema-claro.com-imagem::before { background: linear-gradient(90deg, #f3f6fb 0%, rgba(243, 246, 251, 0.85) 38%, rgba(243, 246, 251, 0) 55%); }
+  .tema-claro .lede { max-width: 46ch; }
+  .tema-claro { background: linear-gradient(180deg, #f5f8fc, #e9eff7); }
+  @media (max-width: 759px) {
+    .tema-claro .fundo { width: 100%; -webkit-mask-image: none; mask-image: none; }
+    .tema-claro.com-imagem::before { background: linear-gradient(180deg, rgba(245, 248, 252, 0.75), rgba(245, 248, 252, 0.95)); }
+  }
   .trilha { margin-bottom: 1.25rem; font-size: 0.95rem; }
   .trilha a { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 32px; }
   .trilha a::before { content: '‹'; font-size: 1.3em; line-height: 1; text-decoration: none; }

@@ -115,20 +115,159 @@ ponto(RIO[0], RIO[1], 11);
 const [rx, ry] = proj(RIO[0], RIO[1]);
 for (const [rr, a] of [[34, 0.7], [58, 0.35], [86, 0.15]]) { g.strokeStyle = `rgba(255,140,60,${a})`; g.lineWidth = 2; g.beginPath(); g.arc(rx, ry, rr, 0, Math.PI * 2); g.stroke(); }
 
+
+// ===== Paisagem logística (cidade, porto, contêineres, estrada, caminhão, avião) =====
+if (q.get('cena') !== '0') {
+  g.save(); g.translate(2050, 960); g.scale(0.7, 0.7); g.translate(-2050, -1035);
+  const CH = 1035; // linha do horizonte (chão)
+  // céu iluminado atrás da paisagem
+  let brilho = g.createRadialGradient(1750, CH, 0, 1750, CH, 900);
+  brilho.addColorStop(0, 'rgba(255,150,70,0.30)'); brilho.addColorStop(0.35, 'rgba(70,130,255,0.22)'); brilho.addColorStop(1, 'rgba(30,60,140,0)');
+  g.fillStyle = brilho; g.fillRect(800, 300, 1760, 900);
+
+  // --- cidade: duas camadas de prédios com janelas acesas
+  function predio(x, w, h, cor, janelas) {
+    let gr = g.createLinearGradient(x, CH - h, x + w, CH);
+    gr.addColorStop(0, cor[0]); gr.addColorStop(1, cor[1]);
+    g.fillStyle = gr; g.fillRect(x, CH - h, w, h);
+    g.fillStyle = 'rgba(140,190,255,0.35)'; g.fillRect(x, CH - h, 2, h); // aresta iluminada
+    if (rnd() < 0.35) { g.fillStyle = cor[0]; g.fillRect(x + w / 2 - 2, CH - h - 50 - rnd() * 60, 4, 60); g.fillStyle = '#ff5a3c'; g.fillRect(x + w / 2 - 3, CH - h - 52, 6, 4); }
+    for (let yy = CH - h + 12; yy < CH - 8; yy += 12) for (let xx = x + 5; xx < x + w - 6; xx += 8)
+      if (rnd() < janelas) { g.fillStyle = rnd() < 0.6 ? 'rgba(255,196,130,0.9)' : 'rgba(160,210,255,0.85)'; g.fillRect(xx, yy, 3, 5); }
+  }
+  let x = 1180;
+  while (x < 1780) { const w = 30 + rnd() * 55; const meio = 1 - Math.abs(x - 1480) / 320; predio(x, w, 160 + rnd() * 380 * Math.max(0.2, meio), ['#1b3366', '#0d1a38'], 0.22); x += w + 4; }
+  x = 1150;
+  while (x < 1820) { const w = 24 + rnd() * 40; predio(x, w, 70 + rnd() * 170, ['#14274e', '#0a1430'], 0.3); x += w + 3; }
+
+  // --- porto: guindastes e pilhas de contêineres
+  function guindaste(bx, alt, lado) {
+    g.strokeStyle = '#ff8a3d'; g.lineWidth = 6; g.lineCap = 'square';
+    g.beginPath();
+    g.moveTo(bx, CH); g.lineTo(bx, CH - alt); g.moveTo(bx + 60, CH); g.lineTo(bx + 60, CH - alt);
+    for (let k = 0; k < alt; k += 45) { g.moveTo(bx, CH - k); g.lineTo(bx + 60, CH - k - 45); }
+    g.moveTo(bx - 60 * lado, CH - alt); g.lineTo(bx + 60 + 240 * lado, CH - alt);
+    g.moveTo(bx + 30, CH - alt - 70); g.lineTo(bx - 60 * lado, CH - alt); g.moveTo(bx + 30, CH - alt - 70); g.lineTo(bx + 60 + 240 * lado, CH - alt);
+    g.stroke();
+    g.lineWidth = 2; g.beginPath(); g.moveTo(bx + 60 + 180 * lado, CH - alt); g.lineTo(bx + 60 + 180 * lado, CH - alt + 130); g.stroke();
+    g.fillStyle = '#ff3b2f'; g.beginPath(); g.arc(bx + 30, CH - alt - 72, 5, 0, 7); g.fill();
+  }
+  guindaste(2190, 330, 1); guindaste(2420, 280, 1);
+  const cores = [['#b5462f', '#7d2c1d'], ['#2d5ea8', '#1a3a70'], ['#d9772a', '#9a4f15'], ['#3f7f6e', '#25504a'], ['#8a93a6', '#596275']];
+  function conteiner(cx, cy, w, h) {
+    const c = cores[Math.floor(rnd() * cores.length)];
+    g.fillStyle = c[0]; g.fillRect(cx, cy, w, h);
+    g.fillStyle = c[1]; for (let k = cx + 4; k < cx + w - 2; k += 7) g.fillRect(k, cy + 3, 2, h - 6);
+    g.strokeStyle = 'rgba(0,0,0,0.35)'; g.lineWidth = 1.5; g.strokeRect(cx, cy, w, h);
+  }
+  for (let col = 0; col < 9; col++) {
+    const n = 2 + Math.floor(rnd() * 4);
+    for (let r = 0; r < n; r++) conteiner(1960 + col * 66, CH - 32 * (r + 1), 64, 30);
+  }
+
+  // --- chão e estrada em perspectiva com rastros de luz
+  let chao = g.createLinearGradient(0, CH, 0, H);
+  chao.addColorStop(0, '#0c1a36'); chao.addColorStop(1, '#050b18');
+  g.fillStyle = chao; g.fillRect(-1500, CH, 5600, 900);
+  const VX = 1650;
+  g.fillStyle = '#0a1326';
+  g.beginPath(); g.moveTo(VX - 30, CH); g.lineTo(VX + 30, CH); g.lineTo(3200, CH + 640); g.lineTo(300, CH + 640); g.closePath(); g.fill();
+  g.save(); g.globalCompositeOperation = 'lighter';
+  for (const [bx, cor] of [[900, 'rgba(255,121,31,A)'], [1150, 'rgba(255,150,60,A)'], [1350, 'rgba(255,121,31,A)'], [2200, 'rgba(140,200,255,A)'], [2500, 'rgba(160,210,255,A)']]) {
+    for (const [lw, a] of [[16, 0.08], [6, 0.25], [2.5, 0.95]]) {
+      g.strokeStyle = cor.replace('A', a); g.lineWidth = lw;
+      g.beginPath(); g.moveTo(VX + (bx - VX) * 0.02, CH + 2); g.quadraticCurveTo(VX + (bx - VX) * 0.4, CH + 60, bx, H); g.stroke();
+    }
+  }
+  g.restore();
+  g.strokeStyle = 'rgba(230,236,255,0.6)';
+  for (let i = 0; i < 9; i++) { const t1 = Math.pow(i / 9, 2), t2 = Math.pow((i + 0.5) / 9, 2); g.lineWidth = 1 + 6 * t2; g.beginPath(); g.moveTo(VX + (1800 - VX) * t1, CH + (H - CH) * t1); g.lineTo(VX + (1800 - VX) * t2, CH + (H - CH) * t2); g.stroke(); }
+
+  // --- caminhão (vista lateral) com carreta-contêiner
+  const TX = 1560, TY = 1150, S = 1.0; // TY = linha das rodas
+  // sombra
+  g.fillStyle = 'rgba(0,0,0,0.5)'; g.beginPath(); g.ellipse(TX + 300, TY + 8, 380, 22, 0, 0, 7); g.fill();
+  // carreta
+  let cr = g.createLinearGradient(0, TY - 230, 0, TY - 50);
+  cr.addColorStop(0, '#c0503a'); cr.addColorStop(1, '#7a2a1c');
+  g.fillStyle = cr; g.fillRect(TX, TY - 235, 470, 175);
+  g.fillStyle = 'rgba(0,0,0,0.25)'; for (let k = TX + 10; k < TX + 465; k += 14) g.fillRect(k, TY - 228, 4, 162);
+  g.fillStyle = 'rgba(255,255,255,0.25)'; g.fillRect(TX, TY - 235, 470, 4);
+  g.fillStyle = '#20283a'; g.fillRect(TX, TY - 60, 470, 18);
+  // cavalo (cabine)
+  let cb = g.createLinearGradient(TX + 480, 0, TX + 640, 0);
+  cb.addColorStop(0, '#9aa6ba'); cb.addColorStop(0.5, '#dfe6f0'); cb.addColorStop(1, '#8b97ab');
+  g.fillStyle = cb;
+  g.beginPath(); g.moveTo(TX + 478, TY - 42); g.lineTo(TX + 478, TY - 225); g.lineTo(TX + 585, TY - 232); g.lineTo(TX + 628, TY - 160); g.lineTo(TX + 645, TY - 150); g.lineTo(TX + 648, TY - 42); g.closePath(); g.fill();
+  g.fillStyle = '#16233d'; g.beginPath(); g.moveTo(TX + 540, TY - 210); g.lineTo(TX + 585, TY - 212); g.lineTo(TX + 618, TY - 160); g.lineTo(TX + 540, TY - 158); g.closePath(); g.fill();
+  g.fillStyle = 'rgba(160,210,255,0.35)'; g.beginPath(); g.moveTo(TX + 548, TY - 205); g.lineTo(TX + 570, TY - 206); g.lineTo(TX + 556, TY - 165); g.lineTo(TX + 548, TY - 165); g.closePath(); g.fill();
+  g.fillStyle = '#5d6a80'; for (let k = 0; k < 5; k++) g.fillRect(TX + 600, TY - 140 + k * 14, 46, 6); // grade
+  g.fillStyle = '#20283a'; g.fillRect(TX + 470, TY - 60, 180, 18);
+  g.strokeStyle = 'rgba(40,50,70,0.8)'; g.lineWidth = 2; g.strokeRect(TX + 490, TY - 200, 40, 120); // porta
+  // faróis com brilho
+  g.save(); g.globalCompositeOperation = 'lighter';
+  for (const [hx, hy] of [[TX + 646, TY - 70]]) {
+    let fl = g.createRadialGradient(hx, hy, 0, hx, hy, 140); fl.addColorStop(0, 'rgba(255,240,210,0.95)'); fl.addColorStop(0.15, 'rgba(255,220,170,0.5)'); fl.addColorStop(1, 'rgba(255,200,140,0)');
+    g.fillStyle = fl; g.beginPath(); g.arc(hx, hy, 140, 0, 7); g.fill();
+  }
+  g.fillStyle = 'rgba(255,121,31,0.9)'; for (let k = TX + 10; k < TX + 470; k += 60) g.fillRect(k, TY - 62, 8, 4); // luzes laterais
+  g.restore();
+  // rodas
+  for (const wx of [TX + 70, TX + 140, TX + 370, TX + 520, TX + 600]) {
+    g.fillStyle = '#0b0f18'; g.beginPath(); g.arc(wx, TY - 18, 30, 0, 7); g.fill();
+    g.fillStyle = '#7d889c'; g.beginPath(); g.arc(wx, TY - 18, 13, 0, 7); g.fill();
+    g.fillStyle = '#2a3346'; g.beginPath(); g.arc(wx, TY - 18, 5, 0, 7); g.fill();
+  }
+
+  // --- avião
+  g.save(); g.translate(1430, 250); g.rotate(-0.16);
+  let av = g.createLinearGradient(0, -20, 0, 20); av.addColorStop(0, '#f4f7fb'); av.addColorStop(1, '#9aa6ba');
+  g.fillStyle = av;
+  g.beginPath(); g.ellipse(0, 0, 175, 19, 0, 0, 7); g.fill(); // fuselagem
+  g.beginPath(); g.moveTo(-30, 4); g.lineTo(-95, 95); g.lineTo(-60, 95); g.lineTo(35, 8); g.closePath(); g.fill(); // asa
+  g.beginPath(); g.moveTo(-10, -6); g.lineTo(-60, -60); g.lineTo(-38, -60); g.lineTo(20, -8); g.closePath(); g.fillStyle = '#c3ccd9'; g.fill();
+  g.fillStyle = av; g.beginPath(); g.moveTo(-150, -5); g.lineTo(-185, -78); g.lineTo(-160, -78); g.lineTo(-120, -10); g.closePath(); g.fill(); // leme
+  g.fillStyle = '#ff791f'; g.beginPath(); g.moveTo(-160, -60); g.lineTo(-180, -76); g.lineTo(-165, -76); g.lineTo(-148, -50); g.closePath(); g.fill();
+  g.fillStyle = '#7d8aa0'; g.beginPath(); g.ellipse(-40, 55, 26, 10, 0, 0, 7); g.fill(); // turbina
+  g.fillStyle = '#2a3a58'; for (let k = -110; k < 140; k += 14) g.fillRect(k, -6, 6, 5); // janelas
+  g.fillStyle = '#16233d'; g.beginPath(); g.ellipse(160, -4, 12, 6, 0.2, 0, 7); g.fill();
+  g.globalCompositeOperation = 'lighter';
+  for (const [lx, ly, c] of [[-80, 90, 'rgba(255,60,60,0.9)'], [-188, -76, 'rgba(255,255,255,0.9)']]) { let l = g.createRadialGradient(lx, ly, 0, lx, ly, 24); l.addColorStop(0, c); l.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = l; g.beginPath(); g.arc(lx, ly, 24, 0, 7); g.fill(); }
+  g.restore();
+  // rastro do avião
+  g.save(); g.globalCompositeOperation = 'lighter'; let rt = g.createLinearGradient(1260, 280, 780, 390); rt.addColorStop(0, 'rgba(200,225,255,0.35)'); rt.addColorStop(1, 'rgba(200,225,255,0)');
+  g.strokeStyle = rt; g.lineWidth = 6; g.beginPath(); g.moveTo(1265, 278); g.lineTo(780, 390); g.stroke(); g.restore();
+
+  // pinos de localização sobre o globo (como na referência)
+  for (const [px2, py2] of [[1380, 520], [1980, 150], [2250, 230], [1760, 260]]) {
+    g.save(); g.shadowColor = 'rgba(255,121,31,0.9)'; g.shadowBlur = 18; g.fillStyle = '#ff791f';
+    g.beginPath(); g.arc(px2, py2, 14, Math.PI, 0); g.lineTo(px2, py2 + 26); g.closePath(); g.fill();
+    g.fillStyle = '#fff3e8'; g.beginPath(); g.arc(px2, py2, 5, 0, 7); g.fill(); g.restore();
+  }
+  g.restore();
+  // chão escuro abaixo da paisagem reduzida, para a faixa de indicadores
+  let pe = g.createLinearGradient(0, 1020, 0, H); pe.addColorStop(0, 'rgba(6,12,24,0)'); pe.addColorStop(0.35, 'rgba(6,12,24,0.55)'); pe.addColorStop(1, 'rgba(6,12,24,0.9)');
+  g.fillStyle = pe; g.fillRect(0, 1020, W, H - 1020);
+}
 // Faixa de luz laranja diagonal (assinatura visual)
 if (q.get('faixa') !== '0') {
   g.save(); g.globalCompositeOperation = 'lighter';
   const fx = +q.get('fx') || W * 0.36;
-  let f = g.createLinearGradient(fx - 160, 0, fx + 160, 0);
-  f.addColorStop(0, 'rgba(255,121,31,0)'); f.addColorStop(0.5, 'rgba(255,121,31,0.22)'); f.addColorStop(1, 'rgba(255,121,31,0)');
-  g.fillStyle = f; g.translate(fx, H / 2); g.rotate(rad(28)); g.fillRect(-160, -H, 320, H * 2);
-  g.fillStyle = 'rgba(255,170,100,0.55)'; g.fillRect(-1.5, -H, 3, H * 2);
+  let f = g.createLinearGradient(fx - 220, 0, fx + 220, 0);
+  f.addColorStop(0, 'rgba(255,121,31,0)'); f.addColorStop(0.5, 'rgba(255,121,31,0.28)'); f.addColorStop(1, 'rgba(255,121,31,0)');
+  g.fillStyle = f; g.translate(fx, H / 2); g.rotate(rad(32)); g.fillRect(-220, -H, 440, H * 2);
+  g.shadowColor = 'rgba(255,121,31,1)'; g.shadowBlur = 30;
+  g.fillStyle = 'rgba(255,170,100,0.85)'; g.fillRect(-2.5, -H, 5, H * 2);
+  g.fillStyle = 'rgba(255,140,60,0.5)'; g.fillRect(70, -H, 2, H * 2);
   g.restore();
 }
+let cl = g.createRadialGradient(W, 0, 0, W, 0, W * 0.35);
+cl.addColorStop(0, 'rgba(200,220,255,0.35)'); cl.addColorStop(1, 'rgba(200,220,255,0)');
+g.fillStyle = cl; g.fillRect(0, 0, W, H);
 // Escurecimento para o texto: à esquerda (computador) ou em cima (celular)
 const movel = q.get('movel') === '1';
 let ov = movel ? g.createLinearGradient(0, 0, 0, H * 0.6) : g.createLinearGradient(0, 0, W * 0.62, 0);
-ov.addColorStop(0, 'rgba(6,12,24,0.92)'); ov.addColorStop(0.55, 'rgba(6,12,24,0.55)'); ov.addColorStop(1, 'rgba(6,12,24,0)');
+ov.addColorStop(0, 'rgba(6,12,24,0.9)'); ov.addColorStop(0.5, 'rgba(6,12,24,0.45)'); ov.addColorStop(1, 'rgba(6,12,24,0)');
 g.fillStyle = ov; g.fillRect(0, 0, W, H);
 // vinheta inferior
 let vb = g.createLinearGradient(0, H * 0.75, 0, H);

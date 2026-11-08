@@ -160,7 +160,7 @@ test.describe('navegação e acessibilidade', () => {
     await expect(page.locator('#menu-principal a[aria-current="page"]')).toHaveText('Certificados');
     // Sem public/curriculo/vitor-assis-curriculo.pdf, nada de botão de download sem arquivo
     await expect(page.locator('a[download]')).toHaveCount(0);
-    await expect(nav.getByRole('link', { name: 'Vamos conversar' })).toHaveAttribute('href', /\/contato\/$/);
+    await expect(nav.getByRole('link', { name: 'Vamos conectar?' })).toHaveAttribute('href', /\/contato\/$/);
   });
 
   for (const rota of [...ROTAS, '/nao-existe/']) {
