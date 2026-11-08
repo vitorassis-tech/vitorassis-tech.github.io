@@ -52,8 +52,8 @@
         "texto": "Em uso diário pela gerência."
       },
       {
-        "tipo": "pendente",
-        "texto": "Ganhos quantitativos (tempo, custo ou eficiência) não são informados: não há medição autorizada para publicação."
+        "tipo": "uso",
+        "texto": "Os relatórios operacionais que chegavam separados passaram a ser vistos em uma única tela, atualizada todos os dias, com faróis que mostram onde a expedição precisa de atenção."
       }
     ],
     "limitacoes": [
@@ -130,8 +130,8 @@
         "texto": "Criado como Assistente de Logística I e atualizado diariamente desde então."
       },
       {
-        "tipo": "pendente",
-        "texto": "Ganhos quantitativos não são informados: não há medição autorizada para publicação."
+        "tipo": "uso",
+        "texto": "Logo após a roteirização, a operação vê quais regiões concentram mais volume e quais veículos vão sair perto ou acima da capacidade, antes do carregamento."
       }
     ],
     "limitacoes": [

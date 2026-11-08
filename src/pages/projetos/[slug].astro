@@ -328,7 +328,7 @@ const rotuloResultado = { medido: 'Resultado medido', uso: 'Em uso', funcional: 
   .resultados { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.85rem; }
   .resultados li { display: grid; gap: 0.25rem; padding: 0.9rem 1rem; border-radius: var(--radius-m); border: 1px solid var(--line); background: var(--surface); }
   .resultados .tipo { font-size: 0.82rem; font-weight: 600; color: var(--navy); }
-  .resultados li[data-tipo='pendente'] { background: repeating-linear-gradient(135deg, #fff, #fff 8px, #f4f6f9 8px, #f4f6f9 16px); border-style: dashed; }
+  .resultados li[data-tipo='pendente'] { background: rgba(255, 255, 255, 0.03); border-style: dashed; }
   .resultados li[data-tipo='pendente'] .tipo { color: var(--muted); }
   .resultados li[data-tipo='uso'] { border-left: 4px solid #2e8b57; }
 

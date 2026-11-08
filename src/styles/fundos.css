@@ -179,7 +179,9 @@
   .contato-destaque { grid-column: 1 / -1; min-height: 240px; }
 }
 
-/* Computador: a imagem inteira é o fundo da seção */
+/* Computador: a imagem inteira é o fundo da seção.
+   Texto e formulário ocupam até ~70% da largura da tela (parte clara); a frase fica
+   à direita da faixa diagonal, sobre o céu escuro, em qualquer largura. */
 @media (min-width: 1100px) {
   .contato-hero {
     display: flex;
@@ -192,29 +194,25 @@
     background-position: right 85%;
   }
   .contato-hero > .container { width: 100%; }
+  .contato-hero > .container.contato-grade {
+    /* conteúdo termina a ~70% da tela: o restante fica livre para a frase */
+    padding-right: max(var(--gutter), min(30vw, calc(38rem + var(--gutter) - 20vw)));
+  }
   .contato-grade {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, 0.62fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
     gap: 2rem;
     align-items: center;
   }
-  /* Sem painel próprio: a frase fica direto sobre o céu escuro da imagem */
   .contato-destaque {
-    background: none;
-    padding: 0 0 0 0.5rem;
+    position: absolute;
+    top: 50%;
+    right: max(1.5rem, 3vw);
+    transform: translateY(-50%);
+    width: min(23vw, 320px);
     min-height: 0;
-    align-self: start;
-    margin-top: clamp(0.5rem, 2vw, 2rem);
+    padding: 0;
+    background: none;
   }
-}
-@media (min-width: 1600px) {
-  .contato-grade { grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr) minmax(0, 0.7fr); }
-}
-@media (min-width: 1100px) and (max-width: 1279px) {
-  .contato-destaque { padding-left: 1.4rem; }
-}
-/* Telas largas: a diagonal fica mais à direita no alto; a frase desce para o centro, onde o fundo já é escuro */
-@media (min-width: 1600px) {
-  .contato-destaque { align-self: center; margin-top: 0; padding-left: 1.5rem; }
 }
 
 /* ============================================================

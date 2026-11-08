@@ -451,6 +451,25 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
     background: rgba(255, 255, 255, 0.05);
   }
   .area-icone svg { width: 21px; height: 21px; }
+  /* Computador: painel encostado na lateral direita da tela, centralizado na altura da abertura (como na referência) */
+  @media (min-width: 1200px) {
+    .hero-grade { position: relative; }
+    .areas {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: calc((100% - 100vw) / 2 + clamp(1rem, 2.2vw, 2.75rem));
+      width: 184px;
+      padding: 1.15rem 1rem 1.25rem;
+      z-index: 2;
+    }
+    .areas-titulo { margin-bottom: 1rem; font-size: 1.05rem; }
+    .areas ul { gap: 0.95rem; }
+    .areas li { font-size: 0.9rem; line-height: 1.22; }
+    .areas li > span:last-child { max-width: 8.2em; }
+    .area-icone { width: 38px; height: 38px; border-radius: 10px; }
+    .area-icone svg { width: 24px; height: 24px; }
+  }
   .em-formacao { display: inline-block; margin-left: 0.4rem; font-size: 0.72rem; color: var(--signal-text); border: 1px solid rgba(255, 121, 31, 0.5); border-radius: var(--radius-pill); padding: 0 0.45rem; vertical-align: 0.1em; }
   @media (max-width: 1079px) {
     .hero-grade { min-height: 0; }
