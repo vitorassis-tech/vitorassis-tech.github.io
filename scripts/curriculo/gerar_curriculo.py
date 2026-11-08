@@ -179,8 +179,8 @@ def main() -> None:
 
     # ---------- Projetos ----------
     hist += secao("Projetos")
-    # mesma ordem e mesmos nomes da página Projetos do site; os painéis de Power BI do trabalho
-    # (do trabalho e o independente) ficam fora desta lista; a experiência com Power BI segue na seção de experiência
+    # mesma ordem e mesmos nomes da página Projetos do site; os projetos de Power BI (do trabalho e o
+    # independente) ficam fora desta lista; a experiência com Power BI segue na seção de experiência
     projetos = [
         "<b>L&amp;G Delícias</b> (projeto independente, em uso pela lanchonete) — sistema web de cardápio, pedidos, estoque e financeiro. JavaScript, SQL (Cloudflare D1); site no ar em lgdelicias.com.br e código no GitHub.",
         "<b>Demonstrações com dados fictícios</b> — Simulação da Torre de Controle, Painel de frota e entregas e Laboratório de roteirização. Python, SQL, TypeScript.",

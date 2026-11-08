@@ -4,7 +4,7 @@ import CabecalhoPagina from '../components/CabecalhoPagina.astro';
 import FaixaContato from '../components/FaixaContato.astro';
 import { experiencias } from '../data/trajetoria';
 import { site } from '../data/site';
-import { duracao, periodo } from '../lib/formato';
+import { duracao, mesAno, periodo } from '../lib/formato';
 
 const referencia = site.revisadoEm.slice(0, 7);
 // Empresa atual (ou a mais recente) na abertura: linha do tempo dos cargos
@@ -51,7 +51,7 @@ const principal = experiencias.find((e) => e.fim === null) ?? experiencias[0];
             <h2 id={`emp-${e.nomeCurto}`}>{e.nomeCurto}</h2>
             <p class="muted">{e.nome}</p>
             <p class="periodo">
-              {periodo(e.inicio, e.fim)}
+              {e.fim ? periodo(e.inicio, e.fim) : `desde ${mesAno(e.inicio)}`}
               {e.fim && <span class="muted">, {duracao(e.inicio, e.fim, referencia)}</span>}
             </p>
           </header>

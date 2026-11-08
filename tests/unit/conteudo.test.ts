@@ -42,14 +42,11 @@ describe('projetos', () => {
     expect(medidos).toHaveLength(0);
   });
 
-  it('projeto profissional não publica números internos', () => {
-    const torre = projetos.find((p) => p.natureza === 'trabalho')!;
-    const texto = JSON.stringify(torre);
-    // Quantidades contratuais, valores financeiros e percentuais da empresa não podem aparecer
-    expect(texto).not.toMatch(/\d+\s*ve[ií]culos/i);
-    expect(texto).not.toMatch(/R\$\s*\d/);
-    expect(texto).not.toMatch(/\d+([.,]\d+)?\s*%/);
-    expect(torre.dados.origem).toMatch(/internos/);
+  it('projetos de Power BI ficam fora da apresentação pública', () => {
+    for (const slug of ['torre-controle-expedicao', 'painel-logistica-varejo', 'dashboard-logistico-power-bi']) {
+      expect(projetos.some((p) => p.slug === slug)).toBe(false);
+    }
+    expect(projetos.some((p) => p.natureza === 'trabalho')).toBe(false);
   });
 
   it('links internos apontam para rotas ou arquivos existentes', () => {
@@ -65,7 +62,6 @@ describe('projetos', () => {
 
 const TERMOS_REGRAS_REAIS = /no-?show|\bspot\b|máximo\(|contrat/i;
 const profarma = experiencias.find((e) => e.nomeCurto === 'Profarma')!;
-const torre = projetos.find((p) => p.slug === 'torre-controle-expedicao')!;
 
 describe('correções factuais (E1–E7, E13, E14)', () => {
   it('E1: nenhum cargo na Profarma associa SQL ao trabalho', () => {
@@ -84,29 +80,6 @@ describe('correções factuais (E1–E7, E13, E14)', () => {
     const itens = competencias.flatMap((g) => g.itens);
     expect(itens.find((c) => c.nome === 'SQL')?.contexto).toBe('formacao');
     for (const c of itens.filter((i) => i.contexto === 'trabalho')) expect(`${c.nome} ${c.evidencia}`).not.toMatch(/\bSQL\b/);
-  });
-
-  it('E4: estudo de caso da Torre com Roadnet e Excel, sem SQL, sem regras e com uso diário', () => {
-    expect(torre.tecnologias).toEqual(['Power BI', 'Power Query', 'DAX', 'Excel', 'Roadnet']);
-    expect(torre.categorias).not.toContain('sql');
-    expect(torre.dados.origem).toMatch(/Roadnet/);
-    const texto = JSON.stringify(torre);
-    expect(texto).not.toMatch(/\bSQL\b/);
-    expect(texto).not.toMatch(TERMOS_REGRAS_REAIS);
-    expect(torre.resultados).toContainEqual({ tipo: 'uso', texto: 'Em uso diário pela gerência.' });
-  });
-
-  it('Painel de Logística Varejo: trabalho, sem SQL, sem regras de contrato e sem números reais', () => {
-    const varejo = projetos.find((p) => p.slug === 'painel-logistica-varejo')!;
-    expect(varejo.natureza).toBe('trabalho');
-    expect(varejo.dados.origem).toMatch(/Roadnet/);
-    const texto = JSON.stringify(varejo);
-    expect(texto).not.toMatch(/\bSQL\b/);
-    expect(texto).not.toMatch(TERMOS_REGRAS_REAIS);
-    // nenhum número de volume, rota ou percentual real da operação
-    expect(texto).not.toMatch(/\d\s?%/);
-    expect(texto).not.toMatch(/\b(?!20\d\d\b)\d{3,}\b/);
-    expect(varejo.galeria).toEqual([]);
   });
 
   it('formações atualizadas: Python e Técnico em Qualidade concluídos', () => {

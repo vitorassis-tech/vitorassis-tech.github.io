@@ -24,12 +24,11 @@ const empresaLogistica = experiencias[0];
 const [anoIni, mesIni] = empresaLogistica.inicio.split('-').map(Number);
 const fimLogistica = empresaLogistica.fim ? empresaLogistica.fim.split('-').map(Number) : [new Date().getFullYear(), new Date().getMonth() + 1];
 const anosLogistica = Math.floor((fimLogistica[0] * 12 + fimLogistica[1] - (anoIni * 12 + mesIni)) / 12);
-const projetosTrabalho = projetos.filter((p) => p.natureza === 'trabalho').length;
 const cursosConcluidos = cursos.filter((c) => c.status === 'concluido').length;
 const tecnicosConcluidos = formacaoAcademica.filter((f) => f.status === 'concluido' && /^Técnico/i.test(f.curso)).length;
 const indicadores = [
   { icone: 'maleta', valor: `${anosLogistica}+`, rotulo: 'anos na logística', detalhe: `${empresaLogistica.nomeCurto}, desde ${mesAno(empresaLogistica.inicio)}` },
-  { icone: 'grafico', valor: String(projetosTrabalho), rotulo: projetosTrabalho === 1 ? 'projeto profissional' : 'projetos profissionais', detalhe: 'dashboards em Power BI' },
+  { icone: 'grafico', valor: String(projetos.length), rotulo: projetos.length === 1 ? 'projeto no portfólio' : 'projetos no portfólio', detalhe: 'web, Python, SQL e roteirização' },
   { icone: 'certificado', valor: String(cursosConcluidos), rotulo: 'cursos concluídos', detalhe: 'Python, BI, IA e mais' },
   { icone: 'capelo', valor: String(tecnicosConcluidos), rotulo: tecnicosConcluidos === 1 ? 'curso técnico' : 'cursos técnicos', detalhe: 'Logística e Qualidade' },
 ];
@@ -260,7 +259,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
         <div>
           <p class="kicker">Meus projetos</p>
           <h2 id="projetos-titulo">Soluções para desafios reais de <em class="laranja">logística e dados</em>.</h2>
-          <p class="muted">Cada projeto informa se é profissional, acadêmico, independente ou demonstração com dados fictícios.</p>
+          <p class="muted">Cada projeto informa se é acadêmico, independente ou demonstração com dados fictícios.</p>
         </div>
         <a class="btn btn-ghost" href={url('/projetos/')}>Ver todos os {projetos.length} projetos</a>
       </div>

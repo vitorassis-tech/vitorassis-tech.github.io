@@ -110,7 +110,7 @@ describe('consultar e criar', () => {
   it('lista todas as coleções com versão', async () => {
     const r = await api('GET', '/api/conteudo');
     expect(r.status).toBe(200);
-    expect(r.json.conteudo.projetos).toHaveLength(9);
+    expect(r.json.conteudo.projetos).toHaveLength(6);
     expect(Object.keys(r.json.versoes)).toContain('instituicoes');
   });
 
@@ -120,8 +120,8 @@ describe('consultar e criar', () => {
     expect(r.status).toBe(200);
     expect(r.json.versao).not.toBe(v.projetos);
     const lista = lerJson('projetos.json');
-    expect(lista).toHaveLength(10);
-    expect(lista[9]).toMatchObject({ slug: 'projeto-de-teste', status: 'rascunho' });
+    expect(lista).toHaveLength(7);
+    expect(lista[6]).toMatchObject({ slug: 'projeto-de-teste', status: 'rascunho' });
   });
 
   it('recusa dados inválidos com mensagens por campo e não grava nada', async () => {
@@ -201,24 +201,27 @@ describe('atualizar', () => {
 
 describe('excluir, lixeira e histórico', () => {
   it('exige confirmação digitada, move para a lixeira e restaura na mesma posição', async () => {
+    // todos os projetos publicados são usados em outras partes; o teste cria um avulso para excluir
+    const criado = await api('POST', '/api/colecoes/projetos/itens', { item: projetoNovo(), versao: (await versoes()).projetos });
+    expect(criado.status).toBe(200);
     const v = await versoes();
-    const posicao = lerJson('projetos.json').findIndex((p: { slug: string }) => p.slug === 'painel-logistica-varejo');
+    const posicao = lerJson('projetos.json').findIndex((p: { slug: string }) => p.slug === 'projeto-de-teste');
 
-    const semConfirmar = await api('POST', '/api/colecoes/projetos/itens/painel-logistica-varejo/excluir', { versao: v.projetos, confirmacao: 'banco' });
+    const semConfirmar = await api('POST', '/api/colecoes/projetos/itens/projeto-de-teste/excluir', { versao: v.projetos, confirmacao: 'banco' });
     expect(semConfirmar.status).toBe(400);
-    expect(lerJson('projetos.json')).toHaveLength(9);
+    expect(lerJson('projetos.json')).toHaveLength(7);
 
-    const r = await api('POST', '/api/colecoes/projetos/itens/painel-logistica-varejo/excluir', { versao: v.projetos, confirmacao: 'painel-logistica-varejo' });
+    const r = await api('POST', '/api/colecoes/projetos/itens/projeto-de-teste/excluir', { versao: v.projetos, confirmacao: 'projeto-de-teste' });
     expect(r.status).toBe(200);
-    expect(lerJson('projetos.json')).toHaveLength(8);
+    expect(lerJson('projetos.json')).toHaveLength(6);
 
     const lixeira = await api('GET', '/api/lixeira');
-    expect(lixeira.json.itens[0]).toMatchObject({ colecao: 'projetos', chave: 'painel-logistica-varejo' });
+    expect(lixeira.json.itens[0]).toMatchObject({ colecao: 'projetos', chave: 'projeto-de-teste' });
 
     const rest = await api('POST', `/api/lixeira/${lixeira.json.itens[0].entrada}/restaurar`, {});
     expect(rest.status).toBe(200);
     const lista = lerJson('projetos.json');
-    expect(lista[posicao].slug).toBe('painel-logistica-varejo');
+    expect(lista[posicao].slug).toBe('projeto-de-teste');
     expect((await api('GET', '/api/lixeira')).json.itens).toHaveLength(0);
   });
 

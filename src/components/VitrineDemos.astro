@@ -4,20 +4,6 @@ import { url } from '../lib/formato';
 
 const demos = [
   {
-    href: '/projetos/torre-controle-expedicao/',
-    selo: 'Réplica do Power BI, dados fictícios',
-    titulo: 'Painel de Expedição',
-    texto: 'O painel que a gerência usa todo dia, reconstruído em código: % expedido, pendências, frota e faróis por transportadora.',
-    tipo: 'expedicao',
-  },
-  {
-    href: '/projetos/painel-logistica-varejo/',
-    selo: 'Réplica do Power BI, dados fictícios',
-    titulo: 'Painel de Logística Varejo',
-    texto: 'Volume e ocupação dos veículos por região e rota, com faixas de capacidade e as maiores rotas do dia.',
-    tipo: 'varejo',
-  },
-  {
     href: '/projetos/simulacao-torre-controle/',
     selo: 'Simulação, dados fictícios',
     titulo: 'Simulação da Torre de Controle',
@@ -122,7 +108,6 @@ const demos = [
   @media (min-width: 900px) {
     .vitrine { grid-template-columns: repeat(6, minmax(0, 1fr)); }
     .demo { grid-column: span 2; }
-    .demo:nth-child(-n + 2) { grid-column: span 3; }
   }
   .demo {
     position: relative;
