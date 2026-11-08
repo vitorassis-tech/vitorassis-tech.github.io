@@ -67,6 +67,7 @@
         "nome": "Python",
         "contexto": "formacao",
         "evidencia": "Programação em Python, Senac RJ (168h, concluído em 28/10/2026)",
+        "status": "concluido",
         "href": "/projetos/atividade-flask/"
       },
       {
@@ -90,7 +91,8 @@
       {
         "nome": "Inteligência Artificial",
         "contexto": "formacao",
-        "evidencia": "Curso de Inteligência Artificial concluído na FAETEC (168h)"
+        "evidencia": "Curso de Inteligência Artificial concluído na FAETEC (168h)",
+        "status": "concluido"
       }
     ]
   },

@@ -53,6 +53,7 @@ export const DEMOS = {
 
 export const SITUACOES_CURSO = { concluido: 'Concluído', andamento: 'Em andamento' };
 export const CONTEXTOS_COMPETENCIA = { trabalho: 'Usada no trabalho', formacao: 'Em formação ou curso' };
+export const STATUS_COMPETENCIA = { concluido: 'Curso concluído' };
 export const TIPOS_CANAL = { email: 'E-mail', linkedin: 'LinkedIn', github: 'GitHub', telefone: 'Telefone / WhatsApp' };
 
 /** Rotas fixas do site (usadas para validar links internos). */
@@ -326,6 +327,7 @@ export const COLECOES = [
               { nome: 'nome', rotulo: 'Competência', tipo: 'texto', obrigatorio: true, max: 60 },
               { nome: 'contexto', rotulo: 'Contexto', tipo: 'opcao', obrigatorio: true, opcoes: CONTEXTOS_COMPETENCIA },
               { nome: 'evidencia', rotulo: 'Evidência', tipo: 'texto', obrigatorio: true, max: 200 },
+              { nome: 'status', rotulo: 'Status do curso', tipo: 'opcao', opcoes: STATUS_COMPETENCIA, ajuda: 'Opcional. Marque quando a competência vem de um curso já concluído.' },
               { nome: 'href', rotulo: 'Link da evidência', tipo: 'url', aceita: ['interno'], ajuda: 'Opcional. Endereço interno, ex.: /projetos/atividade-flask/' },
             ],
           },

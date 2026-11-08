@@ -15,7 +15,7 @@ interface Item {
   status?: 'concluido';
   icone?: keyof typeof icones;
   cor?: string;
-  proprio?: 'powerbi' | 'dax' | 'powerquery' | 'excel' | 'sql' | 'ia';
+  proprio?: 'powerbi' | 'dax' | 'powerquery' | 'excel' | 'sql' | 'ia' | 'rota' | 'erp' | 'terminal' | 'xml' | 'cte' | 'rastreio' | 'coletor';
 }
 const itens: Item[] = [
   { nome: 'Power BI', contexto: 'trabalho', proprio: 'powerbi' },
@@ -24,6 +24,13 @@ const itens: Item[] = [
   { nome: 'Excel avançado', contexto: 'trabalho', proprio: 'excel' },
   { nome: 'JSON', contexto: 'trabalho', icone: 'json', cor: '#e8edf5' },
   { nome: 'CSS', contexto: 'trabalho', icone: 'css', cor: '#4f8fe8' },
+  { nome: 'Roadnet', contexto: 'trabalho', proprio: 'rota' },
+  { nome: 'SAP', contexto: 'trabalho', proprio: 'erp' },
+  { nome: 'Sistema interno (PuTTY)', contexto: 'trabalho', proprio: 'terminal' },
+  { nome: 'e-ColdWeb', contexto: 'trabalho', proprio: 'xml' },
+  { nome: 'Emite (CT-e)', contexto: 'trabalho', proprio: 'cte' },
+  { nome: 'Comprovei', contexto: 'trabalho', proprio: 'rastreio' },
+  { nome: 'Coletores de dados', contexto: 'trabalho', proprio: 'coletor' },
   { nome: 'Python', contexto: 'formacao', status: 'concluido', icone: 'python', cor: '#4b8bd0' },
   { nome: 'SQL', contexto: 'formacao', proprio: 'sql' },
   { nome: 'MySQL', contexto: 'formacao', icone: 'mysql', cor: '#5d9bd6' },
@@ -83,6 +90,54 @@ const rotulo = { trabalho: 'No trabalho', formacao: 'Em formação' } as const;
               <path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8" />
             </svg>
           )}
+          {t.proprio === 'rota' && (
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#ff8a3d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 18c0-4 12-2 12-7s-6-3-6-6" stroke-dasharray="2.4 2.4" />
+              <circle cx="6" cy="18" r="2.4" fill="rgba(255,121,31,0.2)" />
+              <path d="M12 2.5c-1.9 0-3.3 1.4-3.3 3.2 0 2.3 3.3 5.3 3.3 5.3s3.3-3 3.3-5.3c0-1.8-1.4-3.2-3.3-3.2z" fill="rgba(255,121,31,0.2)" />
+              <circle cx="12" cy="5.7" r="1" fill="#ff8a3d" stroke="none" />
+            </svg>
+          )}
+          {t.proprio === 'erp' && (
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#5aa6ff" stroke-width="1.6" stroke-linejoin="round">
+              <rect x="3" y="3" width="7.5" height="7.5" rx="1.6" fill="rgba(90,166,255,0.2)" />
+              <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6" />
+              <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6" />
+              <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6" fill="rgba(90,166,255,0.2)" />
+            </svg>
+          )}
+          {t.proprio === 'terminal' && (
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#9fe0bd" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2.5" y="4" width="19" height="16" rx="2.6" fill="rgba(95,208,138,0.12)" />
+              <path d="M6.5 9.5l3 2.5-3 2.5M12 15h5" />
+            </svg>
+          )}
+          {t.proprio === 'xml' && (
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#7fb2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2.5h8l4.5 4.5v14.5H6z" fill="rgba(127,178,255,0.15)" />
+              <path d="M14 2.5V7h4.5M10 12l-2 2 2 2M14 12l2 2-2 2" />
+            </svg>
+          )}
+          {t.proprio === 'cte' && (
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#ff8a3d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2.5h8l4.5 4.5v14.5H6z" fill="rgba(255,121,31,0.15)" />
+              <path d="M14 2.5V7h4.5M9 14l2.2 2.2L15.5 12" />
+            </svg>
+          )}
+          {t.proprio === 'rastreio' && (
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#5fd08a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2.5 7.5h10.5v8.5H2.5zM13 10.5h4l3 3v2.5h-7z" fill="rgba(95,208,138,0.15)" />
+              <circle cx="6.5" cy="17.5" r="1.8" fill="#0f1b33" />
+              <circle cx="16.5" cy="17.5" r="1.8" fill="#0f1b33" />
+              <path d="M17.5 3.5a3.5 3.5 0 013 3M17.5 1.2a5.8 5.8 0 015.3 5.3" />
+            </svg>
+          )}
+          {t.proprio === 'coletor' && (
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#f2c811" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="6" y="2.5" width="12" height="19" rx="2.4" fill="rgba(242,200,17,0.12)" />
+              <path d="M9 7v5M11 7v5M13 7v5M15 7v5M10 17h4" />
+            </svg>
+          )}
         </span>
         <span class="nome">{t.nome}</span>
         <span class="contexto">{t.status === 'concluido' ? 'Curso concluído' : rotulo[t.contexto]}</span>
@@ -90,6 +145,7 @@ const rotulo = { trabalho: 'No trabalho', formacao: 'Em formação' } as const;
     ))
   }
 </ul>
+
 
 <style>
   .tecnologias {

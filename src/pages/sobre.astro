@@ -174,7 +174,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
                 <div class="comp" data-contexto={c.contexto}>
                   <dt>
                     {c.nome}
-                    <span class="contexto">{c.contexto === 'trabalho' ? 'Trabalho' : 'Formação'}</span>
+                    <span class="contexto">{c.contexto === 'trabalho' ? 'Trabalho' : c.status === 'concluido' ? 'Curso concluído' : 'Formação'}</span>
                   </dt>
                   <dd>
                     {c.href ? (

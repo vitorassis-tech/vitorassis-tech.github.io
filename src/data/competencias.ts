@@ -13,6 +13,8 @@ export interface Competencia {
   nome: string;
   contexto: Contexto;
   evidencia: string;
+  /** curso com certificado concluído (formação, não uso profissional) */
+  status?: 'concluido';
   /** link interno opcional para a evidência */
   href?: string;
 }
