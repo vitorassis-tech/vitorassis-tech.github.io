@@ -7,8 +7,8 @@ import { canaisVisiveis } from '../../data/site';
 import { url } from '../../lib/formato';
 import '../../styles/fundos.css';
 
-// Destaques da abertura (2 x 2)
-const DESTAQUES = ['lg-delicias', 'laboratorio-roteirizacao', 'painel-fretes-simulado', 'simulacao-torre-controle'];
+// Destaques da abertura (2 x 2): painéis do trabalho (réplicas), roteirização e Python + SQL
+const DESTAQUES = ['torre-controle-expedicao', 'painel-logistica-varejo', 'laboratorio-roteirizacao', 'painel-fretes-simulado'];
 const destaques = [
   ...DESTAQUES.map((s) => projetos.find((p) => p.slug === s)).filter((p): p is Projeto => Boolean(p)),
   ...projetos.filter((p) => !DESTAQUES.includes(p.slug)),
@@ -20,7 +20,7 @@ const icone = (p: Projeto) =>
 
 <BaseLayout
   title="Projetos"
-  description="Projetos de Vitor Assis em SQL, Python, desenvolvimento web e logística, com estudos de caso detalhados e demonstrações interativas."
+  description="Projetos de Vitor Assis em Power BI, SQL, Python, desenvolvimento web e logística, com estudos de caso detalhados e demonstrações interativas."
 >
   <section class="projetos-hero" aria-labelledby="projetos-titulo">
     <div class="container projetos-grade">
@@ -79,7 +79,7 @@ const icone = (p: Projeto) =>
   <section class="container lista" id="lista" aria-label="Lista de projetos">
     <dl class="legenda-natureza">
       {
-        (Object.keys(naturezas) as Natureza[]).filter((n) => projetos.some((p) => p.natureza === n)).map((n) => (
+        (Object.keys(naturezas) as Natureza[]).map((n) => (
           <div>
             <dt>
               <span class="natureza" data-natureza={n}>{naturezas[n].rotulo}</span>
@@ -175,7 +175,7 @@ const icone = (p: Projeto) =>
   .lista { padding-top: clamp(2.5rem, 5vw, 3.5rem); scroll-margin-top: 5.5rem; }
   .legenda-natureza { display: grid; gap: 1rem 2rem; margin: 0 0 2rem; }
   @media (min-width: 700px) { .legenda-natureza { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 1200px) { .legenda-natureza { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); } }
+  @media (min-width: 1200px) { .legenda-natureza { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
   .legenda-natureza > div { padding: 1rem 1.1rem; border: 1px solid var(--cmd-line); border-radius: var(--radius-m); background: rgba(255, 255, 255, 0.03); }
   .legenda-natureza dd { margin: 0.6rem 0 0; color: var(--cmd-muted); font-size: 0.93rem; }
   .espaco { height: var(--section); }

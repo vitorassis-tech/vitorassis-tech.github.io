@@ -7,17 +7,20 @@
       {
         "nome": "Power BI",
         "contexto": "trabalho",
-        "evidencia": "Painel de Expedição (em uso diário pela gerência) e Painel de Logística Varejo, na Profarma; cursos FAETEC (160h), Xperiun (64h) e Senac (60h)"
+        "evidencia": "Painel de Expedição (em uso diário pela gerência) e Painel de Logística Varejo, na Profarma; cursos FAETEC (160h), Xperiun (64h) e Senac (60h)",
+        "href": "/projetos/torre-controle-expedicao/"
       },
       {
         "nome": "Power Query",
         "contexto": "trabalho",
-        "evidencia": "Tratamento de relatórios e arquivos operacionais exportados"
+        "evidencia": "Tratamento de relatórios e arquivos operacionais exportados",
+        "href": "/projetos/torre-controle-expedicao/"
       },
       {
         "nome": "DAX",
         "contexto": "trabalho",
-        "evidencia": "Medidas e indicadores de status nos dashboards"
+        "evidencia": "Medidas e indicadores de status nos dashboards",
+        "href": "/projetos/torre-controle-expedicao/"
       },
       {
         "nome": "SQL",
@@ -45,7 +48,8 @@
       {
         "nome": "JSON e CSS no Power BI",
         "contexto": "trabalho",
-        "evidencia": "Personalização visual dos dashboards de Power BI na Profarma"
+        "evidencia": "Personalização visual dos dashboards de Power BI na Profarma",
+        "href": "/projetos/torre-controle-expedicao/"
       },
       {
         "nome": "KPIs e indicadores",

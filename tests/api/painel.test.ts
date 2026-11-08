@@ -110,7 +110,7 @@ describe('consultar e criar', () => {
   it('lista todas as coleções com versão', async () => {
     const r = await api('GET', '/api/conteudo');
     expect(r.status).toBe(200);
-    expect(r.json.conteudo.projetos).toHaveLength(6);
+    expect(r.json.conteudo.projetos).toHaveLength(8);
     expect(Object.keys(r.json.versoes)).toContain('instituicoes');
   });
 
@@ -120,8 +120,8 @@ describe('consultar e criar', () => {
     expect(r.status).toBe(200);
     expect(r.json.versao).not.toBe(v.projetos);
     const lista = lerJson('projetos.json');
-    expect(lista).toHaveLength(7);
-    expect(lista[6]).toMatchObject({ slug: 'projeto-de-teste', status: 'rascunho' });
+    expect(lista).toHaveLength(9);
+    expect(lista[8]).toMatchObject({ slug: 'projeto-de-teste', status: 'rascunho' });
   });
 
   it('recusa dados inválidos com mensagens por campo e não grava nada', async () => {
@@ -209,11 +209,11 @@ describe('excluir, lixeira e histórico', () => {
 
     const semConfirmar = await api('POST', '/api/colecoes/projetos/itens/projeto-de-teste/excluir', { versao: v.projetos, confirmacao: 'banco' });
     expect(semConfirmar.status).toBe(400);
-    expect(lerJson('projetos.json')).toHaveLength(7);
+    expect(lerJson('projetos.json')).toHaveLength(9);
 
     const r = await api('POST', '/api/colecoes/projetos/itens/projeto-de-teste/excluir', { versao: v.projetos, confirmacao: 'projeto-de-teste' });
     expect(r.status).toBe(200);
-    expect(lerJson('projetos.json')).toHaveLength(6);
+    expect(lerJson('projetos.json')).toHaveLength(8);
 
     const lixeira = await api('GET', '/api/lixeira');
     expect(lixeira.json.itens[0]).toMatchObject({ colecao: 'projetos', chave: 'projeto-de-teste' });
