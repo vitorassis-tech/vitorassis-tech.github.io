@@ -52,7 +52,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
       {
         site.foto && (
           <figure class="sobre-foto">
-            <img src={url(site.foto.arquivo)} alt={site.foto.alt} width="585" height="784" loading="eager" fetchpriority="high" decoding="async" />
+            <img src={url(site.foto.arquivo)} alt={site.foto.alt} width="1171" height="1569" loading="eager" fetchpriority="high" decoding="async" />
           </figure>
         )
       }
@@ -169,6 +169,7 @@ const horasConcluidas = cursos.filter((c) => c.status === 'concluido').reduce((s
   .btn-claro:hover { border-color: var(--signal); color: #101c32; }
   .sobre-foto { margin: 0; }
   .sobre-foto img { display: block; width: 100%; height: auto; filter: drop-shadow(0 18px 30px rgba(16, 28, 50, 0.45)); }
+  @media (min-width: 1000px) { .sobre-foto img { height: 100%; width: auto; } }
 
   /* Faixa de áreas (cartão claro sobre a base da foto) */
   .sobre-areas {

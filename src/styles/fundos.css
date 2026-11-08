@@ -255,26 +255,26 @@
   isolation: isolate;
   overflow: hidden;
   padding-top: clamp(2.25rem, 4vw, 3.5rem);
-  padding-bottom: clamp(2rem, 3.5vw, 3rem);
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
   background-color: #f1f5fa;
   background-image:
-    linear-gradient(90deg, #f3f6fb 0%, rgba(243, 246, 251, 0.92) 34%, rgba(243, 246, 251, 0) 52%),
+    linear-gradient(90deg, #f3f6fb 0%, rgba(243, 246, 251, 0.85) 30%, rgba(243, 246, 251, 0) 46%),
     url('../assets/fundos/sobre.webp');
   background-repeat: no-repeat;
-  background-size: auto, auto 100%;
-  background-position: 0 0, right center;
+  background-size: auto, cover;
+  background-position: 0 0, 70% center;
   border-bottom: 1px solid #d9e2ec;
   margin-bottom: clamp(2.5rem, 6vw, 4rem);
 }
 .sobre-grade { display: grid; gap: 1.5rem; align-items: end; }
-.sobre-foto { justify-self: center; width: min(320px, 76%); margin-bottom: -2.5rem; }
+.sobre-foto { justify-self: center; width: min(320px, 76%); margin-bottom: 0; }
 @media (min-width: 1000px) {
   .sobre-grade { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); min-height: clamp(420px, 34vw, 560px); }
   .sobre-texto { align-self: center; padding-bottom: 2.5rem; }
-  .sobre-foto { justify-self: start; width: auto; height: clamp(400px, 33vw, 540px); margin-bottom: -2.75rem; }
+  .sobre-foto { justify-self: start; width: auto; height: clamp(400px, 33vw, 540px); margin-bottom: 0; }
   .sobre-foto img { height: 100%; width: auto; }
-  .sobre-areas { margin-top: -0.5rem; }
+  .sobre-areas { margin-top: 0; }
 }
 @media (max-width: 999px) {
-  .sobre-hero { background-image: linear-gradient(180deg, rgba(243, 246, 251, 0.9) 0%, rgba(243, 246, 251, 0.78) 55%, rgba(243, 246, 251, 0.35) 100%), url('../assets/fundos/sobre.webp'); background-size: auto, cover; background-position: 0 0, 70% center; }
+  .sobre-hero { background-image: linear-gradient(180deg, rgba(243, 246, 251, 0.9) 0%, rgba(243, 246, 251, 0.78) 55%, rgba(243, 246, 251, 0.35) 100%), url('../assets/fundos/sobre.webp'); background-size: auto, cover; background-position: 0 0, 75% center; }
 }
