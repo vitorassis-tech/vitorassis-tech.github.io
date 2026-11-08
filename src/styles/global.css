@@ -562,3 +562,87 @@ body.escuro {
 .console a { color: var(--cmd-text); text-decoration-color: var(--signal); }
 .console .aviso-simulado { background: rgba(255, 121, 31, 0.12); border-color: rgba(255, 121, 31, 0.5); color: var(--signal-text); }
 .console .aviso-simulado strong { color: #fff; }
+
+/* Desempenho no celular ------------------------------------------------------
+ * 1) Seções abaixo da primeira dobra só são montadas quando se aproximam da tela
+ *    (o tamanho reservado evita saltos na barra de rolagem).
+ * 2) Em telas pequenas o "vidro" usa fundo translúcido mais denso no lugar do desfoque:
+ *    visualmente quase idêntico sobre fundos escuros e bem mais leve para o processador.
+ */
+.adiar-render { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+@media (max-width: 759px) {
+  .card {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: linear-gradient(180deg, rgba(27, 52, 90, 0.92), rgba(14, 25, 45, 0.96));
+  }
+  .btn-linha { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(10, 18, 36, 0.7); }
+}
+
+/* Trilho deslizante (só no celular) ------------------------------------------
+ * Listas de cartões viram uma faixa horizontal com encaixe: mesmo conteúdo, bem menos rolagem.
+ * Acima de 640px a lista volta ao layout em grade da própria seção.
+ */
+.dica-trilho { display: none; }
+@media (max-width: 639px) {
+  .trilho {
+    display: flex !important;
+    gap: 0.85rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    margin-inline: calc(-1 * var(--gutter));
+    padding: 0.25rem var(--gutter) 1.1rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 121, 31, 0.55) transparent;
+  }
+  .trilho > * { flex: 0 0 84%; max-width: 22rem; scroll-snap-align: start; }
+  /* dentro do trilho os cartões já entram visíveis (a animação de entrada é vertical) */
+  .revelar-ativo .trilho > .revelar,
+  .revelar-ativo .trilho > * > .revelar { opacity: 1; transform: none; }
+  .dica-trilho {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 0.6rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .dica-trilho::after { content: '→'; color: var(--accent); font-weight: 700; }
+}
+
+/* Movimento ------------------------------------------------------------------
+ * 1) Transição suave entre páginas (View Transitions nativas entre documentos, sem JavaScript).
+ *    Navegadores sem suporte simplesmente trocam de página como antes.
+ * 2) Parallax discreto na imagem da abertura, ligado à rolagem (só onde há suporte).
+ * 3) Retorno tátil nos botões.
+ * Tudo desligado com "reduzir movimento".
+ */
+[data-contar] { font-variant-numeric: tabular-nums; }
+.btn:active { transform: translateY(1px) scale(0.985); }
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation: 220ms cubic-bezier(0.4, 0, 1, 1) both vt-sai; }
+  ::view-transition-new(root) { animation: 380ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both vt-entra; }
+  /* o cabeçalho fica parado durante a troca (consistência entre páginas) */
+  .site-header { view-transition-name: cabecalho; }
+  ::view-transition-group(cabecalho) { animation: none; }
+  @keyframes vt-sai { to { opacity: 0; transform: translateY(-6px); } }
+  @keyframes vt-entra { from { opacity: 0; transform: translateY(10px); } }
+
+  @supports (animation-timeline: scroll()) {
+    @media (min-width: 760px) {
+      .hero-fundo {
+        /* propriedades separadas: o atalho "animation" não aceita a linha do tempo de rolagem */
+        animation-name: parallax-fundo;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+      @keyframes parallax-fundo { to { transform: translateY(7%) scale(1.04); } }
+    }
+  }
+}

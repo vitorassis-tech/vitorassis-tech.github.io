@@ -156,6 +156,10 @@ test.describe('navegação e acessibilidade', () => {
     const nav = page.locator('#menu-principal');
     await expect(nav.locator('ul a')).toHaveText(['Início', 'Sobre', 'Experiência', 'Projetos', 'Formação', 'Certificados', 'Contato']);
     await expect(nav.getByRole('link', { name: 'Vamos conectar?' })).toHaveAttribute('href', /\/contato\/$/);
+    // Acesso secundário ao currículo no cabeçalho (ícone com nome acessível)
+    const cvTopo = nav.getByRole('link', { name: 'Baixar currículo (PDF)' });
+    await expect(cvTopo).toHaveAttribute('download', '');
+    await expect(cvTopo).toHaveAttribute('href', /\/curriculo\/vitor-assis-curriculo\.pdf$/);
     const botao = page.locator('.hero').getByRole('link', { name: 'Baixar currículo' });
     await expect(botao).toHaveAttribute('download', '');
     const href = await botao.getAttribute('href');
@@ -520,7 +524,10 @@ test.describe('laboratório de roteirização', () => {
 test.describe('formação e certificados', () => {
   test('páginas próprias mostram os dados do conteúdo, e os links antigos da página Sobre continuam funcionando', async ({ page }) => {
     await page.goto('/formacao/');
-    await expect(page.locator('h1')).toHaveText('Formação acadêmica');
+    await expect(page.locator('h1')).toHaveText('Conhecimento que sustenta a prática.');
+    // Painel da abertura lista a trajetória acadêmica do conteúdo
+    await expect(page.locator('.mini-trilha li')).toHaveCount(4);
+    await expect(page.locator('.mini-trilha li.andamento')).toContainText('Graduação Tecnológica em Logística');
     await expect(page.locator('main')).toContainText('Graduação Tecnológica em Logística');
     await expect(page.locator('main')).toContainText('Técnico em Qualidade');
     await page.goto('/certificados/');
@@ -530,6 +537,29 @@ test.describe('formação e certificados', () => {
     await page.goto('/sobre/#cursos');
     await expect(page.locator('#cursos')).toHaveAttribute('href', /\/certificados\/$/);
     await expect(page.locator('#formacao')).toHaveAttribute('href', /\/formacao\/$/);
+  });
+});
+
+test.describe('competências e projetos', () => {
+  test('filtro de competências mostra só o contexto escolhido e anuncia o total', async ({ page }) => {
+    await page.goto('/sobre/');
+    const grupos = page.locator('.comp-grupos');
+    const total = await grupos.locator('.comp').count();
+    await page.locator('.comp-filtro [data-filtro=formacao]').click();
+    await expect(page.locator('.comp-filtro [data-filtro=formacao]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(grupos.locator('.comp[data-contexto=trabalho]').first()).toBeHidden();
+    await expect(grupos.locator('.comp[data-contexto=formacao]').first()).toBeVisible();
+    await expect(page.locator('#comp-status')).toContainText('competências exibidas');
+    await page.locator('.comp-filtro [data-filtro=todas]').click();
+    await expect(grupos.locator('.comp:visible')).toHaveCount(total);
+  });
+
+  test('cartões da página Projetos mostram problema, funcionalidades e o código real quando existe', async ({ page }) => {
+    await page.goto('/projetos/');
+    const flask = page.locator('.cartao', { has: page.getByRole('link', { name: 'Atividade Flask' }) });
+    await expect(flask).toContainText('Problema que resolve');
+    await expect(flask).toContainText('Funcionalidades');
+    await expect(flask.locator('a.externo')).toHaveAttribute('href', 'https://github.com/vitorassis-tech/atividade_flask');
   });
 });
 

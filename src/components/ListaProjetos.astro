@@ -37,7 +37,7 @@ const usadas = categoriasEmUso();
     {
       projetos.map((p) => (
         <li class="item" data-categorias={p.categorias.join(' ')}>
-          <CartaoProjeto projeto={p} nivelTitulo={nivelTitulo} />
+          <CartaoProjeto projeto={p} nivelTitulo={nivelTitulo} detalhado />
         </li>
       ))
     }

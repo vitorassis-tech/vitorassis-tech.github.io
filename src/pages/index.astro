@@ -9,6 +9,7 @@ import { site, inicio, CURRICULO, temCurriculo } from '../data/site';
 import { projetos } from '../data/projetos';
 import { experiencias, formacaoAcademica, cursos } from '../data/trajetoria';
 import { mesAno, periodo, url } from '../lib/formato';
+import { srcsetResponsivo } from '../lib/imagens';
 import icones from '../data/icones-marcas.json';
 
 // Projetos em destaque: definidos no painel (Página inicial). Só os publicados aparecem.
@@ -68,7 +69,13 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
   <!-- ============ Abertura ============ -->
   <section class:list={['hero', { 'com-foto': site.foto }]} aria-labelledby="hero-titulo">
     <picture>
-      <source media="(max-width: 759px)" srcset={url('/img/fundos/hero-globo-movel.webp')} width="1080" height="1500" />
+      <source
+        media="(max-width: 759px)"
+        srcset={`${url('/img/fundos/hero-globo-movel-720.webp')} 720w, ${url('/img/fundos/hero-globo-movel-860.webp')} 860w, ${url('/img/fundos/hero-globo-movel.webp')} 1080w`}
+        sizes="100vw"
+        width="1080"
+        height="1500"
+      />
       <img
         class="hero-fundo"
         src={url('/img/fundos/hero-globo-1600.webp')}
@@ -119,7 +126,16 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
         {
           site.foto && (
             <figure class="foto">
-              <img src={url(site.foto.arquivo)} alt={site.foto.alt} width="1171" height="1569" loading="eager" fetchpriority="high" decoding="async" />
+              <img
+                src={url(site.foto.arquivo)}
+                srcset={srcsetResponsivo(site.foto.arquivo, 1171)}
+                sizes="(max-width: 1199px) min(340px, 78vw), 470px"
+                alt={site.foto.alt}
+                width="1171"
+                height="1569"
+                loading="eager"
+                decoding="async"
+              />
             </figure>
           )
         }
@@ -164,7 +180,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
                 <svg viewBox="0 0 24 24" width="26" height="26"><path d={ICONES[i.icone]} fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
               </span>
               <span class="ind-texto">
-                <span class="valor">{i.valor}</span>
+                <span class="valor" data-contar>{i.valor}</span>
                 <span class="rotulo">{i.rotulo}</span>
                 <span class="detalhe">{i.detalhe}</span>
               </span>
@@ -177,7 +193,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
   </section>
 
   <!-- ============ Sobre + Experiência ============ -->
-  <section class="section secao-azul diagonal sobre" aria-labelledby="sobre-titulo">
+  <section class="adiar-render section secao-azul diagonal sobre" aria-labelledby="sobre-titulo">
     <div class="container sobre-grade">
       <div class="revelar">
         <p class="kicker">Sobre mim</p>
@@ -189,7 +205,16 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
         </a>
       </div>
       <figure class="sobre-imagem revelar">
-        <img src={url('/img/fundos/sobre-armazem-foto.webp')} alt="" width="1600" height="1190" loading="lazy" decoding="async" />
+        <img
+          src={url('/img/fundos/sobre-armazem-foto.webp')}
+          srcset={`${url('/img/fundos/sobre-armazem-foto-800.webp')} 800w, ${url('/img/fundos/sobre-armazem-foto.webp')} 1600w`}
+          sizes="(max-width: 999px) 92vw, 46vw"
+          alt=""
+          width="1600"
+          height="1190"
+          loading="lazy"
+          decoding="async"
+        />
       </figure>
     </div>
 
@@ -211,7 +236,8 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
         </ol>
         <a class="link-seta" href={url('/experiencia/')}>Ver experiência completa</a>
       </div>
-      <div class="frentes">
+      <p class="dica-trilho" aria-hidden="true">Deslize para ver mais</p>
+      <div class="frentes trilho">
         {
           inicio.frentes.map((f, i) => (
             <article class:list={['frente card revelar', { formacao: f.formacao }]}>
@@ -228,7 +254,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
   </section>
 
   <!-- ============ Projetos ============ -->
-  <section class="section diagonal projetos-secao" aria-labelledby="projetos-titulo">
+  <section class="adiar-render section diagonal projetos-secao" aria-labelledby="projetos-titulo">
     <div class="container">
       <div class="cabecalho-secao">
         <div>
@@ -238,14 +264,15 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
         </div>
         <a class="btn btn-ghost" href={url('/projetos/')}>Ver todos os {projetos.length} projetos</a>
       </div>
-      <ul class="grade-projetos">
+      <p class="dica-trilho" aria-hidden="true">Deslize para ver mais</p>
+      <ul class="grade-projetos trilho" aria-label="Projetos em destaque">
         {destaques.map((p) => <li class="revelar"><CartaoProjeto projeto={p} /></li>)}
       </ul>
     </div>
   </section>
 
   <!-- ============ Demonstrações ============ -->
-  <section class="cmd section-cmd" id="demonstracoes" aria-labelledby="demos-titulo">
+  <section class="adiar-render cmd section-cmd" id="demonstracoes" aria-labelledby="demos-titulo">
     <div class="container">
       <div class="section-head">
         <p class="kicker">Demonstrações interativas</p>
@@ -257,7 +284,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
   </section>
 
   <!-- ============ Tecnologias + Trajetória ============ -->
-  <section class="section secao-azul" aria-labelledby="ferramentas-titulo">
+  <section class="adiar-render section secao-azul" aria-labelledby="ferramentas-titulo">
     <div class="container">
       <div class="section-head">
         <p class="kicker">Tecnologias e habilidades</p>
@@ -277,7 +304,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
   </section>
 
   <!-- ============ Formação (seção clara, para respiro) ============ -->
-  <section class="section claro formacao" aria-labelledby="formacao-titulo">
+  <section class="adiar-render section claro formacao" aria-labelledby="formacao-titulo">
     <div class="container formacao-grade">
       <div class="revelar">
         <p class="kicker">Formação e certificados</p>

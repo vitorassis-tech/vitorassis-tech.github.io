@@ -41,7 +41,8 @@ const demos = [
 ] as const;
 ---
 
-<ul class="vitrine">
+<p class="dica-trilho" aria-hidden="true">Deslize para ver mais</p>
+<ul class="vitrine trilho" aria-label="Demonstrações interativas">
   {
     demos.map((d) => (
       <li class="demo">

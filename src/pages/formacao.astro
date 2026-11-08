@@ -5,11 +5,14 @@ import FaixaContato from '../components/FaixaContato.astro';
 import SeloInstituicao from '../components/SeloInstituicao.astro';
 import { formacaoAcademica, cursos } from '../data/trajetoria';
 import { mesAno, url } from '../lib/formato';
+import { CURRICULO, temCurriculo } from '../data/site';
+import '../styles/fundos.css';
 
 // Conteúdo em src/content/formacao.json (painel: Formação). Ordem definida no painel.
 const andamento = formacaoAcademica.filter((f) => f.status === 'andamento');
 const concluidas = formacaoAcademica.filter((f) => f.status === 'concluido');
 const cursosConcluidos = cursos.filter((c) => c.status === 'concluido').length;
+const curriculo = temCurriculo();
 ---
 
 <BaseLayout
@@ -17,14 +20,41 @@ const cursosConcluidos = cursos.filter((c) => c.status === 'concluido').length;
   description="Formação de Vitor Assis: Graduação Tecnológica em Logística (UNISUAM, em andamento), Técnico em Logística e Técnico em Qualidade (Senac), além dos cursos de dados e programação."
 >
   <CabecalhoPagina
-    imagem="formacao-diploma"
-    foco="right center"
-    largura="56%"
+    fundo="formacao"
     tema="claro"
     kicker="Formação"
-    titulo="Formação acadêmica"
-    introducao="Formação técnica e superior em logística, complementada por cursos de dados, banco de dados e programação."
-  />
+    titulo="Conhecimento que sustenta a prática."
+    introducao="Formação técnica e superior em logística, complementada por cursos de dados, banco de dados, programação e Inteligência Artificial."
+  >
+    <div class="acoes">
+      <a class="btn btn-primary" href={url('/certificados/')}>
+        Ver certificados
+        <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </a>
+      {
+        curriculo && (
+          <a class="btn btn-claro" href={url(CURRICULO)} download>
+            Baixar currículo
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2v8m0 0 3.5-3.5M8 10 4.5 6.5M3 13.5h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </a>
+        )
+      }
+    </div>
+    <div slot="lado" class="painel-vidro">
+      <p class="painel-vidro-titulo">Trajetória acadêmica</p>
+      <ol class="mini-trilha">
+        {
+          formacaoAcademica.map((f) => (
+            <li class:list={{ andamento: f.status === 'andamento' }}>
+              <span class="mt-ponto" aria-hidden="true" />
+              <span class="mt-curso">{f.curso}</span>
+              <span class="mt-quando">{f.status === 'andamento' ? `Em andamento · previsão ${mesAno(f.data)}` : `Concluído · ${mesAno(f.data)}`}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </CabecalhoPagina>
 
   <section class="container secao" aria-labelledby="andamento-titulo">
     <h2 id="andamento-titulo" class="subtitulo">Em andamento</h2>

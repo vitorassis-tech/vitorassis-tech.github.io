@@ -1,19 +1,20 @@
 ---
 import Monograma from './Monograma.astro';
-import { navegacao, site } from '../data/site';
+import { navegacao, site, CURRICULO, temCurriculo } from '../data/site';
 import { url } from '../lib/formato';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const atual = Astro.url.pathname.replace(base, '') || '/';
 const ativo = (href: string) => (href === '/' ? atual === '/' : atual.startsWith(href.replace(/\/$/, '')));
-// Botão de destaque: currículo quando o PDF existir; senão, contato.
+// Chamada principal: "Vamos conectar?". O currículo em PDF fica como acesso secundário (ícone).
+const curriculo = temCurriculo();
 // Na página inicial o menu fica transparente sobre a imagem da abertura até a página rolar.
 const transparente = atual === '/';
 ---
 
 <header class:list={['site-header', { transparente }]}>
   <div class="container bar">
-    <a class="marca" href={url('/')} aria-label={`${site.nome}, página inicial`}>
+    <a class="marca" href={url('/')} aria-label={`${site.nome} Technology & Data, página inicial`}>
       <Monograma tamanho={52} />
       <span class="marca-texto">
         <span class="marca-nome">{site.nome}</span>
@@ -42,7 +43,6 @@ const transparente = atual === '/';
         }
       </ul>
       <span class="risco" aria-hidden="true"></span>
-      {/* Como no modelo: o menu convida ao contato; o currículo fica na abertura e no Contato */}
       <a class="btn btn-escuro btn-sm cta" href={url('/contato/')}>
         <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2M9 15l-3-3 6-7c2.5-2.5 6.5-2.5 9-2-.5 2.5.5 6.5-2 9l-7 6zM14.5 9.5a1.2 1.2 0 1 0 0-.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
         Vamos conectar?
@@ -50,6 +50,14 @@ const transparente = atual === '/';
           <path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </a>
+      {
+        curriculo && (
+          <a class="cv" href={url(CURRICULO)} download aria-label="Baixar currículo (PDF)" title="Baixar currículo (PDF)">
+            <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M12 11v6m0 0-2.5-2.5M12 17l2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <span class="cv-rotulo" aria-hidden="true">Baixar currículo (PDF)</span>
+          </a>
+        )
+      }
     </nav>
   </div>
 </header>
@@ -175,6 +183,29 @@ const transparente = atual === '/';
     box-shadow: 0 0 22px rgba(255, 121, 31, 0.55);
   }
   .cta { white-space: nowrap; }
+  /* Acesso secundário ao currículo: ícone discreto ao lado da chamada principal */
+  .cv {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: var(--cmd-text);
+    background: rgba(255, 255, 255, 0.04);
+    transition: border-color 0.2s var(--ease), color 0.2s var(--ease), background-color 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .cv:hover { border-color: var(--signal); color: #fff; background: rgba(255, 121, 31, 0.14); transform: translateY(-1px); }
+  .cv:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
+  .cv-rotulo { display: none; }
+  .cv, .cv:hover { text-decoration: none; }
+  /* 1280–1439 px: espaço justo para 7 itens + 2 botões; o traço decorativo sai e os itens aproximam */
+  @media (min-width: 1280px) and (max-width: 1439px) {
+    .risco { display: none; }
+    .nav { gap: 0.6rem; }
+    .nav ul a { padding-inline: 0.7rem; }
+  }
 
   .menu-botao {
     display: none;
@@ -233,6 +264,9 @@ const transparente = atual === '/';
     .nav ul a[aria-current='page']::after { display: none; }
     .risco { display: none; }
     .cta { align-self: flex-start; }
+    /* No painel do celular o currículo aparece com texto, abaixo da chamada principal */
+    .cv { width: auto; height: auto; min-height: 44px; display: inline-flex; gap: 0.55rem; align-self: flex-start; padding: 0 1rem; border-radius: var(--radius-pill); }
+    .cv-rotulo { display: inline; font-weight: 600; }
   }
   @media (max-width: 420px) {
     .marca-sub { display: none; }

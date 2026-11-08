@@ -13,13 +13,19 @@ interface Props {
   nivelTitulo?: 'h2' | 'h3';
   /** Carregamento imediato da imagem (só para cartões na primeira dobra) */
   prioridade?: boolean;
+  /** Versão completa (página Projetos): problema que resolve, funcionalidades e links reais */
+  detalhado?: boolean;
 }
-const { projeto: p, nivelTitulo = 'h3', prioridade = false } = Astro.props;
+const { projeto: p, nivelTitulo = 'h3', prioridade = false, detalhado = false } = Astro.props;
+// Funcionalidades = primeiros passos da solução registrada no estudo de caso (sem texto novo)
+const funcionalidades = detalhado ? p.solucao.slice(0, 3) : [];
+// Links reais externos (ex.: código no GitHub) ficam clicáveis por cima do cartão
+const externos = detalhado ? (p.links ?? []).filter((l) => l.externo && /github\.com\/[^/]+\/[^/]+/.test(l.href)) : [];
 const Titulo = nivelTitulo;
 const capaFicticia = Boolean(p.demo);
 ---
 
-<article class="cartao card card-link">
+<article class:list={['cartao card card-link', { detalhado }]}>
   <div class="capa">
     {
       p.imagem ? (
@@ -45,10 +51,39 @@ const capaFicticia = Boolean(p.demo);
       <a href={url(`/projetos/${p.slug}/`)}>{p.titulo}</a>
     </Titulo>
     <p class="resumo">{p.resumo}</p>
+    {
+      detalhado && (
+        <div class="bloco">
+          <p class="bloco-rotulo">Problema que resolve</p>
+          <p class="bloco-texto">{p.problema}</p>
+        </div>
+      )
+    }
+    {
+      funcionalidades.length > 0 && (
+        <div class="bloco">
+          <p class="bloco-rotulo">Funcionalidades</p>
+          <ul class="func">
+            {funcionalidades.map((f) => <li>{f}</li>)}
+          </ul>
+        </div>
+      )
+    }
     <ul class="tag-list" aria-label="Tecnologias">
-      {p.tecnologias.slice(0, 4).map((t) => <li>{t}</li>)}
+      {p.tecnologias.slice(0, detalhado ? 6 : 4).map((t) => <li>{t}</li>)}
     </ul>
-    <span class="ver" aria-hidden="true">Ver projeto</span>
+    <div class="rodape-cartao">
+      <span class="ver" aria-hidden="true">{detalhado ? 'Explorar projeto' : 'Ver projeto'}</span>
+      {
+        externos.map((l) => (
+          <a class="externo" href={l.href} target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 0 0-2.8 17.5c.4.1.6-.2.6-.4v-1.6c-2.5.5-3-1.1-3-1.1-.4-1-1-1.3-1-1.3-.8-.6.1-.6.1-.6.9.1 1.4 1 1.4 1 .8 1.4 2.1 1 2.6.8.1-.6.3-1 .6-1.2-2-.2-4.1-1-4.1-4.4 0-1 .4-1.8.9-2.4-.1-.2-.4-1.1.1-2.4 0 0 .8-.2 2.5.9a8.6 8.6 0 0 1 4.6 0c1.7-1.1 2.5-.9 2.5-.9.5 1.3.2 2.2.1 2.4.6.6.9 1.4.9 2.4 0 3.4-2.1 4.2-4.1 4.4.3.3.6.8.6 1.6v2.4c0 .2.2.5.6.4A9 9 0 0 0 12 3z" /></svg>
+            Código
+            <span class="visually-hidden">: {l.rotulo} (abre em nova aba)</span>
+          </a>
+        ))
+      }
+    </div>
   </div>
 </article>
 
@@ -128,4 +163,28 @@ const capaFicticia = Boolean(p.demo);
   }
   .ver::after { content: '→'; color: var(--accent-ink); transition: transform 0.2s var(--ease); }
   .cartao:hover .ver::after { transform: translateX(3px); }
+  .rodape-cartao { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+  /* Versão completa: problema e funcionalidades em blocos compactos */
+  .detalhado .resumo { -webkit-line-clamp: 2; }
+  .bloco { display: grid; gap: 0.3rem; padding: 0.7rem 0.8rem; border-radius: var(--radius-m); background: rgba(255, 255, 255, 0.035); border: 1px solid var(--line); }
+  .bloco-rotulo { margin: 0; font: 700 0.72rem/1.2 var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal-text); }
+  .bloco-texto { margin: 0; font-size: 0.9rem; line-height: 1.45; color: var(--cmd-text); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .func { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
+  .func li { position: relative; padding-left: 1.05rem; font-size: 0.88rem; line-height: 1.4; color: var(--cmd-text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .func li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 6px; height: 6px; border-radius: 2px; background: var(--signal); transform: rotate(45deg); }
+  .externo {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 34px;
+    padding: 0 0.8rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font: 600 0.85rem/1 var(--font-display);
+    text-decoration: none;
+  }
+  .externo:hover { border-color: var(--signal); background: rgba(255, 121, 31, 0.14); color: #fff; }
 </style>

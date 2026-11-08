@@ -122,4 +122,13 @@ const rotulo = { trabalho: 'No trabalho', formacao: 'Em formação' } as const;
   .nome { font: 700 1rem/1.2 var(--font-display); color: var(--ink); }
   .contexto { font-size: 0.78rem; color: var(--muted); }
   .tec[data-contexto='trabalho'] .contexto { color: var(--accent-ink); font-weight: 600; }
+  /* Celular: 3 colunas compactas (mesmos itens e rótulos, menos rolagem) */
+  @media (max-width: 639px) {
+    .tecnologias { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.55rem; }
+    .tec { padding: 0.8rem 0.35rem 0.7rem; gap: 0.2rem; }
+    .logo { width: 46px; height: 46px; border-radius: 13px; margin-bottom: 0.2rem; }
+    .logo :global(svg) { width: 28px; height: 28px; }
+    .nome { font-size: 0.82rem; }
+    .contexto { font-size: 0.7rem; }
+  }
 </style>

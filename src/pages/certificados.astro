@@ -5,6 +5,8 @@ import FaixaContato from '../components/FaixaContato.astro';
 import SeloInstituicao from '../components/SeloInstituicao.astro';
 import { cursos } from '../data/trajetoria';
 import { mesAno, numero, url } from '../lib/formato';
+import { CURRICULO, temCurriculo } from '../data/site';
+import '../styles/fundos.css';
 
 // Conteúdo em src/content/cursos.json (painel: Cursos). Ordem definida no painel.
 const andamento = cursos.filter((c) => c.status === 'andamento');
@@ -15,8 +17,10 @@ const resumo = [
   { valor: String(concluidos.length), rotulo: 'cursos concluídos' },
   { valor: `${numero(horas)}h`, rotulo: 'de carga horária concluída' },
   { valor: String(instituicoes), rotulo: instituicoes === 1 ? 'instituição' : 'instituições' },
-  { valor: String(andamento.length), rotulo: 'em andamento' },
+  // "0 em andamento" não informa nada: só aparece quando houver curso em andamento
+  ...(andamento.length > 0 ? [{ valor: String(andamento.length), rotulo: 'em andamento' }] : []),
 ];
+const curriculo = temCurriculo();
 ---
 
 <BaseLayout
@@ -24,24 +28,39 @@ const resumo = [
   description="Cursos e certificados de Vitor Assis em Power BI, banco de dados, Python, Excel e Inteligência Artificial, com instituição, carga horária e data de conclusão."
 >
   <CabecalhoPagina
-    imagem="formacao-diploma"
-    foco="right center"
-    largura="56%"
+    fundo="formacao"
     tema="claro"
     kicker="Certificados"
-    titulo="Cursos e certificações"
+    titulo="Cursos e certificações."
     introducao="Cursos livres e de qualificação que sustentam a migração da operação logística para dados, BI e tecnologia. Carga horária e datas conforme os certificados."
   >
-    <ul class="resumo" aria-label="Resumo dos cursos">
+    <div class="acoes">
+      <a class="btn btn-primary" href="#concluidos-titulo">
+        Ver certificados
+        <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </a>
       {
-        resumo.map((r) => (
-          <li>
-            <span class="valor">{r.valor}</span>
-            <span class="rotulo">{r.rotulo}</span>
-          </li>
-        ))
+        curriculo && (
+          <a class="btn btn-claro" href={url(CURRICULO)} download>
+            Baixar currículo
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2v8m0 0 3.5-3.5M8 10 4.5 6.5M3 13.5h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </a>
+        )
       }
-    </ul>
+    </div>
+    <div slot="lado" class="painel-vidro">
+      <p class="painel-vidro-titulo">Em números</p>
+      <ul class="resumo" aria-label="Resumo dos cursos">
+        {
+          resumo.map((r) => (
+            <li>
+              <span class="valor" data-contar>{r.valor}</span>
+              <span class="rotulo">{r.rotulo}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </CabecalhoPagina>
 
   {
@@ -91,23 +110,28 @@ const resumo = [
 </BaseLayout>
 
 <style>
+  /* Números dentro do painel de vidro da abertura (2 x 2) */
   .resumo {
     list-style: none;
-    margin: 2rem 0 0;
+    margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1px;
-    max-width: 52rem;
-    border: 1px solid var(--cmd-line);
-    border-radius: var(--radius-l);
-    overflow: hidden;
-    background: var(--cmd-line);
+    gap: 0.6rem;
   }
-  @media (min-width: 760px) { .resumo { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-  .resumo li { display: grid; gap: 0.15rem; padding: 1rem 1.15rem; background: rgba(16, 28, 50, 0.92); }
+  .resumo li {
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.9rem 1rem;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #17365d, #101c32);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
   .resumo .valor { font: 800 var(--step-3) / 1 var(--font-display); color: #fff; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
-  .resumo .rotulo { font-size: 0.9rem; color: var(--cmd-muted); }
+  .resumo .rotulo { font-size: 0.86rem; color: #c7d4e5; }
+  .resumo li:first-child .valor { color: #ff9a52; }
+  /* número ímpar de itens: o primeiro ocupa a linha inteira */
+  .resumo li:first-child:nth-last-child(odd) { grid-column: 1 / -1; }
 
   .secao { margin-bottom: clamp(2.5rem, 6vw, 4rem); }
   .subtitulo { font-size: var(--step-2); margin-bottom: 1.25rem; }

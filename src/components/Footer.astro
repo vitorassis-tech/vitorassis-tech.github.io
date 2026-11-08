@@ -1,30 +1,41 @@
 ---
 import Monograma from './Monograma.astro';
-import { canaisVisiveis, navegacao, site } from '../data/site';
+import { canaisVisiveis, navegacao, site, CURRICULO, temCurriculo } from '../data/site';
 import { mesAno, url } from '../lib/formato';
 const canais = canaisVisiveis();
+const curriculo = temCurriculo();
 const ano = new Date().getFullYear();
+// Ícones dos canais (traço simples, cor herdada)
+const ICONE: Record<string, string> = {
+  email: 'M3 6.5h18v11H3zM3.5 7l8.5 6.5L20.5 7',
+  linkedin: 'M4.5 9.5h3v10h-3zM6 4.5a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2zM10.5 9.5h2.9v1.4c.5-.9 1.6-1.7 3.2-1.7 3 0 3.5 2 3.5 4.5v5.8h-3v-5.1c0-1.3 0-2.8-1.7-2.8s-1.9 1.3-1.9 2.7v5.2h-3z',
+  github: 'M12 3a9 9 0 0 0-2.8 17.5c.4.1.6-.2.6-.4v-1.6c-2.5.5-3-1.1-3-1.1-.4-1-1-1.3-1-1.3-.8-.6.1-.6.1-.6.9.1 1.4 1 1.4 1 .8 1.4 2.1 1 2.6.8.1-.6.3-1 .6-1.2-2-.2-4.1-1-4.1-4.4 0-1 .4-1.8.9-2.4-.1-.2-.4-1.1.1-2.4 0 0 .8-.2 2.5.9a8.6 8.6 0 0 1 4.6 0c1.7-1.1 2.5-.9 2.5-.9.5 1.3.2 2.2.1 2.4.6.6.9 1.4.9 2.4 0 3.4-2.1 4.2-4.1 4.4.3.3.6.8.6 1.6v2.4c0 .2.2.5.6.4A9 9 0 0 0 12 3z',
+  telefone: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2',
+};
 ---
 
 <footer class="site-footer">
+  <div class="brilho" aria-hidden="true"></div>
   <div class="container grade">
     <div class="identidade">
-      <a class="marca" href={url('/')} aria-label={`${site.nome}, página inicial`}>
-        <Monograma tamanho={36} />
+      <a class="marca" href={url('/')} aria-label={`${site.nome} Technology & Data, página inicial`}>
+        <Monograma tamanho={44} />
         <span class="marca-texto">
           <span class="marca-nome">{site.nome}</span>
           <span class="marca-sub">Technology &amp; Data</span>
         </span>
       </a>
       <p class="resumo">{site.posicionamento}. {site.local}.</p>
-      <p class="frentes" aria-label="Áreas">Logística · Dados · Tecnologia</p>
+      <p class="frentes"><span>Logística</span><span>Dados</span><span>Tecnologia</span><span>Inovação</span></p>
     </div>
+
     <nav aria-label="Rodapé">
       <p class="titulo">Navegação</p>
-      <ul>
+      <ul class="nav-lista">
         {navegacao.map((n) => <li><a href={url(n.href)}>{n.rotulo}</a></li>)}
       </ul>
     </nav>
+
     <div>
       <p class="titulo">Contato</p>
       <ul class="canais" aria-label="Perfis e contato">
@@ -32,6 +43,11 @@ const ano = new Date().getFullYear();
           canais.map((c) => (
             <li>
               <a href={c.href} rel={c.id === 'email' ? undefined : 'noopener noreferrer'} target={c.id === 'email' ? undefined : '_blank'}>
+                <span class="canal-icone" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18">
+                    <path d={ICONE[c.id] ?? ICONE.email} fill={c.id === 'linkedin' || c.id === 'github' ? 'currentColor' : 'none'} stroke={c.id === 'linkedin' || c.id === 'github' ? 'none' : 'currentColor'} stroke-width="1.7" stroke-linejoin="round" />
+                  </svg>
+                </span>
                 {c.rotulo}
                 {c.id !== 'email' && <span class="visually-hidden"> (abre em nova aba)</span>}
               </a>
@@ -39,64 +55,145 @@ const ano = new Date().getFullYear();
           ))
         }
       </ul>
+      {
+        curriculo && (
+          <a class="btn-cv" href={url(CURRICULO)} download>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M12 11v6m0 0-2.5-2.5M12 17l2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            Baixar currículo (PDF)
+          </a>
+        )
+      }
     </div>
   </div>
+
   <div class="container nota">
     <p>
       © {ano} {site.nomeCompleto}. As demonstrações deste site usam dados fictícios, sempre identificados. Nenhum dado
       interno de empresa é publicado. Conteúdo revisado em {mesAno(site.revisadoEm.slice(0, 7))}.
     </p>
+    <a class="topo" href="#conteudo">
+      Voltar ao topo
+      <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M8 13V3m0 0L4 7m4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </a>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    background: var(--cmd-0);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 60% 120% at 100% 0%, rgba(23, 54, 93, 0.55), transparent 60%),
+      linear-gradient(180deg, #0c1628, #070d1a);
     color: var(--cmd-muted);
-    padding-block: 3.5rem 2rem;
+    padding-block: clamp(3rem, 6vw, 4.5rem) 1.75rem;
     font-size: 0.95rem;
-    border-top: 3px solid var(--signal);
+  }
+  /* Linha laranja com brilho no topo, como as faixas da identidade */
+  .site-footer::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ff791f 18%, #ffb27a 50%, #ff791f 82%, transparent);
+    box-shadow: 0 0 18px 1px rgba(255, 121, 31, 0.55);
+  }
+  /* Grade técnica discreta ao fundo */
+  .brilho {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 85%);
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 85%);
   }
   .site-footer :focus-visible { box-shadow: var(--focus-escuro); }
   .grade { display: grid; gap: 2.25rem; }
   @media (min-width: 760px) {
-    .grade { grid-template-columns: 2fr 1fr 1fr; }
+    .grade { grid-template-columns: 1.6fr 1fr 1fr; gap: 3rem; }
   }
-  .marca {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.7rem;
-    color: #fff;
-    text-decoration: none;
-    margin-bottom: 1rem;
-  }
+  .marca { display: inline-flex; align-items: center; gap: 0.8rem; color: #fff; text-decoration: none; margin-bottom: 1rem; }
   .marca:hover { color: #fff; }
   .marca-texto { display: grid; line-height: 1.1; }
-  .marca-nome { font: 700 1.15rem/1.1 var(--font-display); letter-spacing: -0.02em; }
-  .marca-sub { font-size: 0.78rem; color: var(--cmd-muted); }
-  .resumo { margin-bottom: 0.4rem; }
-  .frentes { color: var(--signal-text); font-weight: 500; margin: 0; }
+  .marca-nome { font: 700 1.3rem/1.1 var(--font-display); letter-spacing: -0.02em; }
+  .marca-sub { font-size: 0.82rem; color: var(--cmd-muted); }
+  .resumo { margin: 0 0 1rem; max-width: 36ch; }
+  .frentes { display: flex; flex-wrap: wrap; gap: 0.35rem 0; margin: 0; font: 600 0.9rem/1.3 var(--font-display); color: #fff; }
+  .frentes span + span::before { content: '·'; margin-inline: 0.6rem; color: var(--signal); }
   .titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font: 700 0.8rem/1.2 var(--font-display);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #fff;
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.9rem;
   }
+  .titulo::before { content: ''; width: 4px; height: 0.95em; background: var(--signal); transform: skewX(-18deg); border-radius: 1px; }
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.1rem; }
+  .nav-lista { grid-template-columns: repeat(2, minmax(0, max-content)); column-gap: 2rem; }
   ul a {
     display: inline-flex;
     align-items: center;
-    min-height: 32px;
+    gap: 0.6rem;
+    min-height: 34px;
     color: var(--cmd-text);
     text-decoration: none;
+    transition: color 0.2s var(--ease);
   }
-  ul a:hover { color: var(--signal-text); text-decoration: underline; text-decoration-color: var(--signal); }
+  ul a:hover { color: var(--signal-text); }
+  .canal-icone {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+    transition: border-color 0.2s var(--ease), background-color 0.2s var(--ease);
+  }
+  ul a:hover .canal-icone { border-color: var(--signal); background: rgba(255, 121, 31, 0.14); }
+  .btn-cv {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 40px;
+    margin-top: 1rem;
+    padding: 0 1rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 121, 31, 0.6);
+    color: #fff;
+    font: 600 0.9rem/1 var(--font-display);
+    text-decoration: none;
+    transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease);
+  }
+  .btn-cv:hover { background: rgba(255, 121, 31, 0.16); border-color: var(--signal); color: #fff; }
   .nota {
-    margin-top: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 2.75rem;
     padding-top: 1.25rem;
-    border-top: 1px solid var(--cmd-line);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     font-size: var(--step--1);
   }
   .nota p { margin: 0; max-width: 80ch; }
+  .topo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 36px;
+    color: var(--cmd-text);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .topo:hover { color: var(--signal-text); }
 </style>
