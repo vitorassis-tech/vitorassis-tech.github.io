@@ -95,6 +95,8 @@ html {
 
 body {
   margin: 0;
+  /* palavras longas (e-mail, endereços) quebram em vez de alargar a página quando o texto é ampliado */
+  overflow-wrap: break-word;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
@@ -178,14 +180,16 @@ a:hover { color: var(--accent-ink); }
 .skip-link {
   position: absolute;
   left: var(--gutter);
-  top: -100px;
+  top: 0;
+  /* escondido pela própria altura: some com qualquer tamanho de letra */
+  transform: translateY(-110%);
   z-index: 100;
   background: var(--navy);
   color: #fff;
   padding: 0.6rem 1rem;
   border-radius: var(--radius-m);
 }
-.skip-link:focus { top: 0.75rem; color: #fff; }
+.skip-link:focus { transform: translateY(0.75rem); color: #fff; }
 
 /* Seções ------------------------------------------------------------------ */
 .section { padding-block: var(--section); }
