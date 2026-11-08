@@ -227,6 +227,7 @@ describe('formatação', () => {
     expect(mesAno('2026-05')).toBe('mai/2026');
     expect(periodo('2019-08', null)).toBe('ago/2019 – atual');
     expect(duracao('2025-03', '2026-04', '2026-10')).toBe('1 ano e 2 meses');
+    expect(duracao('2019-08', null, '2026-11')).toBe('7 anos e 3 meses');
     expect(() => mesAno('2026-13')).toThrow();
   });
   it('trata ausência de valor sem inventar número', () => {

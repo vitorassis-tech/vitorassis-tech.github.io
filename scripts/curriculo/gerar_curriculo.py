@@ -139,7 +139,7 @@ def main() -> None:
         ("Dados e BI", "Power BI, Power Query (M), DAX, Excel avançado (tabelas dinâmicas), indicadores (KPIs) e relatórios gerenciais"),
         ("Programação e bancos de dados", "Python, SQL, MySQL, SQLite, modelagem relacional (MER/DER), JSON, Flask, HTML, CSS, JavaScript, Git e GitHub"),
         ("Inteligência Artificial", "curso de Inteligência Artificial concluído (FAETEC, 168h)"),
-        ("Sistemas", "SAP, Roadnet, TMS, e-ColdWeb, Emite, Comprovei, Cervello e coletores de dados"),
+        ("Sistemas", "Roadnet, SAP, sistema interno de gestão logística (via PuTTY), e-ColdWeb, Emite, Comprovei, Cervello, coletores de dados e Pacote Office"),
     ]
     for titulo, texto in grupos:
         hist.append(Paragraph(f"<b>{titulo}:</b> {texto}.", s_item))
@@ -179,14 +179,16 @@ def main() -> None:
 
     # ---------- Projetos ----------
     hist += secao("Projetos")
+    # mesma ordem e mesmos nomes da página Projetos do site; os painéis do trabalho já estão
+    # descritos na experiência, então aqui só são citados, sem repetir a descrição
     projetos = [
-        "<b>Painel de Expedição</b> (Grupo Profarma) — dashboard em Power BI em uso diário pela gerência: frota, expedição e pendências por transportadora, com faróis de status. Power BI, Power Query, DAX.",
-        "<b>Painel de Logística Varejo</b> (Grupo Profarma) — volume roteirizado por região e rota e ocupação dos veículos. Power BI, Power Query, DAX.",
-        "<b>L&amp;G Delícias</b> (projeto independente, em uso pela lanchonete) — sistema web de cardápio, pedidos, estoque e financeiro. JavaScript, SQL (Cloudflare D1); código no GitHub.",
+        "<b>Painel de Expedição</b> e <b>Painel de Logística Varejo</b> (Grupo Profarma, Power BI) — descritos na experiência profissional; estudos de caso no portfólio, sem dados internos da empresa.",
+        "<b>L&amp;G Delícias</b> (projeto independente, em uso pela lanchonete) — sistema web de cardápio, pedidos, estoque e financeiro. JavaScript, SQL (Cloudflare D1); site no ar em lgdelicias.com.br e código no GitHub.",
         "<b>Dashboard logístico no Power BI</b> (projeto independente, dados fictícios) — custos, prazos, transportadoras e ocorrências de 1.000 fretes. Power BI, Power Query, DAX; arquivo no GitHub.",
-        "<b>Banco de dados de uma escola de música</b> (Firjan SENAI) — modelo relacional com tabelas, restrições, consultas com JOIN, views e procedures. MySQL.",
+        "<b>Demonstrações com dados fictícios</b> — Simulação da Torre de Controle, Painel de frota e entregas e Laboratório de roteirização. Python, SQL, TypeScript.",
         "<b>Atividade Flask</b> (Senac RJ) — aplicação web com cadastro, consulta e edição de conteúdos. Python, Flask, SQLite, HTML, CSS, JavaScript; código no GitHub.",
-        f"Demonstrações com dados fictícios (simulação de torre de controle, painel de frota e laboratório de roteirização) em {PORTFOLIO}.",
+        "<b>Banco de dados de uma escola de música</b> (Firjan SENAI) — modelo relacional com tabelas, restrições, consultas com JOIN, views e procedures. MySQL.",
+        f"Todos os projetos, com estudos de caso: {PORTFOLIO}/projetos/",
     ]
     hist.append(lista(projetos))
 

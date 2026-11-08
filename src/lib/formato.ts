@@ -18,7 +18,8 @@ export function periodo(inicio: string, fim: string | null): string {
 export function duracao(inicio: string, fim: string | null, referencia: string): string {
   const [a1, m1] = inicio.split('-').map(Number);
   const [a2, m2] = (fim ?? referencia).split('-').map(Number);
-  const meses = (a2 - a1) * 12 + (m2 - m1) + 1;
+  // período encerrado conta o mês de saída; período em andamento conta só os meses já completos
+  const meses = (a2 - a1) * 12 + (m2 - m1) + (fim ? 1 : 0);
   const anos = Math.floor(meses / 12);
   const resto = meses % 12;
   const partes: string[] = [];
