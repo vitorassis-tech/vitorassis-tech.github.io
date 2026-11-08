@@ -179,12 +179,10 @@ def main() -> None:
 
     # ---------- Projetos ----------
     hist += secao("Projetos")
-    # mesma ordem e mesmos nomes da página Projetos do site; os painéis do trabalho já estão
-    # descritos na experiência, então aqui só são citados, sem repetir a descrição
+    # mesma ordem e mesmos nomes da página Projetos do site; os painéis de Power BI do trabalho
+    # (do trabalho e o independente) ficam fora desta lista; a experiência com Power BI segue na seção de experiência
     projetos = [
-        "<b>Painel de Expedição</b> e <b>Painel de Logística Varejo</b> (Grupo Profarma, Power BI) — descritos na experiência profissional; estudos de caso no portfólio, sem dados internos da empresa.",
         "<b>L&amp;G Delícias</b> (projeto independente, em uso pela lanchonete) — sistema web de cardápio, pedidos, estoque e financeiro. JavaScript, SQL (Cloudflare D1); site no ar em lgdelicias.com.br e código no GitHub.",
-        "<b>Dashboard logístico no Power BI</b> (projeto independente, dados fictícios) — custos, prazos, transportadoras e ocorrências de 1.000 fretes. Power BI, Power Query, DAX; arquivo no GitHub.",
         "<b>Demonstrações com dados fictícios</b> — Simulação da Torre de Controle, Painel de frota e entregas e Laboratório de roteirização. Python, SQL, TypeScript.",
         "<b>Atividade Flask</b> (Senac RJ) — aplicação web com cadastro, consulta e edição de conteúdos. Python, Flask, SQLite, HTML, CSS, JavaScript; código no GitHub.",
         "<b>Banco de dados de uma escola de música</b> (Firjan SENAI) — modelo relacional com tabelas, restrições, consultas com JOIN, views e procedures. MySQL.",

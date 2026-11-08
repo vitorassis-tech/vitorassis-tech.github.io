@@ -202,23 +202,23 @@ describe('atualizar', () => {
 describe('excluir, lixeira e histórico', () => {
   it('exige confirmação digitada, move para a lixeira e restaura na mesma posição', async () => {
     const v = await versoes();
-    const posicao = lerJson('projetos.json').findIndex((p: { slug: string }) => p.slug === 'laboratorio-roteirizacao');
+    const posicao = lerJson('projetos.json').findIndex((p: { slug: string }) => p.slug === 'painel-logistica-varejo');
 
-    const semConfirmar = await api('POST', '/api/colecoes/projetos/itens/laboratorio-roteirizacao/excluir', { versao: v.projetos, confirmacao: 'banco' });
+    const semConfirmar = await api('POST', '/api/colecoes/projetos/itens/painel-logistica-varejo/excluir', { versao: v.projetos, confirmacao: 'banco' });
     expect(semConfirmar.status).toBe(400);
     expect(lerJson('projetos.json')).toHaveLength(9);
 
-    const r = await api('POST', '/api/colecoes/projetos/itens/laboratorio-roteirizacao/excluir', { versao: v.projetos, confirmacao: 'laboratorio-roteirizacao' });
+    const r = await api('POST', '/api/colecoes/projetos/itens/painel-logistica-varejo/excluir', { versao: v.projetos, confirmacao: 'painel-logistica-varejo' });
     expect(r.status).toBe(200);
     expect(lerJson('projetos.json')).toHaveLength(8);
 
     const lixeira = await api('GET', '/api/lixeira');
-    expect(lixeira.json.itens[0]).toMatchObject({ colecao: 'projetos', chave: 'laboratorio-roteirizacao' });
+    expect(lixeira.json.itens[0]).toMatchObject({ colecao: 'projetos', chave: 'painel-logistica-varejo' });
 
     const rest = await api('POST', `/api/lixeira/${lixeira.json.itens[0].entrada}/restaurar`, {});
     expect(rest.status).toBe(200);
     const lista = lerJson('projetos.json');
-    expect(lista[posicao].slug).toBe('laboratorio-roteirizacao');
+    expect(lista[posicao].slug).toBe('painel-logistica-varejo');
     expect((await api('GET', '/api/lixeira')).json.itens).toHaveLength(0);
   });
 

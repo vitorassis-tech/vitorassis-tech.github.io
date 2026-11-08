@@ -7,8 +7,8 @@ import { canaisVisiveis } from '../../data/site';
 import { url } from '../../lib/formato';
 import '../../styles/fundos.css';
 
-// Destaques da abertura (2 x 2): painéis do trabalho (réplicas), roteirização e Python + SQL
-const DESTAQUES = ['torre-controle-expedicao', 'painel-logistica-varejo', 'laboratorio-roteirizacao', 'painel-fretes-simulado'];
+// Destaques da abertura (2 x 2): sem os projetos de Power BI, que seguem na lista completa
+const DESTAQUES = ['lg-delicias', 'laboratorio-roteirizacao', 'painel-fretes-simulado', 'simulacao-torre-controle'];
 const destaques = [
   ...DESTAQUES.map((s) => projetos.find((p) => p.slug === s)).filter((p): p is Projeto => Boolean(p)),
   ...projetos.filter((p) => !DESTAQUES.includes(p.slug)),

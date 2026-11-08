@@ -52,7 +52,7 @@ const principal = experiencias.find((e) => e.fim === null) ?? experiencias[0];
             <p class="muted">{e.nome}</p>
             <p class="periodo">
               {periodo(e.inicio, e.fim)}
-              <span class="muted">, {duracao(e.inicio, e.fim, referencia)}</span>
+              {e.fim && <span class="muted">, {duracao(e.inicio, e.fim, referencia)}</span>}
             </p>
           </header>
           <ol class="cargos" reversed>

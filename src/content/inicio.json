@@ -57,9 +57,9 @@
     }
   ],
   "projetosDestaque": [
-    "torre-controle-expedicao",
-    "painel-logistica-varejo",
+    "lg-delicias",
     "painel-fretes-simulado",
-    "lg-delicias"
+    "laboratorio-roteirizacao",
+    "simulacao-torre-controle"
   ]
 }
