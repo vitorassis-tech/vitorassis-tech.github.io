@@ -30,7 +30,7 @@ const tecnicosConcluidos = formacaoAcademica.filter((f) => f.status === 'conclui
 const indicadores = [
   { icone: 'maleta', valor: `${anosLogistica}+`, rotulo: 'anos na logística', detalhe: `${empresaLogistica.nomeCurto}, desde ${mesAno(empresaLogistica.inicio)}` },
   { icone: 'grafico', valor: String(projetosTrabalho), rotulo: projetosTrabalho === 1 ? 'projeto profissional' : 'projetos profissionais', detalhe: 'dashboards em Power BI' },
-  { icone: 'certificado', valor: String(cursosConcluidos), rotulo: 'cursos concluídos', detalhe: 'Python, SQL, BI e mais' },
+  { icone: 'certificado', valor: String(cursosConcluidos), rotulo: 'cursos concluídos', detalhe: 'Python, BI, IA e mais' },
   { icone: 'capelo', valor: String(tecnicosConcluidos), rotulo: tecnicosConcluidos === 1 ? 'curso técnico' : 'cursos técnicos', detalhe: 'Logística e Qualidade' },
 ];
 

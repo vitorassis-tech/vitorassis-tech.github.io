@@ -126,7 +126,7 @@ def main() -> None:
             "expedição, roteirização de entregas no Roadnet, documentação fiscal e de transporte e gestão de transportadoras e fretes. "
             "Desenvolve e mantém dashboards gerenciais em Power BI (Power Query e DAX), um deles em uso diário pela gerência no "
             "acompanhamento da expedição. Formação técnica em Logística e em Qualidade, graduação tecnológica em Logística em andamento "
-            "e cursos concluídos de Python, banco de dados e SQL, Power BI e Inteligência Artificial. "
+            "e cursos concluídos de Python, banco de dados, Power BI e Inteligência Artificial, com SQL em formação. "
             f"Objetivo: {site['objetivo'][0].lower()}{site['objetivo'][1:]}",
             s_texto,
         )
