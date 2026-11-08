@@ -261,7 +261,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
     <div class="container">
       <div class="section-head">
         <p class="kicker">Tecnologias e habilidades</p>
-        <h2 id="ferramentas-titulo">Ferramentas que uso e estudo</h2>
+        <h2 id="ferramentas-titulo">Ferramentas que utilizo</h2>
         <p class="muted">"No trabalho" indica uso na rotina profissional; "Em formação", cursos e projetos de estudo. Detalhes de cada competência na página <a href={url('/sobre/#competencias')}>Sobre</a>.</p>
       </div>
       <Tecnologias />
@@ -348,7 +348,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 78% 18%;
+    object-position: 100% 18%;
   }
   /* Véu escuro atrás do texto, para leitura sobre a cidade iluminada */
   .hero::before {
@@ -364,6 +364,11 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
   @media (max-width: 1079px) {
     .hero::before { background: linear-gradient(180deg, rgba(6, 12, 24, 0.55) 0%, rgba(6, 12, 24, 0.75) 45%, rgba(6, 12, 24, 0.9) 100%); }
   }
+  /* Celular: a cena (globo, cidade, avião e caminhão) aparece inteira atrás do título, sem cortes */
+  @media (max-width: 759px) {
+    .hero-fundo { height: auto; aspect-ratio: 1080 / 1500; bottom: auto; object-position: center top; -webkit-mask-image: linear-gradient(180deg, transparent 36%, #000 52%, #000 80%, transparent 100%); mask-image: linear-gradient(180deg, transparent 36%, #000 52%, #000 80%, transparent 100%); }
+    .hero::before { background: linear-gradient(180deg, rgba(6, 12, 24, 0.5) 0, rgba(6, 12, 24, 0.62) 380px, rgba(6, 12, 24, 0.82) 560px, #060c18 calc(100vw * 1.39)); }
+  }
   .hero-grade {
     display: grid;
     gap: 2.5rem;
@@ -374,7 +379,7 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
   }
   @media (min-width: 1080px) {
     .hero-grade { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
-    .hero-lado { justify-self: end; display: grid; justify-items: end; gap: 1rem; }
+    .hero-lado { justify-self: end; align-self: start; display: grid; justify-items: end; gap: 1rem; }
   }
   .selo-topo {
     display: inline-flex;
@@ -432,19 +437,20 @@ const iconeFrente = ['operacao', 'dados', 'capelo'];
   }
   .foto img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 
-  .areas { padding: 1.2rem 1.15rem 1.25rem; width: min(230px, 100%); background: linear-gradient(180deg, rgba(16, 28, 50, 0.96), rgba(10, 18, 36, 0.97)); }
-  .areas-titulo { margin: 0 0 0.9rem; font: 700 1.08rem/1.2 var(--font-display); color: #fff; }
-  .areas ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.85rem; }
-  .areas li { display: flex; align-items: center; gap: 0.8rem; color: var(--cmd-text); font-size: 0.93rem; line-height: 1.25; }
+  .areas { padding: 1rem 1.05rem 1.05rem; width: min(250px, 100%); background: linear-gradient(180deg, rgba(16, 28, 50, 0.94), rgba(10, 18, 36, 0.96)); }
+  .areas-titulo { margin: 0 0 0.75rem; font: 700 1.02rem/1.2 var(--font-display); color: #fff; }
+  .areas ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+  .areas li { display: flex; align-items: center; gap: 0.7rem; color: var(--cmd-text); font-size: 0.9rem; line-height: 1.2; }
   .area-icone {
     display: grid;
     place-items: center;
     flex: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
     background: rgba(255, 255, 255, 0.05);
   }
+  .area-icone svg { width: 21px; height: 21px; }
   .em-formacao { display: inline-block; margin-left: 0.4rem; font-size: 0.72rem; color: var(--signal-text); border: 1px solid rgba(255, 121, 31, 0.5); border-radius: var(--radius-pill); padding: 0 0.45rem; vertical-align: 0.1em; }
   @media (max-width: 1079px) {
     .hero-grade { min-height: 0; }

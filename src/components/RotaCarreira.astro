@@ -11,6 +11,7 @@ const n = marcos.length;
 const FOLGA = 1.7; // coluna extra à direita para o rótulo da última parada
 const W = n + FOLGA;
 const ultimoConcluido = marcos.findLastIndex((m) => !m.proxima);
+const temPrevisto = marcos.some((m) => m.proxima);
 
 // Geometria da faixa da rota (viewBox 1000 x 100)
 const pts = marcos.map((_, i) => {
@@ -33,13 +34,13 @@ const trechoPrevisto = curva(pts.slice(ultimoConcluido));
 ---
 
 <figure class="rota" aria-labelledby="rota-titulo" style={`--n:${n};--folga:${FOLGA}fr`}>
-  <figcaption id="rota-titulo" class="visually-hidden">Trajetória profissional e de formação, de 2017 até as próximas etapas previstas</figcaption>
+  <figcaption id="rota-titulo" class="visually-hidden">Trajetória profissional e de formação, de 2017 {temPrevisto ? 'até as próximas etapas previstas' : 'até hoje'}</figcaption>
   <div class="faixa" aria-hidden="true">
     <svg viewBox="0 0 1000 100" preserveAspectRatio="none" focusable="false">
       <path class="trilha" d={curva(pts)} vector-effect="non-scaling-stroke"></path>
       <path class="brilho" d={trechoConcluido} vector-effect="non-scaling-stroke"></path>
       <path class="concluido" d={trechoConcluido} vector-effect="non-scaling-stroke"></path>
-      <path class="previsto" d={trechoPrevisto} vector-effect="non-scaling-stroke"></path>
+      {temPrevisto && <path class="previsto" d={trechoPrevisto} vector-effect="non-scaling-stroke"></path>}
     </svg>
   </div>
   <ol>
@@ -63,7 +64,7 @@ const trechoPrevisto = curva(pts.slice(ultimoConcluido));
   </ol>
   <p class="legenda" aria-hidden="true">
     <span class="leg-concluido"></span> concluído
-    <span class="leg-previsto"></span> previsto
+    {temPrevisto && (<><span class="leg-previsto"></span> previsto</>)}
   </p>
 </figure>
 

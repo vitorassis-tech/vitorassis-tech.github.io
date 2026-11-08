@@ -4,6 +4,7 @@
  * rótulo com traço laranja, título e introdução.
  */
 import { url } from '../lib/formato';
+import '../styles/fundos.css';
 interface Props {
   titulo: string;
   introducao?: string;
@@ -17,11 +18,25 @@ interface Props {
   foco?: string;
   /** Tema da abertura: escuro (padrão) ou claro (imagem clara, texto azul-marinho) */
   tema?: 'escuro' | 'claro';
+  /** Tema claro: fração da largura ocupada pela imagem à direita (padrão 66%) */
+  largura?: string;
+  /**
+   * Fundo aplicado por CSS (src/styles/fundos.css), com enquadramento próprio por página
+   * e por tamanho de tela. Quando informado, substitui `imagem`.
+   */
+  fundo?: 'experiencia';
+  /** Lado do texto sobre o fundo por CSS, para não cobrir o assunto da imagem */
+  lado?: 'esquerda' | 'direita';
 }
-const { titulo, introducao, trilha, kicker, imagem, foco = 'center', tema = 'escuro' } = Astro.props;
+const { titulo, introducao, trilha, kicker, imagem: imagemProp, foco = 'center', tema = 'escuro', largura = '66%', fundo, lado = 'esquerda' } = Astro.props;
+const imagem = fundo ? undefined : imagemProp;
+const temLado = Astro.slots.has('lado');
 ---
 
-<header class:list={['cabecalho', { 'com-imagem': imagem, 'tema-claro': tema === 'claro' }]}>
+<header
+  class:list={['cabecalho', { 'com-imagem': imagem, 'tema-claro': tema === 'claro', 'com-fundo': fundo, [`fundo-${fundo}`]: fundo, 'texto-direita': fundo && lado === 'direita', 'com-lado': temLado }]}
+  style={`--largura-imagem: ${largura}`}
+>
   {
     imagem && (
       <img
@@ -40,6 +55,7 @@ const { titulo, introducao, trilha, kicker, imagem, foco = 'center', tema = 'esc
     )
   }
   <div class="container">
+    <div class="bloco-texto">
     {
       trilha && (
         <nav aria-label="Trilha de navegação" class="trilha">
@@ -51,6 +67,8 @@ const { titulo, introducao, trilha, kicker, imagem, foco = 'center', tema = 'esc
     <h1>{titulo}</h1>
     {introducao && <p class="lede">{introducao}</p>}
     <slot />
+    </div>
+    {temLado && <div class="lado"><slot name="lado" /></div>}
   </div>
 </header>
 
@@ -126,7 +144,7 @@ const { titulo, introducao, trilha, kicker, imagem, foco = 'center', tema = 'esc
   /* No tema claro a imagem ocupa a direita e se dissolve no fundo claro */
   .tema-claro .fundo {
     left: auto;
-    width: 66%;
+    width: var(--largura-imagem, 66%);
     object-position: right center;
     -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 30%);
     mask-image: linear-gradient(90deg, transparent 0%, #000 30%);
@@ -134,6 +152,11 @@ const { titulo, introducao, trilha, kicker, imagem, foco = 'center', tema = 'esc
   .tema-claro.com-imagem::before { background: linear-gradient(90deg, #f3f6fb 0%, rgba(243, 246, 251, 0.85) 38%, rgba(243, 246, 251, 0) 55%); }
   .tema-claro .lede { max-width: 46ch; }
   .tema-claro { background: linear-gradient(180deg, #f5f8fc, #e9eff7); }
+  /* Telas médias: a imagem recua para não ficar sob o título */
+  @media (min-width: 760px) and (max-width: 1199px) {
+    .tema-claro .fundo { width: min(var(--largura-imagem, 66%), 46%); }
+    .tema-claro h1 { font-size: clamp(2.3rem, 1rem + 3.3vw, 3.2rem); }
+  }
   @media (max-width: 759px) {
     .tema-claro .fundo { width: 100%; -webkit-mask-image: none; mask-image: none; }
     .tema-claro.com-imagem::before { background: linear-gradient(180deg, rgba(245, 248, 252, 0.75), rgba(245, 248, 252, 0.95)); }

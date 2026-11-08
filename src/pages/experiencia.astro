@@ -7,6 +7,8 @@ import { site } from '../data/site';
 import { duracao, periodo } from '../lib/formato';
 
 const referencia = site.revisadoEm.slice(0, 7);
+// Empresa atual (ou a mais recente) na abertura: linha do tempo dos cargos
+const principal = experiencias.find((e) => e.fim === null) ?? experiencias[0];
 ---
 
 <BaseLayout
@@ -14,15 +16,34 @@ const referencia = site.revisadoEm.slice(0, 7);
   description="Experiência profissional de Vitor Assis: Profarma (Assistente de Logística II, Assistente de Logística I, Auxiliar de Depósito) e DAGAD."
 >
   <CabecalhoPagina
-    imagem="experiencia-caminhao"
-    foco="right center"
+    fundo="experiencia"
     tema="claro"
-    kicker="Experiência"
-    titulo="Experiência profissional"
-    introducao="Promoções sucessivas na mesma empresa, do armazém ao planejamento de transportes e aos dashboards gerenciais."
-  />
+    kicker="Experiência profissional"
+    titulo="Uma jornada de crescimento na logística e tecnologia."
+    introducao="Operações logísticas, roteirização e análise de dados no Grupo Profarma, com promoções sucessivas desde 2019."
+  >
+    <a class="btn btn-primary ver-detalhes" href="#trajetoria">
+      Ver detalhes da experiência
+      <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </a>
+    <ol slot="lado" class="linha-cargos" aria-label={`Cargos no ${principal.nome}`}>
+      {
+        principal.cargos.map((c) => (
+          <li class:list={['linha-cargo', { atual: c.fim === null }]}>
+            <span class="ponto" aria-hidden="true" />
+            <div class="linha-cargo-titulo">
+              <h2>{c.titulo}</h2>
+              <p class="linha-empresa">{principal.nomeCurto}</p>
+              <p class="linha-periodo">{periodo(c.inicio, c.fim)}</p>
+            </div>
+            <p class="linha-resumo">{c.resumo ?? c.atividades[0]}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </CabecalhoPagina>
 
-  <div class="container empresas">
+  <div class="container empresas" id="trajetoria">
     {
       experiencias.map((e) => (
         <section class="empresa" aria-labelledby={`emp-${e.nomeCurto}`}>
@@ -61,7 +82,7 @@ const referencia = site.revisadoEm.slice(0, 7);
 </BaseLayout>
 
 <style>
-  .empresas { display: grid; gap: var(--section); padding-bottom: var(--section); }
+  .empresas { display: grid; gap: var(--section); padding-bottom: var(--section); scroll-margin-top: 6.5rem; }
   .empresa { display: grid; gap: 1.5rem 4rem; }
   @media (min-width: 960px) {
     .empresa { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }

@@ -2,7 +2,7 @@
 /**
  * Grade de tecnologias com logotipos coloridos.
  * Ícones de marca: Simple Icons (licença CC0), em src/data/icones-marcas.json.
- * Power BI e Excel não têm ícone livre: usam um pictograma próprio nas cores de cada ferramenta.
+ * Power BI, DAX, Power Query, Excel, SQL e IA não têm ícone livre: usam pictogramas próprios.
  * Cada item informa onde foi usado: no trabalho ou em formação (nunca "nível avançado").
  */
 import icones from '../data/icones-marcas.json';
@@ -13,19 +13,23 @@ interface Item {
   contexto: Contexto;
   icone?: keyof typeof icones;
   cor?: string;
-  proprio?: 'powerbi' | 'excel' | 'sql';
+  proprio?: 'powerbi' | 'dax' | 'powerquery' | 'excel' | 'sql' | 'ia';
 }
 const itens: Item[] = [
   { nome: 'Power BI', contexto: 'trabalho', proprio: 'powerbi' },
-  { nome: 'Excel', contexto: 'trabalho', proprio: 'excel' },
+  { nome: 'DAX', contexto: 'trabalho', proprio: 'dax' },
+  { nome: 'Power Query (M)', contexto: 'trabalho', proprio: 'powerquery' },
+  { nome: 'Excel avançado', contexto: 'trabalho', proprio: 'excel' },
+  { nome: 'Python', contexto: 'formacao', icone: 'python', cor: '#4b8bd0' },
   { nome: 'SQL', contexto: 'formacao', proprio: 'sql' },
   { nome: 'MySQL', contexto: 'formacao', icone: 'mysql', cor: '#5d9bd6' },
-  { nome: 'Python', contexto: 'formacao', icone: 'python', cor: '#4b8bd0' },
+  { nome: 'JSON', contexto: 'formacao', icone: 'json', cor: '#e8edf5' },
+  { nome: 'HTML', contexto: 'formacao', icone: 'html', cor: '#f06529' },
+  { nome: 'CSS', contexto: 'formacao', icone: 'css', cor: '#4f8fe8' },
+  { nome: 'JavaScript', contexto: 'formacao', icone: 'javascript', cor: '#f7df1e' },
   { nome: 'Flask', contexto: 'formacao', icone: 'flask', cor: '#3babc3' },
-  { nome: 'Django', contexto: 'formacao', icone: 'django', cor: '#44b78b' },
-  { nome: 'GitHub', contexto: 'formacao', icone: 'github', cor: '#ffffff' },
-  { nome: 'Astro', contexto: 'formacao', icone: 'astro', cor: '#d987ff' },
-  { nome: 'TypeScript', contexto: 'formacao', icone: 'typescript', cor: '#4f8fe8' },
+  { nome: 'Git e GitHub', contexto: 'formacao', icone: 'github', cor: '#ffffff' },
+  { nome: 'Inteligência Artificial', contexto: 'formacao', proprio: 'ia' },
 ];
 const rotulo = { trabalho: 'No trabalho', formacao: 'Em formação' } as const;
 ---
@@ -45,6 +49,24 @@ const rotulo = { trabalho: 'No trabalho', formacao: 'Em formação' } as const;
               <rect x="13" y="2" width="6" height="20" rx="1.6" fill="#f2c811" />
               <rect x="8.5" y="7" width="6" height="15" rx="1.6" fill="#e8b10c" />
               <rect x="4" y="12" width="6" height="10" rx="1.6" fill="#c99500" />
+            </svg>
+          )}
+          {t.proprio === 'dax' && (
+            <svg viewBox="0 0 24 24" width="40" height="40">
+              <rect x="2.5" y="4" width="19" height="16" rx="3" fill="rgba(242,200,17,0.16)" stroke="#f2c811" stroke-width="1.4" />
+              <text x="12" y="15.5" text-anchor="middle" font-size="7.5" font-weight="700" font-family="system-ui, sans-serif" fill="#f2c811">fx</text>
+            </svg>
+          )}
+          {t.proprio === 'powerquery' && (
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#5fd08a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5h16l-6 7v6l-4 2v-8z" fill="rgba(95,208,138,0.16)" />
+            </svg>
+          )}
+          {t.proprio === 'ia' && (
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#ff8a3d" stroke-width="1.6" stroke-linecap="round">
+              <path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" />
+              <rect x="6" y="6" width="12" height="12" rx="2.5" fill="rgba(255,121,31,0.15)" />
+              <circle cx="12" cy="12" r="2.4" fill="#ff8a3d" stroke="none" />
             </svg>
           )}
           {t.proprio === 'excel' && (
@@ -77,6 +99,7 @@ const rotulo = { trabalho: 'No trabalho', formacao: 'Em formação' } as const;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
   }
   @media (min-width: 1000px) { .tecnologias { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  @media (min-width: 1200px) { .tecnologias { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
   .tec {
     display: grid;
     justify-items: center;

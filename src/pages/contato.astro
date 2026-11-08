@@ -1,96 +1,84 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CabecalhoPagina from '../components/CabecalhoPagina.astro';
-import { canaisVisiveis, site, CURRICULO, temCurriculo } from '../data/site';
-import { url } from '../lib/formato';
+import { canaisVisiveis, inicio, site } from '../data/site';
+import '../styles/fundos.css';
 const canais = canaisVisiveis();
-const curriculo = temCurriculo();
 const email = canais.find((c) => c.id === 'email')?.valor ?? '';
-const descricao: Record<string, string> = {
-  email: 'Melhor canal para propostas e oportunidades.',
-  linkedin: 'Trajetória, recomendações e mensagens.',
-  github: 'Código-fonte dos projetos deste portfólio.',
-  telefone: 'Contato direto.',
+const acao: Record<string, string> = {
+  email: 'Enviar um e-mail',
+  linkedin: 'Conectar no LinkedIn',
+  github: 'Acessar meu GitHub',
+  telefone: 'Ligar',
 };
+// Frase de destaque: a mesma da página inicial, com a última palavra em laranja
+const frase = inicio.titulo.replace(/\.$/, '');
+const corte = frase.lastIndexOf(' ');
+const fraseInicio = frase.slice(0, corte + 1);
+const fraseDestaque = frase.slice(corte + 1);
 ---
 
-<BaseLayout title="Contato" description="Canais de contato profissional de Vitor Assis: e-mail, LinkedIn e GitHub.">
-  <CabecalhoPagina
-    imagem="contato-mapa"
-    foco="35% 50%"
-    kicker="Contato"
-    titulo="Vamos conversar?"
-    introducao="Para oportunidades, conversas sobre dados e logística ou feedback sobre os projetos, use um dos canais abaixo."
-  />
+<BaseLayout title="Contato" description="Canais de contato profissional de Vitor Assis: e-mail, LinkedIn, GitHub e formulário de mensagem.">
+  <section class="contato-hero" aria-labelledby="contato-titulo">
+    <div class="container contato-grade">
+      <div class="contato-texto">
+        <p class="kicker">Contato</p>
+        <h1 id="contato-titulo">Vamos conversar?</h1>
+        <p class="contato-lede">Estou sempre aberto para novas conexões, projetos e oportunidades.</p>
 
-  <section class="container contato-grade" aria-label="Canais e formulário de contato">
-    <div>
-      <ul class="canais">
-        {
-          canais.map((c) => (
-            <li class="canal card" data-canal={c.id}>
-              <span class="icone" aria-hidden="true" />
-              <span class="rotulo">{c.rotulo}</span>
-              <a
-                class="valor"
-                href={c.href}
-                target={c.id === 'email' ? undefined : '_blank'}
-                rel={c.id === 'email' ? undefined : 'noopener noreferrer'}
-              >
-                {c.valor}
-                {c.id !== 'email' && <span class="visually-hidden"> (abre em nova aba)</span>}
-              </a>
-              <span class="descricao">{descricao[c.id] ?? ''}</span>
-              {c.id === 'email' && (
-                <button type="button" class="copiar btn btn-ghost btn-sm" data-copiar={c.valor}>
-                  Copiar e-mail
-                </button>
-              )}
-            </li>
-          ))
-        }
-      </ul>
-      <p class="status-copia" role="status" aria-live="polite"></p>
-      {
-        curriculo && (
-          <p class="curriculo">
-            <a class="btn btn-primary" href={url(CURRICULO)} download>Baixar currículo (PDF)</a>
-          </p>
-        )
-      }
-      <p class="muted local">{site.local}. Disponível para conversas on-line.</p>
+        <ul class="canais" aria-label="Canais de contato">
+          {
+            canais.map((c) => (
+              <li class="canal" data-canal={c.id}>
+                <a
+                  href={c.href}
+                  target={c.id === 'email' ? undefined : '_blank'}
+                  rel={c.id === 'email' ? undefined : 'noopener noreferrer'}
+                >
+                  <span class="icone" aria-hidden="true" />
+                  <span class="canal-acao">{acao[c.id] ?? c.rotulo}</span>
+                  <span class="visually-hidden">: {c.valor}{c.id !== 'email' && ' (abre em nova aba)'}</span>
+                  <svg class="seta" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="copia">
+          <span>{email}</span>
+          <button type="button" class="copiar" data-copiar={email}>Copiar e-mail</button>
+        </p>
+        <p class="status-copia" role="status" aria-live="polite"></p>
+      </div>
+
+      <form class="formulario" id="formulario" action={`mailto:${email}`} method="get" novalidate aria-label="Enviar mensagem">
+        <div class="campo">
+          <label for="f-nome">Nome <span aria-hidden="true">*</span></label>
+          <input id="f-nome" name="nome" type="text" autocomplete="name" required maxlength="80" />
+          <p class="erro" id="e-nome" hidden>Informe seu nome.</p>
+        </div>
+        <div class="campo">
+          <label for="f-email">E-mail <span aria-hidden="true">*</span></label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="120" />
+          <p class="erro" id="e-email" hidden>Informe um e-mail válido.</p>
+        </div>
+        <div class="campo">
+          <label for="f-mensagem">Mensagem <span aria-hidden="true">*</span></label>
+          <textarea id="f-mensagem" name="mensagem" rows="5" required maxlength="3000"></textarea>
+          <p class="erro" id="e-mensagem" hidden>Escreva a mensagem.</p>
+        </div>
+        <button class="btn btn-primary enviar" type="submit">
+          Enviar mensagem
+          <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </button>
+        <p class="form-ajuda">Abre o seu aplicativo de e-mail com a mensagem pronta. Nenhum dado é guardado neste site.</p>
+        <p class="status-form" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="contato-destaque">
+        <p class="destaque-frase">{fraseInicio}<em>{fraseDestaque}</em>.</p>
+        <p class="assinatura" aria-hidden="true">{site.nome}</p>
+      </div>
     </div>
-
-    <form class="formulario card" id="formulario" action={`mailto:${email}`} method="get" novalidate aria-labelledby="form-titulo">
-      <h2 id="form-titulo">Envie uma mensagem</h2>
-      <p class="form-ajuda muted">
-        O formulário abre o seu aplicativo de e-mail com a mensagem pronta para enviar a {email}. Nenhum dado é guardado neste site.
-      </p>
-      <div class="campo">
-        <label for="f-nome">Nome <span aria-hidden="true">*</span></label>
-        <input id="f-nome" name="nome" type="text" autocomplete="name" required maxlength="80" />
-        <p class="erro" id="e-nome" hidden>Informe seu nome.</p>
-      </div>
-      <div class="campo">
-        <label for="f-email">E-mail <span aria-hidden="true">*</span></label>
-        <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="120" />
-        <p class="erro" id="e-email" hidden>Informe um e-mail válido.</p>
-      </div>
-      <div class="campo">
-        <label for="f-assunto">Assunto</label>
-        <input id="f-assunto" name="assunto" type="text" maxlength="120" placeholder="Ex.: Oportunidade de Analista de Dados" />
-      </div>
-      <div class="campo">
-        <label for="f-mensagem">Mensagem <span aria-hidden="true">*</span></label>
-        <textarea id="f-mensagem" name="mensagem" rows="6" required maxlength="3000"></textarea>
-        <p class="erro" id="e-mensagem" hidden>Escreva a mensagem.</p>
-      </div>
-      <button class="btn btn-primary enviar" type="submit">
-        Enviar mensagem
-        <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
-      </button>
-      <p class="status-form" role="status" aria-live="polite"></p>
-    </form>
   </section>
 </BaseLayout>
 
@@ -124,7 +112,7 @@ const descricao: Record<string, string> = {
         if (statusForm) statusForm.textContent = 'Confira os campos destacados.';
         return;
       }
-      const assunto = campo('assunto').value.trim() || `Contato pelo portfólio: ${campo('nome').value.trim()}`;
+      const assunto = `Contato pelo portfólio: ${campo('nome').value.trim()}`;
       const corpo = `${campo('mensagem').value.trim()}\n\n${campo('nome').value.trim()}\n${campo('email').value.trim()}`;
       window.location.href = `mailto:${destino}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
       if (statusForm) statusForm.textContent = 'Abrindo o seu aplicativo de e-mail com a mensagem pronta. Se nada abrir, envie para ' + destino + '.';
@@ -149,81 +137,107 @@ const descricao: Record<string, string> = {
 </script>
 
 <style>
-  .contato-grade { display: grid; gap: 2rem; align-items: start; }
-  @media (min-width: 1000px) { .contato-grade { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 2.5rem; } }
+  .kicker { color: #101c32; font-size: 1.05rem; text-transform: none; letter-spacing: 0; font-weight: 700; }
+  h1 { margin: 0.35rem 0 0.6rem; font-size: clamp(2.2rem, 1.4rem + 2.4vw, 3.3rem); font-weight: 800; letter-spacing: -0.035em; color: #101c32; }
+  .contato-lede { margin: 0 0 1.5rem; max-width: 30ch; font-size: 1.08rem; color: #2c3a4f; }
+
+  /* Canais: cartão claro com três atalhos */
   .canais {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0.5rem;
     display: grid;
-    gap: 1rem;
+    gap: 0.15rem;
+    max-width: 22rem;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(23, 54, 93, 0.12);
+    box-shadow: 0 18px 40px -24px rgba(16, 28, 50, 0.45);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
   }
-  .formulario { padding: clamp(1.4rem, 3vw, 2rem); display: grid; gap: 1rem; border-top: 3px solid var(--accent); }
-  .formulario h2 { font-size: var(--step-2); margin: 0; }
-  .form-ajuda { margin: 0; font-size: 0.93rem; }
-  .campo { display: grid; gap: 0.35rem; }
-  .campo label { font-weight: 600; font-size: 0.95rem; }
-  .campo label span { color: var(--signal); }
+  .canal a {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 48px;
+    padding: 0.5rem 0.75rem;
+    border-radius: 11px;
+    color: #101c32;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s var(--ease);
+  }
+  .canal a:hover { background: rgba(255, 121, 31, 0.1); }
+  .canal a:focus-visible { outline: 3px solid var(--signal); outline-offset: 1px; }
+  .canal-acao { flex: 1; }
+  .seta { color: #17365d; transition: transform 0.2s var(--ease); }
+  .canal a:hover .seta { transform: translateX(3px); }
+  .icone { width: 22px; height: 22px; flex: none; background: #17365d; -webkit-mask: var(--icone) center / contain no-repeat; mask: var(--icone) center / contain no-repeat; }
+  [data-canal='email'] .icone { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1.4 2L12 12.4 19.6 7z'/%3E%3C/svg%3E"); }
+  [data-canal='linkedin'] .icone { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 3h18v18H3zm3 6v9h3V9zm1.5-4.5a1.75 1.75 0 1 0 0 3.5 1.75 1.75 0 0 0 0-3.5zM11 9v9h3v-4.6c0-1.2.3-2.4 1.8-2.4s1.5 1.4 1.5 2.5V18h3v-5.2c0-2.6-.6-4.1-3.5-4.1-1.4 0-2.3.7-2.8 1.4V9z' fill-rule='evenodd'/%3E%3C/svg%3E"); }
+  [data-canal='github'] .icone { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z'/%3E%3C/svg%3E"); }
+  [data-canal='telefone'] .icone { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2'/%3E%3C/svg%3E"); }
+  .copia { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.75rem; margin: 0.9rem 0 0; font-size: 0.92rem; color: #2c3a4f; }
+  .copiar {
+    min-height: 32px;
+    padding: 0.2rem 0.75rem;
+    border: 1px solid rgba(23, 54, 93, 0.35);
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.6);
+    color: #17365d;
+    font: 600 0.85rem/1 var(--font-body);
+    cursor: pointer;
+  }
+  .copiar:hover { border-color: var(--signal); }
+  .status-copia { min-height: 1.4rem; margin: 0.4rem 0 0; font-size: 0.9rem; color: #17365d; }
+
+  /* Formulário: cartão branco */
+  .formulario {
+    display: grid;
+    gap: 0.75rem;
+    padding: clamp(1.1rem, 2.2vw, 1.5rem);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(23, 54, 93, 0.12);
+    box-shadow: 0 30px 60px -30px rgba(16, 28, 50, 0.55);
+    color: #101c32;
+  }
+  .campo { display: grid; gap: 0.3rem; }
+  .campo label { font-weight: 600; font-size: 0.92rem; color: #202b3a; }
+  .campo label span { color: #c4520a; }
   .campo input, .campo textarea {
     width: 100%;
-    min-height: 46px;
-    padding: 0.7rem 0.9rem;
-    border-radius: var(--radius-m);
-    border: 1px solid var(--cmd-line-2);
-    background: rgba(7, 14, 30, 0.6);
-    color: var(--cmd-text);
+    min-height: 44px;
+    padding: 0.6rem 0.85rem;
+    border-radius: 10px;
+    border: 1px solid #c8d3e1;
+    background: #fff;
+    color: #101c32;
     font: inherit;
     transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
   }
-  .campo textarea { resize: vertical; min-height: 140px; }
-  .campo input::placeholder { color: #7f92ad; }
-  .campo input:focus-visible, .campo textarea:focus-visible { border-color: var(--signal); box-shadow: 0 0 0 3px rgba(255, 121, 31, 0.35); }
-  .campo [aria-invalid='true'] { border-color: #f0645a; }
-  .erro { margin: 0; color: #ff9a92; font-size: 0.88rem; }
-  .enviar { justify-self: start; }
-  .status-form { margin: 0; min-height: 1.4rem; color: var(--signal-text); font-size: 0.93rem; }
-  .canal {
-    display: grid;
-    align-content: start;
-    justify-items: start;
-    gap: 0.4rem;
-    padding: 1.4rem 1.5rem 1.5rem;
-    border-left: 3px solid rgba(160, 190, 228, 0.35);
-  }
-  .canal[data-canal='email'] { border-left-color: var(--accent); }
-  .icone {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: rgba(255, 121, 31, 0.1);
-    border: 1px solid rgba(255, 121, 31, 0.3);
-    position: relative;
-    margin-bottom: 0.5rem;
-  }
-  .icone::before {
-    content: '';
-    position: absolute;
-    inset: 11px;
-    background: var(--signal);
-    -webkit-mask: var(--icone) center / contain no-repeat;
-    mask: var(--icone) center / contain no-repeat;
-  }
-  [data-canal='email'] .icone { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2'/%3E%3Cpath d='m4 7 8 6 8-6'/%3E%3C/svg%3E"); }
-  [data-canal='linkedin'] .icone { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 9h3.5v11H4zM5.75 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM9.5 9H13v1.6c.5-.9 1.7-1.9 3.6-1.9 3.6 0 4.4 2.3 4.4 5.4V20h-3.5v-5.2c0-1.3 0-2.9-1.8-2.9s-2.1 1.4-2.1 2.8V20H9.5z'/%3E%3C/svg%3E"); }
-  [data-canal='github'] .icone { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z'/%3E%3C/svg%3E"); }
-  [data-canal='telefone'] .icone { --icone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2'/%3E%3C/svg%3E"); }
-  .rotulo { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-  .valor {
-    font: 700 var(--step-1) / 1.25 var(--font-display);
-    color: #fff;
+  .campo textarea { resize: vertical; min-height: 110px; }
+  .campo input:focus-visible, .campo textarea:focus-visible { outline: none; border-color: var(--signal); box-shadow: 0 0 0 3px rgba(255, 121, 31, 0.3); }
+  .campo [aria-invalid='true'] { border-color: #c62828; }
+  .erro { margin: 0; color: #b42318; font-size: 0.86rem; }
+  .enviar { width: 100%; justify-content: center; margin-top: 0.25rem; }
+  .form-ajuda { margin: 0; font-size: 0.82rem; color: #4a5a70; text-align: center; }
+  .status-form { margin: 0; min-height: 1.2rem; color: #17365d; font-size: 0.9rem; }
+  .status-form:empty { display: none; }
+
+  /* Frase de destaque sobre a cidade */
+  .destaque-frase {
+    margin: 0;
+    font: 700 clamp(1.35rem, 0.9rem + 1vw, 1.75rem) / 1.25 var(--font-display);
     letter-spacing: -0.015em;
-    overflow-wrap: anywhere;
-    text-decoration-thickness: 2px;
-    text-decoration-color: var(--accent);
+    color: #fff;
+    text-shadow: 0 2px 16px rgba(4, 10, 24, 0.6);
   }
-  .descricao { color: var(--muted); font-size: 0.95rem; }
-  .copiar { margin-top: 0.6rem; }
-  .status-copia { min-height: 1.5rem; margin-top: 1rem; color: var(--navy); }
-  .curriculo { margin: 0.5rem 0 1rem; }
-  .local { margin-bottom: var(--section); }
+  .destaque-frase em { font-style: normal; color: var(--signal); }
+  .assinatura {
+    margin: 0.9rem 0 0;
+    font: italic 400 clamp(1.5rem, 1.1rem + 1vw, 2rem) / 1 'Segoe Script', 'Brush Script MT', 'Lucida Handwriting', cursive;
+    color: rgba(255, 255, 255, 0.85);
+  }
 </style>

@@ -54,10 +54,9 @@
     "detalhe": "Técnico em Qualidade concluído, Senac"
   },
   {
-    "id": "2026-12-inteligencia-artificial",
-    "data": "2026-12",
+    "id": "2026-11-inteligencia-artificial",
+    "data": "2026-11",
     "titulo": "Inteligência Artificial",
-    "detalhe": "Curso na FAETEC (previsão)",
-    "proxima": true
+    "detalhe": "Curso de Inteligência Artificial concluído, FAETEC (168h)"
   }
 ]

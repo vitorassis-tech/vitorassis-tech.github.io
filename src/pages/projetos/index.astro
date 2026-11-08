@@ -1,22 +1,82 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import CabecalhoPagina from '../../components/CabecalhoPagina.astro';
 import ListaProjetos from '../../components/ListaProjetos.astro';
 import FaixaContato from '../../components/FaixaContato.astro';
-import { projetos, naturezas, type Natureza } from '../../data/projetos';
+import { projetos, naturezas, type Natureza, type Projeto } from '../../data/projetos';
+import { canaisVisiveis } from '../../data/site';
+import { url } from '../../lib/formato';
+import '../../styles/fundos.css';
+
+// Destaques da abertura (2 x 2): painéis do trabalho (réplicas), roteirização e Python + SQL
+const DESTAQUES = ['torre-controle-expedicao', 'painel-logistica-varejo', 'laboratorio-roteirizacao', 'painel-fretes-simulado'];
+const destaques = [
+  ...DESTAQUES.map((s) => projetos.find((p) => p.slug === s)).filter((p): p is Projeto => Boolean(p)),
+  ...projetos.filter((p) => !DESTAQUES.includes(p.slug)),
+].slice(0, 4);
+const github = canaisVisiveis().find((c) => c.id === 'github');
+const icone = (p: Projeto) =>
+  p.categorias.includes('bi') ? 'grafico' : p.categorias.includes('python') ? 'codigo' : p.categorias.includes('logistica') ? 'rota' : 'codigo';
 ---
 
 <BaseLayout
   title="Projetos"
   description="Projetos de Vitor Assis em Power BI, SQL, Python, desenvolvimento web e logística, com estudos de caso detalhados e demonstrações interativas."
 >
-  <CabecalhoPagina
-    imagem="hero-globo"
-    foco="75% 50%"
-    kicker="Projetos"
-    titulo="Projetos e estudos de caso"
-    introducao="Do painel feito para a gerência às demonstrações abertas com dados fictícios. Cada estudo de caso mostra contexto, decisões, limitações e próximos passos."
-  >
+  <section class="projetos-hero" aria-labelledby="projetos-titulo">
+    <div class="container projetos-grade">
+      <div class="projetos-texto">
+        <p class="kicker">Projetos</p>
+        <h1 id="projetos-titulo">Soluções para desafios de logística, dados e análise inteligente.</h1>
+        <p class="projetos-lede">Dashboards, aplicações e demonstrações interativas que transformam dados em decisões.</p>
+        <div class="projetos-cta">
+          <a class="btn btn-primary" href="#lista">
+            Ver todos os projetos
+            <svg data-seta viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </a>
+          {
+            github && (
+              <a class="btn btn-claro" href={github.href} target="_blank" rel="noopener noreferrer">
+                Acessar GitHub
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z" /></svg>
+                <span class="visually-hidden"> (abre em nova aba)</span>
+              </a>
+            )
+          }
+        </div>
+        <p class="projetos-nota">Os painéis feitos no trabalho aparecem como réplicas com dados fictícios.</p>
+      </div>
+
+      <ul class="destaques" aria-label="Projetos em destaque">
+        {
+          destaques.map((p, i) => (
+            <li class="destaque">
+              <div class="destaque-capa">
+                {p.imagem && (
+                  <img src={url(p.imagem.arquivo)} alt="" width="960" height="600" loading={i < 2 ? 'eager' : 'lazy'} decoding="async" />
+                )}
+                {p.demo && <span class="destaque-aviso">Dados fictícios</span>}
+              </div>
+              <div class="destaque-corpo">
+                <h2 class="destaque-titulo">
+                  <span class="destaque-icone" data-icone={icone(p)} aria-hidden="true" />
+                  <a href={url(`/projetos/${p.slug}/`)}>{p.titulo}</a>
+                </h2>
+                <p class="destaque-sub">{p.subtitulo}</p>
+                <ul class="destaque-tags" aria-label="Tecnologias">
+                  {p.tecnologias.slice(0, 3).map((t) => <li>{t}</li>)}
+                </ul>
+                <span class="destaque-seta" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" width="15" height="15"><path d="M3 8h10m0 0L9 4m4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </span>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="container lista" id="lista" aria-label="Lista de projetos">
     <dl class="legenda-natureza">
       {
         (Object.keys(naturezas) as Natureza[]).map((n) => (
@@ -29,9 +89,6 @@ import { projetos, naturezas, type Natureza } from '../../data/projetos';
         ))
       }
     </dl>
-  </CabecalhoPagina>
-
-  <section class="container" aria-label="Lista de projetos">
     <ListaProjetos projetos={projetos} filtros nivelTitulo="h2" />
   </section>
 
@@ -40,11 +97,83 @@ import { projetos, naturezas, type Natureza } from '../../data/projetos';
 </BaseLayout>
 
 <style>
-  .legenda-natureza {
-    display: grid;
-    gap: 1rem 2rem;
-    margin: 2.25rem 0 0;
+  .kicker { color: #101c32; font-size: 1.15rem; text-transform: none; letter-spacing: 0; font-weight: 700; }
+  h1 {
+    margin: 0.4rem 0 0.9rem;
+    font-size: clamp(2rem, 1.2rem + 2.1vw, 3rem);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    color: #101c32;
+    max-width: 18ch;
   }
+  .projetos-lede { margin: 0; max-width: 38ch; font-size: 1.08rem; color: #2c3a4f; }
+  .projetos-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.6rem; }
+  .btn-claro {
+    background: rgba(255, 255, 255, 0.75);
+    color: #17365d;
+    border: 1.5px solid rgba(23, 54, 93, 0.35);
+  }
+  .btn-claro:hover { border-color: var(--signal); color: #101c32; }
+  .projetos-nota { margin: 1rem 0 0; font-size: 0.88rem; color: #4a5a70; }
+
+  /* Destaques: cartões brancos com capa */
+  .destaques { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  .destaque {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid rgba(23, 54, 93, 0.12);
+    box-shadow: 0 22px 44px -28px rgba(16, 28, 50, 0.55);
+    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+  .destaque:hover { transform: translateY(-3px); box-shadow: 0 28px 50px -26px rgba(16, 28, 50, 0.6); }
+  .destaque:focus-within { outline: 3px solid var(--signal); outline-offset: 2px; }
+  .destaque-capa { position: relative; aspect-ratio: 16 / 7; background: #0d1d3a; overflow: hidden; }
+  .destaque-capa img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .destaque-aviso {
+    position: absolute;
+    left: 0.6rem;
+    bottom: 0.5rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: var(--radius-pill);
+    background: rgba(8, 14, 28, 0.85);
+    color: #ffb27a;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+  .destaque-corpo { position: relative; display: grid; gap: 0.35rem; padding: 0.85rem 1rem 1rem; flex: 1; align-content: start; }
+  .destaque-titulo { display: flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 1.05rem; line-height: 1.25; color: #101c32; padding-right: 2.6rem; }
+  .destaque-titulo a { color: inherit; text-decoration: none; }
+  .destaque-titulo a::after { content: ''; position: absolute; inset: -100vh 0 0 0; z-index: 1; }
+  .destaque-titulo a:focus-visible { outline: none; }
+  .destaque-sub { margin: 0; font-size: 0.88rem; line-height: 1.4; color: #4a5a70; padding-right: 2.2rem; }
+  .destaque-tags { list-style: none; display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.35rem 0 0; padding: 0 2.8rem 0 0; }
+  .destaque-tags li { padding: 0.12rem 0.55rem; border-radius: 6px; background: #edf2f8; border: 1px solid #d6e0ec; font-size: 0.76rem; font-weight: 600; color: #17365d; }
+  .destaque-seta {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.9rem;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid #17365d;
+    color: #17365d;
+    transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
+  }
+  .destaque:hover .destaque-seta { background: var(--signal); border-color: var(--signal); color: #101c32; }
+  .destaque-icone { flex: none; width: 20px; height: 20px; background: var(--signal); -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; }
+  [data-icone='grafico'] { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 21h18v-2H3zM4 17h3.5v-6H4zm6.25 0h3.5V6h-3.5zm6.25 0H20V9h-3.5z'/%3E%3C/svg%3E"); }
+  [data-icone='rota'] { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 2a4 4 0 0 0-4 4c0 3 4 7 4 7s4-4 4-7a4 4 0 0 0-4-4zm0 5.5A1.5 1.5 0 1 1 6 4.5a1.5 1.5 0 0 1 0 3zM18 11a4 4 0 0 0-4 4c0 3 4 7 4 7s4-4 4-7a4 4 0 0 0-4-4zm0 5.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM9 18h3v2H9a5 5 0 0 1 0-10h2v2H9a3 3 0 0 0 0 6z'/%3E%3C/svg%3E"); }
+  [data-icone='codigo'] { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8.6 16.6 4 12l4.6-4.6L7.2 6 1.2 12l6 6zm6.8 0L20 12l-4.6-4.6L16.8 6l6 6-6 6zM13.4 4l-4.8 16h2L15.4 4z'/%3E%3C/svg%3E"); }
+
+  .lista { padding-top: clamp(2.5rem, 5vw, 3.5rem); scroll-margin-top: 5.5rem; }
+  .legenda-natureza { display: grid; gap: 1rem 2rem; margin: 0 0 2rem; }
   @media (min-width: 900px) { .legenda-natureza { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   .legenda-natureza > div { padding: 1rem 1.1rem; border: 1px solid var(--cmd-line); border-radius: var(--radius-m); background: rgba(255, 255, 255, 0.03); }
   .legenda-natureza dd { margin: 0.6rem 0 0; color: var(--cmd-muted); font-size: 0.93rem; }

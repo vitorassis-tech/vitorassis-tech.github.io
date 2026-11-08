@@ -17,8 +17,7 @@
       "nome": "Banco de Dados & SQL"
     },
     {
-      "nome": "Inteligência Artificial",
-      "formacao": true
+      "nome": "Inteligência Artificial"
     }
   ],
   "frentes": [
@@ -35,7 +34,7 @@
     {
       "rotulo": "Módulo em formação",
       "titulo": "Em formação",
-      "texto": "Concluídos: Programação em Python (Senac RJ), SQL e modelagem de dados (Administrador de Banco de Dados, Firjan SENAI) e Técnico em Qualidade (Senac). Em andamento: Inteligência Artificial (FAETEC) e Graduação em Logística (UNISUAM).",
+      "texto": "Concluídos: Programação em Python (Senac RJ), SQL e modelagem de dados (Administrador de Banco de Dados, Firjan SENAI), Inteligência Artificial (FAETEC) e Técnico em Qualidade (Senac). Em andamento: Graduação Tecnológica em Logística (UNISUAM).",
       "formacao": true
     }
   ],

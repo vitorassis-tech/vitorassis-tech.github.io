@@ -120,7 +120,14 @@ portfolio-vitor-assis/
 
 ## 7. Currículo para download
 
-Salve o PDF em `public/curriculo/vitor-assis-curriculo.pdf` (crie a pasta se não existir). No próximo build, o botão **Baixar currículo** aparece no menu automaticamente. Sem o arquivo, o menu mostra **Vamos conversar**, que leva à página de contato. Para trocar o currículo, substitua o arquivo mantendo o mesmo nome.
+O currículo em PDF (`public/curriculo/vitor-assis-curriculo.pdf`) é gerado a partir do mesmo conteúdo do site (`src/content/*.json`), em formato compatível com ATS: uma coluna, texto selecionável, títulos de seção padronizados e sem imagens. Para gerar de novo depois de editar o conteúdo:
+
+```powershell
+python -m pip install reportlab
+python scripts/curriculo/gerar_curriculo.py
+```
+
+Enquanto o arquivo existir, o botão **Baixar currículo** aparece no menu e na abertura. Se o PDF for removido, o menu volta a mostrar **Vamos conectar?**, que leva à página de contato. Também é possível substituir o PDF por outro, mantendo o mesmo nome.
 
 ## 8. Privacidade e segurança
 

@@ -217,7 +217,8 @@ describe('trajetória', () => {
     const datas = marcos.map((m) => m.data);
     expect([...datas].sort()).toEqual(datas);
     const primeiroPrevisto = marcos.findIndex((m) => m.proxima);
-    expect(marcos.slice(primeiroPrevisto).every((m) => m.proxima)).toBe(true);
+    // Pode não haver marco previsto; se houver, todos depois dele também são previstos
+    if (primeiroPrevisto >= 0) expect(marcos.slice(primeiroPrevisto).every((m) => m.proxima)).toBe(true);
   });
 });
 

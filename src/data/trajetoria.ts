@@ -11,6 +11,8 @@ export interface Cargo {
   inicio: string; // AAAA-MM
   fim: string | null; // null = atual
   atividades: string[];
+  /** Resumo de uma linha, usado na abertura da página Experiência */
+  resumo?: string;
 }
 
 export interface Empresa {

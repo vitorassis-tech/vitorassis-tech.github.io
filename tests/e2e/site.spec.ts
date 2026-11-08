@@ -150,17 +150,22 @@ test.describe('navegação e acessibilidade', () => {
     await expect(page.locator('#menu-principal a[aria-current="page"]')).toHaveText('Projetos');
   });
 
-  test('menu tem os 7 itens e o botão de destaque leva ao contato enquanto não há currículo em PDF', async ({ page }) => {
+  test('menu tem os 7 itens e o botão de destaque baixa o currículo em PDF', async ({ page, request }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
     const nav = page.locator('#menu-principal');
     await expect(nav.locator('ul a')).toHaveText(['Início', 'Sobre', 'Experiência', 'Projetos', 'Formação', 'Certificados', 'Contato']);
+    const botao = nav.getByRole('link', { name: 'Baixar currículo' });
+    await expect(botao).toHaveAttribute('download', '');
+    const href = await botao.getAttribute('href');
+    expect(href).toMatch(/\/curriculo\/vitor-assis-curriculo\.pdf$/);
+    // O arquivo existe de verdade e é um PDF
+    const resposta = await request.get(href!);
+    expect(resposta.ok()).toBe(true);
+    expect(resposta.headers()['content-type']).toContain('pdf');
     await nav.getByRole('link', { name: 'Certificados' }).click();
     await expect(page).toHaveURL(/\/certificados\/$/);
     await expect(page.locator('#menu-principal a[aria-current="page"]')).toHaveText('Certificados');
-    // Sem public/curriculo/vitor-assis-curriculo.pdf, nada de botão de download sem arquivo
-    await expect(page.locator('a[download]')).toHaveCount(0);
-    await expect(nav.getByRole('link', { name: 'Vamos conectar?' })).toHaveAttribute('href', /\/contato\/$/);
   });
 
   for (const rota of [...ROTAS, '/nao-existe/']) {
@@ -207,8 +212,13 @@ test.describe('conteúdo profissional (E1–E8)', () => {
     } else {
       await expect(page.locator('.hero .hero-fundo')).toBeVisible();
     }
-    // Inteligência Artificial aparece como "em formação"
-    await expect(page.locator('.areas li.formacao')).toContainText('em formação');
+    // Curso de IA concluído: nenhuma área marcada como "em formação"; ferramentas agrupadas por categoria
+    await expect(page.locator('.areas li')).toHaveCount(5);
+    await expect(page.locator('.areas')).not.toContainText('em formação');
+    const ferramentas = page.locator('.tecnologias .nome');
+    for (const nome of ['Power BI', 'DAX', 'Power Query (M)', 'Excel avançado', 'Python', 'SQL', 'JSON', 'HTML', 'CSS', 'JavaScript', 'Git e GitHub', 'Inteligência Artificial']) {
+      await expect(ferramentas.filter({ hasText: nome }).first()).toBeVisible();
+    }
     // Capas carregam; as de réplicas e demonstrações avisam que os dados são fictícios
     const cartoes = page.locator('.grade-projetos .cartao');
     await expect(cartoes).toHaveCount(4);

@@ -236,6 +236,7 @@ export const COLECOES = [
               { nome: 'inicio', rotulo: 'Início', tipo: 'mesAno', obrigatorio: true },
               { nome: 'fim', rotulo: 'Fim', tipo: 'mesAno', nulo: true, ajuda: 'Vazio = cargo atual.' },
               { nome: 'atividades', rotulo: 'Atividades', tipo: 'listaTexto', obrigatorio: true, minItens: 1, max: 500 },
+              { nome: 'resumo', rotulo: 'Resumo curto', tipo: 'texto', max: 90, ajuda: 'Uma linha para a abertura da página Experiência. Vazio = usa a primeira atividade.' },
             ],
           },
         ],

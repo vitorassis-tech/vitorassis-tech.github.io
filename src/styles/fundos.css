@@ -1,0 +1,249 @@
+/*
+ * Fundos das aberturas das páginas internas, aplicados por CSS.
+ * Cada página tem enquadramento próprio (background-position) e ajustes por tamanho de tela.
+ * Regras gerais: background-size cover ou proporcional (nunca esticado), texto fora do assunto
+ * principal da imagem e véus discretos só onde o texto precisa de contraste.
+ * As imagens ficam em src/assets/fundos (o Vite gera o caminho final, inclusive com BASE_PATH).
+ */
+
+/* ---------- Estrutura comum ---------- */
+.cabecalho.com-fundo {
+  display: flex;
+  align-items: center;
+  background-repeat: no-repeat;
+}
+.cabecalho.com-fundo > .container { width: 100%; }
+.cabecalho.com-fundo .bloco-texto { position: relative; }
+/* Texto à direita: ocupa a faixa livre da imagem (de ~44% a ~76% da tela), sem cobrir
+   o assunto à esquerda nem as formas do canto direito */
+@media (min-width: 1200px) {
+  .cabecalho.texto-direita .bloco-texto {
+    margin-left: auto;
+    margin-right: max(0px, calc(50% - 26vw));
+    width: min(100%, 28rem);
+  }
+}
+
+/* ============================================================
+ * Experiência — imagem clara: cidade e caminhão com contêineres embaixo à esquerda,
+ * céu claro em cima e à direita, detalhe laranja no canto inferior direito.
+ * Computador: texto no céu (alto, à esquerda), caminhão inteiro abaixo dele,
+ * linha do tempo dos cargos na faixa clara da direita.
+ * Tablet e celular: texto, linha do tempo e, por último, o caminhão inteiro.
+ * ============================================================ */
+.cabecalho.com-fundo.fundo-experiencia {
+  background-color: #eef2f7;
+  background-image: url('../assets/fundos/experiencia.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: left bottom;
+}
+.cabecalho.com-fundo.fundo-experiencia::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.cabecalho.com-fundo.fundo-experiencia h1 {
+  font-size: clamp(1.9rem, 0.9rem + 2vw, 2.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  max-width: 19ch;
+  margin-bottom: 0.85rem;
+}
+.cabecalho.com-fundo.fundo-experiencia h1::after { display: none; }
+.cabecalho.com-fundo.fundo-experiencia .kicker { font-size: 1rem; text-transform: none; letter-spacing: 0; color: #101c32; font-weight: 700; }
+.cabecalho.com-fundo.fundo-experiencia .lede { max-width: 44ch; color: #2c3a4f; }
+.fundo-experiencia .ver-detalhes { margin-top: 1.4rem; }
+
+/* Linha do tempo dos cargos */
+.linha-cargos { list-style: none; margin: 0; padding: 0; position: relative; display: grid; gap: 1.6rem; }
+.linha-cargos::before {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: linear-gradient(180deg, #ff791f, rgba(255, 121, 31, 0.35));
+}
+.linha-cargo {
+  position: relative;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 1.1rem;
+  align-items: start;
+}
+.linha-cargo .ponto {
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+  border-radius: 50%;
+  background: #ff791f;
+  border: 4px solid #fff;
+  box-shadow: 0 0 0 2px rgba(255, 121, 31, 0.45), 0 4px 10px rgba(255, 121, 31, 0.35);
+}
+.linha-cargo h2 { margin: 0; font-size: 1.12rem; line-height: 1.25; color: #101c32; letter-spacing: -0.01em; }
+.linha-empresa { margin: 0.15rem 0 0; font-weight: 600; color: #17365d; }
+.linha-periodo { margin: 0.1rem 0 0; font-size: 0.92rem; color: #4a5a70; font-variant-numeric: tabular-nums; }
+.linha-resumo {
+  margin: 0;
+  padding-left: 1.1rem;
+  border-left: 1px solid rgba(23, 54, 93, 0.25);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #2c3a4f;
+}
+
+/* ---------- Computador: duas colunas ---------- */
+@media (min-width: 1200px) {
+  .cabecalho.com-fundo.fundo-experiencia {
+    align-items: flex-start;
+    /* altura proporcional à largura: a imagem cobre sem cortar o caminhão */
+    min-height: min(54vw, 900px);
+    padding-top: clamp(2.25rem, 3.5vw, 3.5rem);
+    padding-bottom: 2rem;
+  }
+  .fundo-experiencia.com-lado > .container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+  .fundo-experiencia .lado { padding-top: clamp(1rem, 3vw, 3rem); }
+  /* Véu claro discreto atrás da linha do tempo e no alto do texto */
+  .cabecalho.com-fundo.fundo-experiencia::before {
+    background:
+      radial-gradient(ellipse 30% 42% at 74% 40%, rgba(246, 249, 253, 0.7), rgba(246, 249, 253, 0) 75%),
+      radial-gradient(ellipse 34% 30% at 22% 18%, rgba(246, 249, 253, 0.55), rgba(246, 249, 253, 0) 75%);
+  }
+}
+
+/* ---------- Tablet e celular: uma coluna; caminhão inteiro embaixo ---------- */
+@media (max-width: 1199px) {
+  .cabecalho.com-fundo.fundo-experiencia {
+    align-items: flex-start;
+    min-height: 0;
+    padding-bottom: 30vw;
+    background-size: 100% auto;
+    background-position: left bottom;
+  }
+  .fundo-experiencia .lado { margin-top: 2.25rem; max-width: 46rem; }
+  .cabecalho.com-fundo.fundo-experiencia::before {
+    background: linear-gradient(180deg, rgba(246, 249, 253, 0.9) 0%, rgba(246, 249, 253, 0.82) 62%, rgba(246, 249, 253, 0) 80%);
+  }
+}
+@media (max-width: 759px) {
+  .cabecalho.com-fundo.fundo-experiencia {
+    padding-bottom: clamp(190px, 54vw, 300px);
+    background-image: url('../assets/fundos/experiencia-800.webp');
+    /* proporcional (sem esticar): amplia para o caminhão ocupar a largura do celular */
+    background-size: 170% auto;
+    background-position: 10% 100%;
+  }
+  .linha-cargo { grid-template-columns: 20px minmax(0, 1fr); }
+  .linha-resumo { grid-column: 2; margin-top: 0.45rem; padding-left: 0; border-left: 0; }
+  .linha-cargos { gap: 1.35rem; }
+  .fundo-experiencia .ver-detalhes { width: 100%; justify-content: center; }
+}
+
+/* ============================================================
+ * Contato — imagem com metade esquerda clara (gráficos suaves) e, à direita da diagonal,
+ * cidade noturna com rede de conexões. Computador: texto e canais na parte clara,
+ * formulário no centro, frase de destaque sobre o céu escuro da direita.
+ * Tablet e celular: a frase vai para um painel próprio com o recorte escuro da imagem.
+ * ============================================================ */
+.contato-hero {
+  position: relative;
+  isolation: isolate;
+  background-color: #f1f5fa;
+  background-image: linear-gradient(180deg, #f6f9fc, #e8eef6);
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+}
+.contato-grade { display: grid; gap: 2rem; align-items: start; }
+.contato-destaque {
+  border-radius: 18px;
+  padding: clamp(1.6rem, 4vw, 2.5rem);
+  min-height: 220px;
+  display: grid;
+  align-content: center;
+  background-color: #0d1d3a;
+  background-image: linear-gradient(100deg, rgba(8, 18, 38, 0.82) 0%, rgba(8, 18, 38, 0.55) 55%, rgba(8, 18, 38, 0.1) 100%), url('../assets/fundos/contato-painel.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right 70%;
+}
+@media (min-width: 760px) and (max-width: 1099px) {
+  .contato-grade { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+  .contato-destaque { grid-column: 1 / -1; min-height: 240px; }
+}
+
+/* Computador: a imagem inteira é o fundo da seção */
+@media (min-width: 1100px) {
+  .contato-hero {
+    display: flex;
+    align-items: center;
+    min-height: clamp(560px, 46vw, 780px);
+    background-image: url('../assets/fundos/contato.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* parte de baixo (cidade) sempre visível; o corte acontece no céu */
+    background-position: right 85%;
+  }
+  .contato-hero > .container { width: 100%; }
+  .contato-grade {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, 0.62fr);
+    gap: 2rem;
+    align-items: center;
+  }
+  /* Sem painel próprio: a frase fica direto sobre o céu escuro da imagem */
+  .contato-destaque {
+    background: none;
+    padding: 0 0 0 0.5rem;
+    min-height: 0;
+    align-self: start;
+    margin-top: clamp(0.5rem, 2vw, 2rem);
+  }
+}
+@media (min-width: 1600px) {
+  .contato-grade { grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr) minmax(0, 0.7fr); }
+}
+@media (min-width: 1100px) and (max-width: 1279px) {
+  .contato-destaque { padding-left: 1.4rem; }
+}
+/* Telas largas: a diagonal fica mais à direita no alto; a frase desce para o centro, onde o fundo já é escuro */
+@media (min-width: 1600px) {
+  .contato-destaque { align-self: center; margin-top: 0; padding-left: 1.5rem; }
+}
+
+/* ============================================================
+ * Projetos — fundo claro com gráficos e redes suaves (mais visíveis embaixo à esquerda
+ * e no centro-direita). Texto à esquerda, cartões de destaque à direita.
+ * Não há assunto principal na imagem: o enquadramento só preserva os gráficos de baixo.
+ * ============================================================ */
+.projetos-hero {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(2.25rem, 4.5vw, 3.75rem);
+  background-color: #eef3f9;
+  background-image: url('../assets/fundos/projetos.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: left bottom;
+}
+.projetos-grade { display: grid; gap: 2rem; align-items: center; }
+@media (min-width: 1100px) {
+  .projetos-hero { min-height: clamp(520px, 40vw, 720px); display: flex; align-items: center; }
+  .projetos-hero > .container { width: 100%; }
+  .projetos-grade { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr); gap: 3rem; }
+  .projetos-grade .destaques { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* Tablet: cartões em duas colunas abaixo do texto */
+@media (min-width: 640px) and (max-width: 1099px) {
+  .projetos-grade .destaques { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* Celular: os gráficos do fundo ficam no rodapé da seção, atrás dos cartões; um véu claro garante a leitura */
+@media (max-width: 759px) {
+  .projetos-hero { background-size: 220% auto; background-position: 0% 100%; }
+}
