@@ -182,6 +182,8 @@ def main() -> None:
     projetos = [
         "<b>Painel de Expedição</b> (Grupo Profarma) — dashboard em Power BI em uso diário pela gerência: frota, expedição e pendências por transportadora, com faróis de status. Power BI, Power Query, DAX.",
         "<b>Painel de Logística Varejo</b> (Grupo Profarma) — volume roteirizado por região e rota e ocupação dos veículos. Power BI, Power Query, DAX.",
+        "<b>L&amp;G Delícias</b> (projeto independente, em uso pela lanchonete) — sistema web de cardápio, pedidos, estoque e financeiro. JavaScript, SQL (Cloudflare D1); código no GitHub.",
+        "<b>Dashboard logístico no Power BI</b> (projeto independente, dados fictícios) — custos, prazos, transportadoras e ocorrências de 1.000 fretes. Power BI, Power Query, DAX; arquivo no GitHub.",
         "<b>Banco de dados de uma escola de música</b> (Firjan SENAI) — modelo relacional com tabelas, restrições, consultas com JOIN, views e procedures. MySQL.",
         "<b>Atividade Flask</b> (Senac RJ) — aplicação web com cadastro, consulta e edição de conteúdos. Python, Flask, SQLite, HTML, CSS, JavaScript; código no GitHub.",
         f"Demonstrações com dados fictícios (simulação de torre de controle, painel de frota e laboratório de roteirização) em {PORTFOLIO}.",

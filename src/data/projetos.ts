@@ -8,6 +8,7 @@
  *     'trabalho'     → feito no emprego; dados internos NÃO são exibidos
  *     'academico'    → feito em curso / instituição de ensino
  *     'demonstracao' → criado para o portfólio, com DADOS FICTÍCIOS
+ *     'independente' → feito por conta própria (negócio real ou estudo), fora do trabalho e dos cursos
  * - Resultados só entram como 'medido' se houver medição real e autorizada;
  *   'uso' informa uso real sem números.
  * - Itens em `pendencias` aparecem no site como "Informação pendente".
@@ -18,7 +19,7 @@ import { conteudo, MODO_PREVIA } from './conteudo';
 import { CATEGORIAS, NATUREZAS, STATUS } from '../lib/esquema.mjs';
 
 export type Categoria = 'logistica' | 'bi' | 'sql' | 'python' | 'web' | 'ia';
-export type Natureza = 'trabalho' | 'academico' | 'demonstracao';
+export type Natureza = 'trabalho' | 'academico' | 'demonstracao' | 'independente';
 export type StatusProjeto = 'publicado' | 'rascunho' | 'arquivado';
 
 export const categorias = CATEGORIAS as Record<Categoria, string>;
@@ -28,6 +29,8 @@ const EXPLICACOES: Record<Natureza, string> = {
   academico: 'Desenvolvido em curso, como atividade prática.',
   demonstracao:
     'Criado para este portfólio. Dados, indicadores e parâmetros são fictícios, gerados por script e independentes de qualquer empresa.',
+  independente:
+    'Desenvolvido por conta própria, fora do trabalho e dos cursos: para um negócio real ou para estudo, como cada projeto indica.',
 };
 
 export const naturezas = Object.fromEntries(

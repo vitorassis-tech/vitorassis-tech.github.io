@@ -314,24 +314,24 @@ test.describe('filtros de projetos', () => {
   test('filtra por categoria, anuncia o resultado e mantém a URL', async ({ page }) => {
     await page.goto('/projetos/');
     const itens = page.locator('.lista-projetos .item');
-    await expect(itens).toHaveCount(7);
+    await expect(itens).toHaveCount(9);
     await page.getByRole('button', { name: /Desenvolvimento web/ }).click();
-    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(2);
+    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(3);
     await expect(page.getByRole('button', { name: /Desenvolvimento web/ })).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('.status-filtro')).toHaveText('2 projetos exibidos');
+    await expect(page.locator('.status-filtro')).toHaveText('3 projetos exibidos');
     await expect(page).toHaveURL(/categoria=web/);
 
     await page.reload();
-    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(2);
+    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(3);
     await page.getByRole('button', { name: /^Todos/ }).click();
-    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(7);
+    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(9);
   });
 
   test('sem JavaScript, todos os projetos continuam visíveis', async ({ browser }) => {
     const contexto = await browser.newContext({ javaScriptEnabled: false });
     const page = await contexto.newPage();
     await page.goto('/projetos/');
-    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(7);
+    await expect(page.locator('.lista-projetos .item:visible')).toHaveCount(9);
     await expect(page.locator('.filtros')).toBeHidden();
     await contexto.close();
   });

@@ -43,7 +43,7 @@ test('consultar: lista, busca e filtro por status', async ({ page }) => {
   const erros = vigiarErros(page);
   await page.goto('/#/c/projetos');
   await expect(page.getByRole('heading', { level: 1, name: 'Projetos' })).toBeVisible();
-  await expect(page.locator('tbody tr')).toHaveCount(7);
+  await expect(page.locator('tbody tr')).toHaveCount(9);
   await page.getByRole('searchbox').fill('flask');
   await expect(page.locator('tbody tr')).toHaveCount(1);
   await page.getByRole('searchbox').fill('');
@@ -166,7 +166,7 @@ test('excluir: exige digitar o identificador, vai para a lixeira e pode ser rest
   await page.getByRole('dialog').getByRole('button', { name: 'Mover para a lixeira' }).click();
   await expect(page.locator('.aviso-sucesso').last()).toContainText('movido para a lixeira');
   await expect(page).toHaveURL(/#\/c\/projetos$/);
-  await expect(page.locator('tbody tr')).toHaveCount(7);
+  await expect(page.locator('tbody tr')).toHaveCount(9);
 
   await page.getByRole('link', { name: 'Lixeira', exact: true }).click();
   await expect(page.locator('tbody tr')).toHaveCount(1);
@@ -175,7 +175,7 @@ test('excluir: exige digitar o identificador, vai para a lixeira e pode ser rest
   await expect(page.locator('.aviso-sucesso').last()).toContainText('restaurado');
   await expect(page.getByText('A lixeira está vazia.')).toBeVisible();
   await page.goto('/#/c/projetos');
-  await expect(page.locator('tbody tr')).toHaveCount(8);
+  await expect(page.locator('tbody tr')).toHaveCount(10);
 });
 
 test('excluir definitivamente só pela lixeira e com nova confirmação', async ({ page }) => {
@@ -197,7 +197,7 @@ test('excluir definitivamente só pela lixeira e com nova confirmação', async 
 });
 
 test('excluir: item usado em outras páginas fica bloqueado, com explicação', async ({ page }) => {
-  await page.goto('/#/c/projetos/editar/atividade-flask');
+  await page.goto('/#/c/projetos/editar/lg-delicias');
   await page.getByRole('button', { name: 'Mover para a lixeira' }).click();
   const dialogo = page.getByRole('dialog');
   await expect(dialogo).toContainText('Não é possível excluir agora');

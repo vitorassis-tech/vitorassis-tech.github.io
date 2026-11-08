@@ -322,6 +322,7 @@ a:hover { color: var(--accent-ink); }
 .natureza[data-natureza='academico']::before { background: var(--muted); border-radius: 2px; }
 .natureza[data-natureza='demonstracao'] { background: var(--accent-wash); border-color: #ffc9a3; }
 .natureza[data-natureza='demonstracao']::before { background: var(--accent); transform: rotate(45deg); }
+.natureza[data-natureza='independente']::before { background: transparent; border: 2px solid currentColor; border-radius: 50%; }
 
 .tag-list { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; padding: 0; margin: 0; }
 .tag-list li {

@@ -152,6 +152,194 @@
     }
   },
   {
+    "titulo": "L&G Delícias",
+    "slug": "lg-delicias",
+    "subtitulo": "Sistema web de cardápio, pedidos, estoque e financeiro para uma lanchonete",
+    "resumo": "Sistema web em uso pela L&G Delícias, lanchonete de tortas salgadas: cardápio on-line, pedidos com acompanhamento pelo cliente, baixa automática do estoque e controle financeiro, publicado na Cloudflare com banco SQL (D1).",
+    "natureza": "independente",
+    "instituicao": "L&G Delícias",
+    "periodo": "2026",
+    "categorias": [
+      "web",
+      "sql"
+    ],
+    "tecnologias": [
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "SQL",
+      "Cloudflare D1",
+      "Cloudflare Pages Functions"
+    ],
+    "contexto": "A L&G Delícias vende tortas salgadas, assados, fritos, sobremesas e bebidas. Desenvolvi por conta própria, fora do trabalho e do curso, o sistema que a lanchonete usa para receber e acompanhar os pedidos.",
+    "problema": "Cada pedido precisa ser conferido com o estoque e acompanhado até o pagamento, inclusive nas vendas a prazo (fiado), sem perder o controle do que foi vendido, do que foi recebido e do que está pendente.",
+    "objetivo": "Oferecer um cardápio on-line para os clientes e uma central de pedidos para a L&G, com estoque e financeiro atualizados automaticamente.",
+    "dados": {
+      "descricao": "Banco SQL no Cloudflare D1 (compatível com SQLite) com produtos, pedidos, itens, acréscimos, eventos e pagamentos: tabelas com chaves estrangeiras, restrições CHECK e índices.",
+      "origem": "Os dados reais da operação ficam somente no banco de produção e não são publicados. As imagens desta página foram geradas em testes, com cliente e pedido fictícios."
+    },
+    "solucao": [
+      "Cardápio responsivo por categorias, com destaques escolhidos na área administrativa.",
+      "Carrinho que valida a quantidade disponível de cada produto.",
+      "Baixa automática do estoque a cada pedido, produto esgotado quando o saldo chega a zero e devolução ao cancelar.",
+      "Status do pedido (novo, confirmado, pronto, finalizado e cancelado) e status financeiro (pago ou pendente).",
+      "Formas de pagamento: prazo/fiado, Pix, dinheiro e cartão, com painel financeiro por cliente, telefone e período.",
+      "Acompanhamento do pedido pelo cliente, com link privado, e acréscimo de itens ao mesmo pedido, sujeito a aprovação quando o pedido já foi confirmado.",
+      "Alerta visual e sonoro na central quando chega um pedido novo."
+    ],
+    "decisoes": [
+      {
+        "decisao": "Preço, disponibilidade e estoque validados no servidor",
+        "motivo": "O sistema não confia nos valores enviados pelo navegador, o que impede alterar preço ou quantidade pelo lado do cliente."
+      },
+      {
+        "decisao": "Baixa de estoque em transação",
+        "motivo": "Duas vendas simultâneas não conseguem vender a mesma última unidade, e um clique duplo não gera pedido repetido."
+      },
+      {
+        "decisao": "Link privado para o cliente",
+        "motivo": "O número do pedido sozinho não dá acesso a ele: cada pedido recebe uma chave aleatória, e o banco guarda apenas o resumo (hash) dessa chave."
+      }
+    ],
+    "resultados": [
+      {
+        "tipo": "uso",
+        "texto": "Em uso pela L&G Delícias para receber pedidos e controlar estoque e financeiro."
+      },
+      {
+        "tipo": "funcional",
+        "texto": "Testes automatizados com dados fictícios: regras e API com SQLite, cenários no navegador e verificações com o D1 local."
+      }
+    ],
+    "limitacoes": [
+      "Os alertas de pedido novo dependem de a central estar aberta no navegador.",
+      "O financeiro registra os pagamentos, mas não tem integração com banco, cartão ou Pix.",
+      "A confirmação pelo WhatsApp depende da configuração da API do WhatsApp."
+    ],
+    "proximosPassos": [
+      "Notificações de pedido novo mesmo com o navegador fechado."
+    ],
+    "galeria": [
+      {
+        "legenda": "Central de pedidos: acréscimo aguardando aprovação, com total e saldo.",
+        "imagem": {
+          "arquivo": "/img/projetos/lg-delicias-central.webp",
+          "alt": "Central da L&G com pedido de cliente fictício, confirmado e pago, e um acréscimo aguardando aprovação."
+        }
+      },
+      {
+        "legenda": "Cardápio com a revisão dos itens adicionais antes de confirmar.",
+        "imagem": {
+          "arquivo": "/img/projetos/capa-lg-delicias.webp",
+          "alt": "Cardápio da L&G Delícias com tortas e salgados ao fundo e o painel de revisão dos itens adicionais aberto."
+        }
+      },
+      {
+        "legenda": "Acompanhamento do pedido pelo cliente, no celular.",
+        "imagem": {
+          "arquivo": "/img/projetos/lg-delicias-celular.webp",
+          "alt": "Tela de celular Acompanhe seu pedido, com o pedido de um cliente fictício confirmado, os itens, o total, o pagamento registrado e o acréscimo efetivado."
+        }
+      }
+    ],
+    "links": [
+      {
+        "rotulo": "Instagram da L&G Delícias",
+        "href": "https://www.instagram.com/lucitortasalgada",
+        "externo": true
+      },
+      {
+        "rotulo": "Código-fonte no GitHub (lg-delicias-site)",
+        "href": "https://github.com/vitorassis-tech/lg-delicias-site",
+        "externo": true
+      }
+    ],
+    "notaAutoria": "Desenvolvido com apoio de ferramentas de IA generativa.",
+    "pendencias": [],
+    "status": "publicado",
+    "imagem": {
+      "arquivo": "/img/projetos/capa-lg-delicias.webp",
+      "alt": "Cardápio on-line da L&G Delícias com tortas salgadas e o painel de revisão de itens adicionais aberto."
+    }
+  },
+  {
+    "titulo": "Dashboard logístico no Power BI",
+    "slug": "dashboard-logistico-power-bi",
+    "subtitulo": "Custos, prazos, transportadoras e ocorrências de 1.000 fretes fictícios",
+    "resumo": "Dashboard em Power BI que analisa uma operação logística fictícia com 1.000 fretes: custo total e médio, entregas no prazo por transportadora, custo por mês e por região e as ocorrências mais frequentes, com filtros por período, transportadora e região.",
+    "natureza": "independente",
+    "periodo": "2026",
+    "categorias": [
+      "bi",
+      "logistica"
+    ],
+    "tecnologias": [
+      "Power BI",
+      "Power Query",
+      "DAX",
+      "CSV"
+    ],
+    "contexto": "Projeto de estudo criado por conta própria para praticar Power BI fora do ambiente da empresa, com uma base fictícia que pode ser publicada por completo, inclusive o arquivo do Power BI.",
+    "problema": "Como acompanhar, em uma única tela e com filtros, o custo do frete, o cumprimento de prazo e as ocorrências de cada transportadora?",
+    "objetivo": "Responder perguntas de negócio: percentual de entregas no prazo, transportadoras com melhor nível de serviço, evolução mensal do custo, regiões mais caras e ocorrências mais frequentes.",
+    "dados": {
+      "descricao": "Base com 1.000 fretes de jul/2025 a jun/2026: data, transportadora, região, quantidade de notas, valor da mercadoria, custo do frete, status de prazo, ocorrência e avaliação do cliente. Quatro transportadoras e quatro regiões.",
+      "origem": "DADOS FICTÍCIOS, criados para estudo e portfólio. Não representam nenhuma empresa."
+    },
+    "solucao": [
+      "Importação e tratamento da base CSV no Power Query.",
+      "Medidas DAX: total de fretes, custo total e médio, entregas no prazo (quantidade e %), frete sobre o valor da mercadoria e avaliação média.",
+      "Cartões com os indicadores principais no topo da página Visão executiva.",
+      "Gráficos de evolução mensal do custo, entregas no prazo por transportadora, custo por região e composição das ocorrências.",
+      "Segmentadores de período, transportadora e região."
+    ],
+    "decisoes": [
+      {
+        "decisao": "Divisões com DIVIDE",
+        "motivo": "Evita erro quando um filtro deixa o denominador em zero."
+      },
+      {
+        "decisao": "Entregas no prazo com CALCULATE",
+        "motivo": "A mesma medida de contagem é reaproveitada com o filtro do status, e o percentual sai de uma divisão simples."
+      }
+    ],
+    "resultados": [
+      {
+        "tipo": "funcional",
+        "texto": "Dashboard funcional, com o arquivo do Power BI, a base CSV e as medidas DAX publicados no GitHub. Na base fictícia: 81,5% das entregas no prazo e custo médio de R$ 914,46 por frete."
+      }
+    ],
+    "limitacoes": [
+      "Dados fictícios, criados para estudo.",
+      "Esta página mostra apenas a Visão executiva do dashboard."
+    ],
+    "proximosPassos": [
+      "Publicar a página de análise por transportadora."
+    ],
+    "galeria": [
+      {
+        "legenda": "Página Visão executiva no Power BI, com dados fictícios.",
+        "imagem": {
+          "arquivo": "/img/projetos/dashboard-logistico-power-bi-visao.webp",
+          "alt": "Dashboard no Power BI com cartões de fretes, custo e prazo e gráficos por mês, transportadora, região e ocorrência."
+        }
+      }
+    ],
+    "links": [
+      {
+        "rotulo": "Arquivo do Power BI, base e medidas no GitHub",
+        "href": "https://github.com/vitorassis-tech/dashboard-logistico-power-bi",
+        "externo": true
+      }
+    ],
+    "pendencias": [],
+    "status": "publicado",
+    "imagem": {
+      "arquivo": "/img/projetos/dashboard-logistico-power-bi-visao.webp",
+      "alt": "Dashboard logístico no Power BI com cartões de indicadores e gráfico de evolução do custo do frete."
+    }
+  },
+  {
     "titulo": "Simulação da Torre de Controle",
     "slug": "simulacao-torre-controle",
     "subtitulo": "Painel de status de frota, expedição e pendências com dados fictícios",

@@ -102,7 +102,7 @@ describe('validação de campos', () => {
 
 describe('referências e normalização', () => {
   it('encontra onde um projeto e uma instituição são usados', () => {
-    expect(referenciasPara('projetos', 'atividade-flask', conteudo).map((r) => r.onde)).toContain('Projetos em destaque');
+    expect(referenciasPara('projetos', 'lg-delicias', conteudo).map((r) => r.onde)).toContain('Projetos em destaque');
     expect(referenciasPara('instituicoes', 'senac', conteudo).length).toBeGreaterThan(0);
     expect(referenciasPara('instituicoes', 'ctest', conteudo)).toHaveLength(1);
   });

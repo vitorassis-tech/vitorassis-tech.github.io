@@ -18,6 +18,7 @@ export const NATUREZAS = {
   trabalho: 'Projeto profissional',
   academico: 'Projeto acadêmico',
   demonstracao: 'Demonstração com dados fictícios',
+  independente: 'Projeto independente',
 };
 
 export const CATEGORIAS = {
